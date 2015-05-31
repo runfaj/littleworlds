@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.stuartrosk.littleworlds.app.HomeFragment"
+            android:id="@+id/fragmentHome">
+
+        <ImageView
+            android:layout_width="220dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageView"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="107dp"
+            android:background="#ffd41200"/>
+
+        <Switch
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Enable Worlds"
+            android:id="@+id/serviceSwitch"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feedback"
+            android:id="@+id/feedbackBtn"
+            android:layout_alignLeft="@+id/imageView"
+            android:layout_alignStart="@+id/imageView"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/serviceSwitch"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:id="@+id/settingsBtn"
+            android:layout_alignTop="@+id/feedbackBtn"
+            android:layout_alignRight="@+id/imageView"
+            android:layout_alignEnd="@+id/imageView"/>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/mainEditButton"
+            android:background="#ffff0002"
+            android:src="@mipmap/ic_action_edit"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="80dp"
+            android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>

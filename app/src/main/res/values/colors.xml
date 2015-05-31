@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#ffffff</color>
+    <color name="edit_box_very_light">#ffeaeaea</color>
+    <color name="edit_box_light">#ffbdbdbd</color>
+    <color name="edit_box_regular">#ffa0a0a0</color>
+</resources>
