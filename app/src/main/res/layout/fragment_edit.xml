@@ -144,10 +144,10 @@
         android:layout_alignEnd="@+id/bottomRightCornerEditBtn"/>
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="240dp"
+        android:layout_height="360dp"
         android:layout_centerInParent="true"
-        android:layout_margin="70dp">
+        >
 
         <TextView
             android:layout_width="wrap_content"

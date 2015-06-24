@@ -17,7 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ImageEditActivity"
+        <activity android:name=".ImageEditFragment"
                   android:launchMode="singleInstance">
         </activity>
     </application>

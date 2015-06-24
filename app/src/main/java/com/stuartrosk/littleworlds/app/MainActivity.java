@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity
+    implements EditFragment.EditFragmentListener,
+        HomeFragment.HomeFragmentListener,
+        ImageEditFragment.ImageEditFragmentListener {
 
     private HomeFragment fragmentHome;
     private EditFragment fragmentEdit;
@@ -30,26 +34,58 @@ public class MainActivity extends Activity {
     }
 
     public void startWorldService() {
-        startService(new Intent(getApplicationContext(), WorldService.class));
+        if(!isServiceRunning())
+            startService(new Intent(getApplicationContext(), WorldService.class));
     }
 
     public void stopWorldService() {
-        stopService(new Intent(getApplicationContext(), WorldService.class));
+        if(isServiceRunning())
+            stopService(new Intent(getApplicationContext(), WorldService.class));
     }
 
     public void showEditScreen() {
+        ////////////// show the edit version of service
+        if(!isServiceRunning())
+            startWorldService();
+
         getFragmentManager().beginTransaction()
             .replace(R.id.mainFrame, fragmentEdit)
             .addToBackStack(null)
         .commit();
     }
 
-    public void finishedEditing() {
+
+    public void hideEditScreen() {
+        getFragmentManager().popBackStack();
+        onFinishEdit();
+    }
+
+    public void showImageEditScreen(String editPos) {
         getFragmentManager().beginTransaction()
-            .replace(R.id.mainFrame, fragmentHome)
+            .replace(R.id.mainFrame, ImageEditFragment.newInstance(editPos))
             .addToBackStack(null)
         .commit();
-        ///reset world service
+    }
+
+    public void cancelImageEditScreen() {
+        //////// are you sure? dialog - if yes,
+        hideImageEditScreen();
+    }
+
+    public void hideImageEditScreen() {
+        getFragmentManager().popBackStack();
+        /////??
+    }
+
+    @Override
+    public void onFinishEdit() {
+        preferences.edit().putBoolean(getResources().getString(R.string.edit_mode_pref),false);
+        ////////////reset world service
+    }
+
+    @Override
+    public void onStartEdit() {
+        ////////// change world service to show edit mode
     }
 
     @Override
@@ -65,9 +101,7 @@ public class MainActivity extends Activity {
         .commit();
 
         preferences = getPreferences(MODE_PRIVATE);
-
-        //always tell it to disable edit mode initially
-        preferences.edit().putBoolean(getString(R.string.editModePref), false).commit();
+        preferences.edit().putBoolean(getResources().getString(R.string.edit_mode_pref), false);
     }
 
     @Override

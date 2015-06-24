@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.stuartrosk.littleworlds.app.ImageListPreference
+                  xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <com.stuartrosk.littleworlds.app.EditListPreference
             android:key="imageList"
             android:title="Select Theme"
             android:summary="Current: Custom"
@@ -9,12 +11,4 @@
             android:entries="@array/imageListNames"
             android:entryValues="@array/imageListValues"
             app:entryImages="@array/imageListImages"/>
-
-    <!--<com.stuartrosk.littleworlds.app.ThicknessSliderPreference
-        android:key="thickness"
-        android:dialogLayout="@layout/thickness_preference_old"
-        android:title="Thickness"
-        android:summary="Set the thickness of the world boxes."
-        android:dialogTitle="Thickness"
-        android:dialogMessage="Thickness of world boxes (Default: 15)."/>-->
 </PreferenceScreen>

@@ -12,16 +12,16 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class ImageListAdapter extends ArrayAdapter<CharSequence> implements View.OnClickListener {
+public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View.OnClickListener {
     int selected = 0;
     private String[] resourceNames = null;
     private TypedArray resourceImages = null;
     private int[] resourceValues = null;
-    private ImageListPreference ts;
+    private EditListPreference ts;
 
-    public ImageListAdapter(Context context, int textViewResourceId,
+    public ThemeListAdapter(Context context, int textViewResourceId,
                             CharSequence[] objects, int[] ids,
-                            String[] texts, TypedArray images, int i, ImageListPreference ts) {
+                            String[] texts, TypedArray images, int i, EditListPreference ts) {
         super(context, textViewResourceId, objects);
 
         selected = i;

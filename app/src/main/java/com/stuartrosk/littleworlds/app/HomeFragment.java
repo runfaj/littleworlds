@@ -1,6 +1,7 @@
 package com.stuartrosk.littleworlds.app;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,12 +24,57 @@ public class HomeFragment extends Fragment {
     private ImageButton mainEditButton;
     private Switch toggleSwitch;
     private SharedPreferences preferences;
-    private MainActivity ma;
+    private HomeFragmentListener listener;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
+    public interface HomeFragmentListener {
+        public void startWorldService();
+        public void stopWorldService();
+        public void showEditScreen();
+        public boolean isServiceRunning();
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            listener = (HomeFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement EditFragmentListener");
+        }
+    }
+
+    private void setServiceToggle() {
+        boolean firstTimer = preferences.getBoolean(getResources().getString(R.string.first_time_pref),true);
+        if(firstTimer) {
+            toggleSwitch.setChecked(true);
+            preferences.edit().putBoolean(getString(R.string.first_time_pref), false).commit();
+            listener.startWorldService();
+        } else {
+            boolean currServiceValue = preferences.getBoolean(getResources().getString(R.string.service_enabled_pref), false);
+            preferences.edit().putBoolean(getString(R.string.service_enabled_pref), currServiceValue).commit();
+            toggleSwitch.setChecked(currServiceValue);
+            if(currServiceValue)
+                listener.startWorldService();
+            else
+                listener.stopWorldService();
+        }
+    }
+
+    private void setServiceToggle(boolean toggled) {
+        preferences.edit().putBoolean(getString(R.string.service_enabled_pref), toggled).commit();
+        if(toggled)
+            listener.startWorldService();
+        else
+            listener.stopWorldService();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,30 +83,14 @@ public class HomeFragment extends Fragment {
 
         mainEditButton = (ImageButton)v.findViewById(R.id.mainEditButton);
         toggleSwitch = (Switch)v.findViewById(R.id.serviceSwitch);
+        preferences = getActivity().getPreferences(getActivity().MODE_PRIVATE);
 
-        ma = (MainActivity)getActivity();
-        preferences = ma.getPreferences(ma.MODE_PRIVATE);
+        setServiceToggle();
 
-        boolean firstTimer = preferences.getBoolean("firstTimer",true);
-        if(firstTimer) {
-            toggleSwitch.setChecked(true);
-            preferences.edit().putBoolean("firstTimer",false).commit();
-            ma.startWorldService();
-        } else {
-            boolean currServiceValue = preferences.getBoolean("serviceEnabled", false);
-            preferences.edit().putBoolean("serviceEnabled", currServiceValue).commit();
-            toggleSwitch.setChecked(currServiceValue);
-            if(currServiceValue)
-                ma.startWorldService();
-            else
-                ma.stopWorldService();
-        }
-
-        mainEditButton.setOnTouchListener(new View.OnTouchListener() {
+        mainEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ma.showEditScreen();
-                return true;
+            public void onClick(View v) {
+                listener.showEditScreen();
             }
         });
 
@@ -68,11 +98,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
-                if (!ma.isServiceRunning() && isChecked)
-                    ma.startWorldService();
-                else
-                    ma.stopWorldService();
-                preferences.edit().putBoolean("serviceEnabled", isChecked).commit();
+                setServiceToggle(isChecked);
             }
         });
 
@@ -81,20 +107,13 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-        boolean currServiceValue = preferences.getBoolean("serviceEnabled", false);
-        if(currServiceValue) {
-            ma.startWorldService();
-            toggleSwitch.setChecked(true);
-        } else {
-            ma.stopWorldService();
-            toggleSwitch.setChecked(false);
-        }
-
+        setServiceToggle();
         super.onResume();
     }
 
     @Override
     public void onPause() {
+
         super.onPause();
     }
 }

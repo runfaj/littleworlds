@@ -1,6 +1,7 @@
 package com.stuartrosk.littleworlds.app;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,11 +20,33 @@ import android.widget.ImageButton;
 public class EditFragment extends Fragment {
 
     private SharedPreferences preferences;
-    private MainActivity ma;
     private Button editDoneBtn;
+    private EditFragmentListener listener;
 
     public EditFragment() {
         // Required empty public constructor
+    }
+
+    public interface EditFragmentListener {
+        public void onFinishEdit();
+        public void onStartEdit();
+        public void hideEditScreen();
+        public void showImageEditScreen(String editPos);
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            listener = (EditFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement EditFragmentListener");
+        }
     }
 
 
@@ -32,40 +55,37 @@ public class EditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        ma = (MainActivity)getActivity();
-        preferences = ma.getPreferences(ma.MODE_PRIVATE);
+        preferences = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+        editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
 
         //init fragment
         getFragmentManager().beginTransaction()
             .replace(R.id.myPrefFragmentCont, new PreferenceListFragment())
         .commit();
 
-        editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
-
         editDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ma.finishedEditing();
+                listener.hideEditScreen();
             }
         });
 
         //set edit button handlers
-        ViewGroup vg = (ViewGroup)v.findViewById(R.id.editScreen);
+        ViewGroup vg = (ViewGroup)v.findViewById(R.id.fragmentEdit);
         for(int i=0;i<vg.getChildCount();i++) {
             if(vg.getChildAt(i) instanceof ImageButton) {
                 vg.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int btnID = v.getId();
-                        //preferences.edit().putString(getString(R.string.editModePos),"PUT EDIT POS HERE");
-                        //show dialog with pos
+                        listener.showImageEditScreen(btnID + ""); ///////////////////////// change to actual pos
                     }
                 });
             }
         }
 
         //always just restart service without edit controls oncreate
-        preferences.edit().putBoolean(getString(R.string.editModePref),false).commit();
+        preferences.edit().putBoolean(getString(R.string.edit_mode_pref),false).commit();
 
         return v;
     }
@@ -73,28 +93,24 @@ public class EditFragment extends Fragment {
     @Override
     public void onDestroy() {
         //if we were in edit mode, cancel it
-        if(preferences.getBoolean(getString(R.string.editModePref),false))
-            ma.serviceFinishEdit();
-        preferences.edit()
-            .putBoolean(getString(R.string.editModePref),false)
-            .putString(getString(R.string.editModePos),"")
-        .commit();
+        if(preferences.getBoolean(getString(R.string.edit_mode_pref),false))
+            listener.onFinishEdit();
 
         super.onDestroy();
     }
     @Override
     public void onPause() {
         //if we are supposed to keep service, restart without the edit controls
-        if(preferences.getBoolean(getString(R.string.editModePref),false)) {
-            ma.serviceFinishEdit();
+        if(preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
+            listener.onFinishEdit();
         }
 
         super.onPause();
     }
     @Override
     public void onResume() {
-        if(preferences.getBoolean(getString(R.string.editModePref),false)) {
-            ma.serviceStartEdit();
+        if(preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
+            listener.onStartEdit();
         }
 
         super.onResume();

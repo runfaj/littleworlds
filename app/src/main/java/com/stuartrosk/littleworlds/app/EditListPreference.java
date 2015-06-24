@@ -11,14 +11,14 @@ import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
-public class ImageListPreference extends ListPreference
+public class EditListPreference extends ListPreference
 {
     private String[] resourceNames = null;
     private TypedArray resourceImages = null;
     private int[] resourceValues = null;
     SharedPreferences preferences;
 
-    public ImageListPreference(Context context, AttributeSet attrs) {
+    public EditListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -33,7 +33,7 @@ public class ImageListPreference extends ListPreference
 
         System.out.println(index);
 
-        ListAdapter listAdapter = new ImageListAdapter(getContext(),
+        ListAdapter listAdapter = new ThemeListAdapter(getContext(),
                 R.layout.image_list_row, this.getEntries(),
                 resourceValues, resourceNames, resourceImages, index,
                 this);

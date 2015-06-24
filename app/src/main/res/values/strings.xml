@@ -2,10 +2,7 @@
     <string name="app_name">Little Worlds</string>
     <string name="default_side_text">20</string>
     <string name="default_corner_text">40</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="editModePref">editMode</string>
-    <string name="editModePos">editPos</string>
+    <string name="edit_mode_pref">edit_mode</string> <!-- used to keep track of our service being edit more or regular -->
+    <string name="first_time_pref">first_timer</string> <!-- used to see if we should hide/show initial worlds. Also for tutorial -->
+    <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
 </resources>
