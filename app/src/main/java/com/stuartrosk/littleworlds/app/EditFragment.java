@@ -2,11 +2,9 @@ package com.stuartrosk.littleworlds.app;
 
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,14 +75,13 @@ public class EditFragment extends Fragment {
                 vg.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int btnID = v.getId();
-                        listener.showImageEditScreen(btnID + ""); ///////////////////////// change to actual pos
+                        String btnName = v.getTag().toString();
+                        listener.showImageEditScreen(btnName);
                     }
                 });
             }
         }
 
-        //always just restart service without edit controls oncreate
         preferences.edit().putBoolean(getString(R.string.edit_mode_pref),false).commit();
 
         return v;
