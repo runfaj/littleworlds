@@ -119,7 +119,7 @@ public class ImageJsonObject {
             this.file_path = default_file_path;
             this.type = type;
             this.position = p;
-            setPreferences(context);
+            commitChanges(context);
         }
 
         return this;
@@ -127,7 +127,7 @@ public class ImageJsonObject {
 
     public String readPreferences(Context context, Position p) {
         String curJson = context.getSharedPreferences("com.stuartrosk.littleworlds",Context.MODE_PRIVATE).getString(p.toString(),EMPTY_JSON_VALUE);
-        Log.d("test",curJson);
+        //Log.d("test",curJson);
         ImageJsonObject newObj = JsonToObject(curJson);
 
 
@@ -142,7 +142,7 @@ public class ImageJsonObject {
         return curJson;
     }
 
-    public void setPreferences(Context context) {
+    public void commitChanges(Context context) {
         String json = ObjectToJson(this);
         context.getSharedPreferences("com.stuartrosk.littleworlds",Context.MODE_PRIVATE)
             .edit()

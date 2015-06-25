@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,36 @@ public class ImageEditFragment extends Fragment {
         }
     }
 
+    private void setRadio(ImageJsonObject.Alignment a) {
+        RadioButton checked = null;
+        switch (a) {
+            case center: checked = (RadioButton)view.findViewById(R.id.radioC); break;
+            case topLeft: checked = (RadioButton)view.findViewById(R.id.radioTL); break;
+            case topCenter: checked = (RadioButton)view.findViewById(R.id.radioTM); break;
+            case topRight: checked = (RadioButton)view.findViewById(R.id.radioTR); break;
+            case bottomLeft: checked = (RadioButton)view.findViewById(R.id.radioBL); break;
+            case bottomCenter: checked = (RadioButton)view.findViewById(R.id.radioBM); break;
+            case bottomRight: checked = (RadioButton)view.findViewById(R.id.radioBR); break;
+            case sideLeft: checked = (RadioButton)view.findViewById(R.id.radioLM); break;
+            case sideRight: checked = (RadioButton)view.findViewById(R.id.radioRM); break;
+        }
+        checked.setChecked(true);
+        handleRadios(checked);
+    }
+
+    private void saveRadio() {
+        RadioButton checked = null;
+        for(int i=0;i<radioGroup.getChildCount();i++) {
+            if(radioGroup.getChildAt(i) instanceof RadioButton) {
+                if(((RadioButton) radioGroup.getChildAt(i)).isChecked())
+                    checked = (RadioButton)radioGroup.getChildAt(i);
+            }
+        }
+        Log.d("test",checked.getTag().toString());
+        config.alignment = ImageJsonObject.Alignment.valueOf(checked.getTag().toString());
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,17 +130,35 @@ public class ImageEditFragment extends Fragment {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /////////////// compile json object
-                //////////////// save changes
-                listener.hideImageEditScreen();
+            saveRadio();
+            config.commitChanges(view.getContext());
+            listener.hideImageEditScreen();
             }
         });
 
         titleText.setText("Editing " + config.getPositionName());
         sizeBtn.setText(config.width + "x" + config.height);
+
         String imageText = config.file_name;
         if(imageText.equals("")) imageText = getString(R.string.default_image_btn_text);
         imageBtn.setText(imageText);
+
+        setRadio(config.alignment);
+
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileDialog fd = new FileDialog(getActivity(), config.file_path, new FileDialog.FileDialogListener() {
+                    @Override
+                    public void fileDialogOutput(String path, String name) {
+                        config.file_name = name;
+                        config.file_path = path;
+                        imageBtn.setText(name);
+                    }
+                });
+                fd.show();
+            }
+        });
 
         return view;
     }

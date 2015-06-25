@@ -46,196 +46,217 @@
                 android:background="@android:color/white"
                 android:layout_marginTop="15dp">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:stretchColumns="*"
-        android:paddingRight="10dp"
-        android:paddingLeft="6dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp">
-
-        <TableRow
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            >
+            android:paddingRight="10dp"
+            android:paddingLeft="6dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Size (px):"
-                android:id="@+id/textView21"/>
+                android:layout_height="wrap_content">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="80x80"
-                android:id="@+id/sizeBtn"
-                android:layout_gravity="top|right"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Size (px):"
+                    android:id="@+id/textView21"
+                    android:layout_alignParentLeft="true"
+                    />
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Image: "
-                android:id="@+id/textView15"
-                android:enabled="true"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="(none)"
-                android:id="@+id/imageBtn"
-                android:layout_gravity="top|right"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingTop="10dp"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Image Alignment:"
-                android:id="@+id/textView14"
-                android:gravity="left"
-                android:enabled="true"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="80x80"
+                    android:id="@+id/sizeBtn"
+                    android:layout_gravity="top|right"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textView21"/>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="fill_parent"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Image: "
+                    android:id="@+id/textView15"
+                    android:enabled="true"
+                    android:layout_alignParentLeft="true"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="(none)"
+                    android:id="@+id/imageBtn"
+                    android:layout_gravity="top|right"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textView15"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Image Alignment:"
+                    android:id="@+id/textView14"
+                    android:gravity="left"
+                    android:enabled="true"
+                    android:layout_alignParentLeft="true"/>
 
                 <RelativeLayout
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:id="@+id/edit_radiogroup"
-                    android:background="@color/edit_box_light"
-                    android:layout_gravity="top|right"
-                    android:layout_alignParentRight="true">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textView14">
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:buttonTint="@android:color/white"
-                        android:checked="true"/>
+                    <RelativeLayout
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:id="@+id/edit_radiogroup"
+                        android:background="@color/edit_box_light"
+                        android:layout_gravity="top|right"
+                        android:layout_alignParentRight="true">
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton2"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioTL"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="topLeft"
+                            android:checked="true"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton3"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioTR"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="topRight"
+                            android:checked="false"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton4"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioBR"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="bottomRight"
+                            android:checked="false"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton5"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioBL"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="bottomLeft"
+                            android:checked="false"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton6"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioC"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="center"
+                            android:checked="false"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton7"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioTM"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="topCenter"
+                            android:checked="false"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton8"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioBM"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="bottomCenter"
+                            android:checked="false"/>
 
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/radioButton9"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:buttonTint="@android:color/white"/>
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioLM"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="sideLeft"
+                            android:checked="false"/>
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/radioRM"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:buttonTint="@android:color/white"
+                            android:tag="sideRight"
+                            android:checked="false"/>
+                    </RelativeLayout>
                 </RelativeLayout>
             </RelativeLayout>
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingTop="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Preview: "
-                android:id="@+id/textView20"
-                android:enabled="true"/>
-
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|right">
+                android:layout_height="fill_parent"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Preview: "
+                    android:id="@+id/textView20"
+                    android:enabled="true"
+                    android:layout_alignParentLeft="true"/>
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="300dp"
                     android:id="@+id/imageView2"
-                    android:background="@color/edit_box_regular"/>
+                    android:background="@color/edit_box_regular"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/textView20"/>
+
             </RelativeLayout>
 
-        </TableRow>
+        </LinearLayout>
 
-    </TableLayout>
 </ScrollView>
 
     <Button
