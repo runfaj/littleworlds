@@ -15,7 +15,7 @@ public class EditListPreference extends ListPreference
 {
     private String[] resourceNames = null;
     private TypedArray resourceImages = null;
-    private int[] resourceValues = null;
+    private String[] resourceValues = null;
     SharedPreferences preferences;
 
     public EditListPreference(Context context, AttributeSet attrs) {
@@ -24,12 +24,12 @@ public class EditListPreference extends ListPreference
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         resourceNames = context.getResources().getStringArray(R.array.imageListNames);
         resourceImages = context.getResources().obtainTypedArray(R.array.imageListImages);
-        resourceValues = context.getResources().getIntArray(R.array.imageListValues);
+        resourceValues = context.getResources().getStringArray(R.array.imageListValues);
     }
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        int index = preferences.getInt("theme",1);
+        int index = preferences.getInt(getContext().getString(R.string.theme_id),1);
 
         System.out.println(index);
 
@@ -47,8 +47,12 @@ public class EditListPreference extends ListPreference
         if(this.callChangeListener(""+clicked))
         {
             System.out.println("Sel: "+clicked);
-            preferences.edit().putInt("theme", clicked).commit();
+            preferences.edit()
+                .putInt(getContext().getString(R.string.theme_id), clicked)
+                .putString(getContext().getString(R.string.theme_key), resourceNames[clicked-1])
+            .commit();
         }
-        this.getDialog().dismiss();
+        if(this.getDialog()!=null)
+            this.getDialog().dismiss();
     }
 }

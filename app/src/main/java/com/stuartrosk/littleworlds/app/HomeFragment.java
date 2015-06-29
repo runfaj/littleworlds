@@ -31,7 +31,7 @@ public class HomeFragment extends Fragment {
     }
 
     public interface HomeFragmentListener {
-        public void startWorldService();
+        public void startWorldService(boolean editMode, String editPos);
         public void stopWorldService();
         public void showEditScreen();
         public boolean isServiceRunning();
@@ -56,13 +56,13 @@ public class HomeFragment extends Fragment {
         if(firstTimer) {
             toggleSwitch.setChecked(true);
             preferences.edit().putBoolean(getString(R.string.first_time_pref), false).commit();
-            listener.startWorldService();
+            listener.startWorldService(false,"");
         } else {
             boolean currServiceValue = preferences.getBoolean(getResources().getString(R.string.service_enabled_pref), false);
             preferences.edit().putBoolean(getString(R.string.service_enabled_pref), currServiceValue).commit();
             toggleSwitch.setChecked(currServiceValue);
             if(currServiceValue)
-                listener.startWorldService();
+                listener.startWorldService(false,"");
             else
                 listener.stopWorldService();
         }
@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
     private void setServiceToggle(boolean toggled) {
         preferences.edit().putBoolean(getString(R.string.service_enabled_pref), toggled).commit();
         if(toggled)
-            listener.startWorldService();
+            listener.startWorldService(false,"");
         else
             listener.stopWorldService();
     }

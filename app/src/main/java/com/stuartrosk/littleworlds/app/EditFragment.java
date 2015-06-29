@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class EditFragment extends Fragment {
     private SharedPreferences preferences;
     private Button editDoneBtn;
     private EditFragmentListener listener;
+    private PreferenceListFragment preferenceListFragment;
 
     public EditFragment() {
         // Required empty public constructor
@@ -55,10 +57,11 @@ public class EditFragment extends Fragment {
 
         preferences = getActivity().getPreferences(getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
+        preferenceListFragment = new PreferenceListFragment();
 
         //init fragment
         getFragmentManager().beginTransaction()
-            .replace(R.id.myPrefFragmentCont, new PreferenceListFragment())
+            .replace(R.id.myPrefFragmentCont, preferenceListFragment)
         .commit();
 
         editDoneBtn.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +88,16 @@ public class EditFragment extends Fragment {
         preferences.edit().putBoolean(getString(R.string.edit_mode_pref),false).commit();
 
         return v;
+    }
+
+    public void updatePreferenceList(int index) {
+        if(preferenceListFragment != null) {
+            preferences.edit()
+                .putString(getString(R.string.theme_id), ""+index)
+                .putString(getString(R.string.theme_key), "Custom")
+            .commit();
+            preferenceListFragment.updateThemeEntry(index);
+        }
     }
 
     @Override

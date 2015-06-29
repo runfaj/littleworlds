@@ -16,11 +16,11 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
     int selected = 0;
     private String[] resourceNames = null;
     private TypedArray resourceImages = null;
-    private int[] resourceValues = null;
+    private String[] resourceValues = null;
     private EditListPreference ts;
 
     public ThemeListAdapter(Context context, int textViewResourceId,
-                            CharSequence[] objects, int[] ids,
+                            CharSequence[] objects, String[] ids,
                             String[] texts, TypedArray images, int i, EditListPreference ts) {
         super(context, textViewResourceId, objects);
 
@@ -39,7 +39,7 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
         View row = inflater.inflate(R.layout.image_list_row, parent, false);
 
         //set id
-        row.setId(resourceValues[position]);
+        row.setId(Integer.parseInt(resourceValues[position]));
 
         //set on click listener for row
         row.setOnClickListener(this);
@@ -54,7 +54,7 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
 
         //set checkbox
         RadioButton tb = (RadioButton) row.findViewById(R.id.ckbox);
-        if (resourceValues[position] == selected) {
+        if (Integer.parseInt(resourceValues[position]) == selected) {
             tb.setChecked(true);
         } else {
             tb.setChecked(false);

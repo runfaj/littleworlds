@@ -7,4 +7,6 @@
     <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
     <string name="default_file_path">/</string>
     <string name="default_image_btn_text">(none)</string>
+    <string name="theme_key">imageList</string>
+    <string name="theme_id">themeId</string>
 </resources>

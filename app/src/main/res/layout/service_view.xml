@@ -11,7 +11,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="true"
-            android:background="@color/edit_box_light" />
+        />
 
     <ImageView
             android:id="@+id/topRightCorner"
@@ -20,7 +20,7 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/topLeftMiddle"
@@ -28,7 +28,7 @@
             android:layout_height="@dimen/barThickness"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/topLeftCorner"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/topRightMiddle"
@@ -36,7 +36,7 @@
             android:layout_height="@dimen/barThickness"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/topRightCorner"
-            android:background="@color/edit_box_light" />
+        />
 
     <ImageView
             android:id="@+id/bottomLeftCorner"
@@ -44,7 +44,7 @@
             android:layout_height="@dimen/cornerThickness"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:background="@color/edit_box_light" />
+        />
 
     <ImageView
             android:id="@+id/bottomRightCorner"
@@ -52,7 +52,7 @@
             android:layout_height="@dimen/cornerThickness"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/bottomLeftMiddle"
@@ -60,7 +60,7 @@
             android:layout_height="@dimen/barThickness"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/bottomLeftCorner"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/bottomRightMiddle"
@@ -68,7 +68,7 @@
             android:layout_height="@dimen/barThickness"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/bottomRightCorner"
-            android:background="@color/edit_box_light" />
+        />
 
     <ImageView
             android:id="@+id/sideLeftTop"
@@ -77,7 +77,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/topLeftCorner"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/sideLeftMiddle"
@@ -86,7 +86,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:background="@color/edit_box_light" />
+        />
 
     <ImageView
             android:id="@+id/sideLeftBottom"
@@ -95,7 +95,7 @@
             android:layout_above="@+id/bottomLeftCorner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/sideRightTop"
@@ -104,7 +104,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/topRightCorner"
-            android:background="@color/edit_box_light" />
+        />
 
     <ImageView
             android:id="@+id/sideRightMiddle"
@@ -113,7 +113,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@color/edit_box_regular" />
+        />
 
     <ImageView
             android:id="@+id/sideRightBottom"
@@ -122,5 +122,5 @@
             android:layout_above="@+id/bottomRightCorner"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:background="@color/edit_box_light" />
+        />
 </RelativeLayout>

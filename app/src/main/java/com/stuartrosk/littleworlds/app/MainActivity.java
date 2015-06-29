@@ -33,9 +33,13 @@ public class MainActivity extends Activity
         return false;
     }
 
-    public void startWorldService() {
-        if(!isServiceRunning())
-            startService(new Intent(getApplicationContext(), WorldService.class));
+    public void startWorldService(boolean editMode, String editPos) {
+        if(!isServiceRunning()) {
+            Intent worldService = new Intent(getApplicationContext(), WorldService.class);
+            worldService.putExtra("editMode",editMode);
+            worldService.putExtra("editPos",editPos);
+            startService(worldService);
+        }
     }
 
     public void stopWorldService() {
@@ -44,14 +48,11 @@ public class MainActivity extends Activity
     }
 
     public void showEditScreen() {
-        ////////////// show the edit version of service
-        if(!isServiceRunning())
-            startWorldService();
-
         getFragmentManager().beginTransaction()
             .replace(R.id.mainFrame, fragmentEdit)
             .addToBackStack(null)
         .commit();
+        onStartEdit();
     }
 
 
@@ -65,27 +66,37 @@ public class MainActivity extends Activity
             .replace(R.id.mainFrame, ImageEditFragment.newInstance(editPos))
             .addToBackStack(null)
         .commit();
+
+        fragmentEdit.updatePreferenceList(1);
+
+        stopWorldService();
+        startWorldService(true, editPos);
     }
 
     public void cancelImageEditScreen() {
         //////// are you sure? dialog - if yes,
         hideImageEditScreen();
+        stopWorldService();
+        startWorldService(true,"");
     }
 
     public void hideImageEditScreen() {
         getFragmentManager().popBackStack();
-        /////??
+        stopWorldService();
+        startWorldService(true,"");
     }
 
     @Override
     public void onFinishEdit() {
-        preferences.edit().putBoolean(getResources().getString(R.string.edit_mode_pref),false);
-        ////////////reset world service
+        preferences.edit().putBoolean(getResources().getString(R.string.edit_mode_pref),false).commit();
+        stopWorldService();
+        startWorldService(false,"");
     }
 
     @Override
     public void onStartEdit() {
-        ////////// change world service to show edit mode
+        stopWorldService();
+        startWorldService(true,"");
     }
 
     @Override

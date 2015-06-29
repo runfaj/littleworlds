@@ -1,9 +1,13 @@
 package com.stuartrosk.littleworlds.app;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.File;
 
 public class ImageJsonObject {
     private static String EMPTY_JSON_VALUE = "{}";
@@ -50,6 +54,8 @@ public class ImageJsonObject {
     public Alignment alignment = Alignment.center;
     public int width = 0,
                height = 0;
+    public int default_width = 0,
+               default_height = 0;
     public String file_name = "",
                   file_path = "";
 
@@ -107,14 +113,14 @@ public class ImageJsonObject {
         return json;
     }
 
-    public ImageJsonObject setDefaults(Context context, Position p, int width, int height, String file_name, SizeType type) {
+    public ImageJsonObject setDefaults(Context context, Position p, int width, int height, String file_name, SizeType type, boolean forceReset) {
         //this is used to initialize a json setting in the event it doesn't already exist
 
         String default_file_path = context.getString(R.string.default_file_path);
         String json = readPreferences(context, p);
-        if(json.equals(EMPTY_JSON_VALUE)) {
-            this.width = width;
-            this.height = height;
+        if(forceReset || json.equals(EMPTY_JSON_VALUE)) {
+            this.width = default_width = width;
+            this.height = default_height = height;
             this.file_name = file_name;
             this.file_path = default_file_path;
             this.type = type;
@@ -138,6 +144,8 @@ public class ImageJsonObject {
         type = newObj.type;
         position = newObj.position;
         alignment = newObj.alignment;
+        default_height = newObj.default_height;
+        default_width = newObj.default_width;
 
         return curJson;
     }
@@ -148,5 +156,17 @@ public class ImageJsonObject {
             .edit()
             .putString(this.position.toString(), json)
             .commit();
+    }
+
+    public Uri getFullPath(Context context) {
+        if(!file_name.equals("")) {
+            File file = new File(file_path + "/" + file_name);
+            Log.d("file", Uri.fromFile(file).toString());
+            if (file.exists())
+                return Uri.fromFile(file);
+            else
+                Toast.makeText(context, "The file chosen for " + getPositionName() + " is not valid.", Toast.LENGTH_LONG);
+        }
+        return null;
     }
 }

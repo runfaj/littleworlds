@@ -28,18 +28,21 @@ public class FileDialog extends Dialog {
     private TextView myPath;
     private ListView list;
     private FileDialogListener fileDialogListener;
+    private String[] allowedExtensions = {};
 
     public interface FileDialogListener {
         public void fileDialogOutput(String path, String name);
     }
 
-    public FileDialog(final Context context, String path, FileDialogListener fileDialogListener) {
+    public FileDialog(final Context context, String path, String[] extensions, FileDialogListener fileDialogListener) {
         super(context);
         this.context = context;
         this.fileDialogListener = fileDialogListener;
         if(!path.equals("") && path.startsWith("/"))
             root = path;
         setTitle("Select Image File...");
+        if(extensions.length > 0)
+            allowedExtensions = extensions;
     }
 
     @Override
@@ -100,8 +103,17 @@ public class FileDialog extends Dialog {
             path.add(file.getPath());
             if (file.isDirectory())
                 item.add(file.getName() + "/");
-            else
-                item.add(file.getName());
+            else {
+                if(allowedExtensions.length > 0) {
+                    for(String ext: allowedExtensions) {
+                        String str = file.getName().toLowerCase();
+                        int lastDot = str.lastIndexOf(".");
+                        int matches = str.indexOf(ext.toLowerCase(),lastDot);
+                        if(matches > 0)
+                            item.add(file.getName());
+                    }
+                }
+            }
         }
 
         ArrayAdapter<String> fileList =

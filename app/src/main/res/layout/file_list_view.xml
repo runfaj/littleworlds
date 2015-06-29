@@ -13,7 +13,8 @@
         android:singleLine="false"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        />
+        android:paddingLeft="12dp"
+        android:textColor="#ff000000"/>
     <ListView
         android:id="@+id/file_list"
         android:layout_width="fill_parent"

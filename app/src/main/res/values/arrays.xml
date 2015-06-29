@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="imageListNames">
-        <item>"Custom"</item>
-        <item>"Help"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
-        <item>"Info"</item>
+        <item>Custom</item>
+        <item>Help</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
+        <item>Info</item>
     </string-array>
-    <integer-array name="imageListValues">
+    <string-array name="imageListValues">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -25,7 +25,7 @@
         <item>9</item>
         <item>10</item>
         <item>11</item>
-    </integer-array>
+    </string-array>
     <array name="imageListImages">
         <item>@mipmap/ic_action_edit</item>
         <item>@mipmap/ic_launcher</item>
