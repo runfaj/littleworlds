@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
 
         mainEditButton = (ImageButton)v.findViewById(R.id.mainEditButton);
         toggleSwitch = (Switch)v.findViewById(R.id.serviceSwitch);
-        preferences = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences("com.stuartrosk.littleworlds", getActivity().MODE_PRIVATE);
 
         mainEditButton.setOnClickListener(new View.OnClickListener() {
             @Override

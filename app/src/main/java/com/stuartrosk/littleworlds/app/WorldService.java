@@ -246,11 +246,12 @@ public class WorldService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        Bundle extras = intent.getExtras();
-        if(extras != null)
-        {
-            editMode = (Boolean) extras.get("editMode");
-            editPos = (String) extras.get("editPos");
+        if(intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                editMode = (Boolean) extras.get("editMode");
+                editPos = (String) extras.get("editPos");
+            }
         }
 
         setSizes();
@@ -258,6 +259,6 @@ public class WorldService extends Service {
         if(editPos != null && !editPos.equals(""))
             checkSpecificPos(ImageJsonObject.Position.valueOf(editPos));
 
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 }
