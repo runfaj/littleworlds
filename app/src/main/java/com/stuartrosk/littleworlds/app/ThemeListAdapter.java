@@ -2,8 +2,8 @@ package com.stuartrosk.littleworlds.app;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +15,13 @@ import android.widget.TextView;
 public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View.OnClickListener {
     int selected = 0;
     private String[] resourceNames = null;
-    private TypedArray resourceImages = null;
+    private String[] resourceImages = null;
     private String[] resourceValues = null;
     private EditListPreference ts;
 
     public ThemeListAdapter(Context context, int textViewResourceId,
                             CharSequence[] objects, String[] ids,
-                            String[] texts, TypedArray images, int i, EditListPreference ts) {
+                            String[] texts, String[] images, int i, EditListPreference ts) {
         super(context, textViewResourceId, objects);
 
         selected = i;
@@ -50,7 +50,17 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
 
         //set image
         ImageView ti = (ImageView) row.findViewById(R.id.themeImage);
-        ti.setImageResource(resourceImages.getResourceId(position,-1));
+        try {
+            ti.setImageDrawable(
+                    Drawable.createFromStream(
+                            getContext().getAssets().open(resourceImages[position]),
+                            null
+                    )
+            );
+        } catch (Exception e) {
+            Log.e("error", e.getMessage());
+        }
+        //ti.setImageResource(resourceImages.getResourceId(position,-1));
 
         //set checkbox
         RadioButton tb = (RadioButton) row.findViewById(R.id.ckbox);

@@ -253,7 +253,8 @@
                     android:id="@+id/previewImage"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/textView20"
-                    android:background="#ffeaeaea"/>
+                    android:background="#ffeaeaea"
+                    android:scaleType="fitXY"/>
 
             </RelativeLayout>
 

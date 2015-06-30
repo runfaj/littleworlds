@@ -9,5 +9,5 @@
     android:paddingLeft="12dp"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:singleLine="false"
-    android:paddingTop="2dp"
-    android:paddingBottom="2dp"/>
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"/>

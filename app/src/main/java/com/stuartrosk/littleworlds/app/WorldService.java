@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -16,8 +16,6 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
-import java.io.File;
 
 public class WorldService extends Service {
 
@@ -35,8 +33,10 @@ public class WorldService extends Service {
     private float startWindowWidth, startWindowHeight;
     SharedPreferences preferences;
 
-    private boolean editMode;
+    private boolean editMode = false;
     private String editPos;
+
+    private ThemeJsonObject.Theme currTheme;
 
     @Override public IBinder onBind(Intent intent) {
         if(intent.getStringExtra("showEditMode").equals("true")){
@@ -83,6 +83,46 @@ public class WorldService extends Service {
         srbO = new ImageJsonObject();
     }
 
+    private void setConfig(ImageView v, ImageJsonObject o) {
+        v.getLayoutParams().width = o.width;
+        v.getLayoutParams().height = o.height;
+        if (editMode) {
+            int color = getResources().getColor(R.color.edit_box_light);
+            switch (o.position) {
+                case top_left_middle:
+                case top_right_corner:
+                case side_left_top:
+                case side_left_bottom:
+                case side_right_middle:
+                case bottom_left_middle:
+                case bottom_right_corner:
+                    color = getResources().getColor(R.color.edit_box_regular);
+            }
+            v.setBackgroundColor(color);
+        }
+
+        if(currTheme.id != 1) {
+            try {
+                String asset = ThemeJsonObject.getFileFromPosition(currTheme, o.position);
+                if(asset.toLowerCase().equals("error")) throw new Exception("Image cannot be loaded, bad position");
+                v.setImageDrawable(
+                        Drawable.createFromStream(
+                                getAssets().open(
+                                        asset
+                                ),
+                                null
+                        )
+                );
+            } catch (Exception e) {
+                Log.e("error", e.getMessage());
+            }
+        } else {
+            v.setImageURI(o.getFullPath(this));
+        }
+
+        v.requestLayout();
+    }
+
     private void setSizes() {
         //set initial screen size
         Display display = windowManager.getDefaultDisplay();
@@ -99,107 +139,58 @@ public class WorldService extends Service {
         int cornerPX = (int)(cornerDP * density);
         int thicknessPX = (int)(thicknessDP * density);
 
+        currTheme = ThemeJsonObject.getTheme(this,preferences.getInt(getString(R.string.theme_id),1));
+        Log.d("cursel",""+preferences.getInt(getString(R.string.theme_id),1));
+
         /////force resetting defaults config for testing only
         boolean resetPrefs = false;
         /////end testing config
 
         //corners
         tlcO.setDefaults(this, ImageJsonObject.Position.top_left_corner, cornerPX, cornerPX, "", ImageJsonObject.SizeType.square, resetPrefs);
-        tlcV.getLayoutParams().width = tlcV.getLayoutParams().height = tlcO.height;
-        tlcV.setImageURI(tlcO.getFullPath(this));
-        if(editMode)tlcV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        tlcV.requestLayout();
+        setConfig(tlcV, tlcO);
 
         trcO.setDefaults(this, ImageJsonObject.Position.top_right_corner, cornerPX, cornerPX, "", ImageJsonObject.SizeType.square, resetPrefs);
-        trcV.getLayoutParams().width = trcV.getLayoutParams().height = trcO.height;
-        trcV.setImageURI(trcO.getFullPath(this));
-        if(editMode)trcV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        trcV.requestLayout();
+        setConfig(trcV, trcO);
 
         blcO.setDefaults(this, ImageJsonObject.Position.bottom_left_corner, cornerPX, cornerPX, "", ImageJsonObject.SizeType.square, resetPrefs);
-        blcV.getLayoutParams().width = blcV.getLayoutParams().height = blcO.height;
-        blcV.setImageURI(blcO.getFullPath(this));
-        if(editMode)blcV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        blcV.requestLayout();
+        setConfig(blcV, blcO);
 
         brcO.setDefaults(this, ImageJsonObject.Position.bottom_right_corner, cornerPX, cornerPX, "", ImageJsonObject.SizeType.square, resetPrefs);
-        brcV.getLayoutParams().width = brcV.getLayoutParams().height = brcO.height;
-        brcV.setImageURI(brcO.getFullPath(this));
-        if(editMode)brcV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        brcV.requestLayout();
+        setConfig(brcV, brcO);
 
         //top and bottom
         tlmO.setDefaults(this, ImageJsonObject.Position.top_left_middle, wSplitPX, thicknessPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        tlmV.getLayoutParams().width = tlmO.width;
-        tlmV.getLayoutParams().height = tlmO.height;
-        tlmV.setImageURI(tlmO.getFullPath(this));
-        if(editMode)tlmV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        tlmV.requestLayout();
+        setConfig(tlmV, tlmO);
 
         trmO.setDefaults(this, ImageJsonObject.Position.top_right_middle, wSplitPX, thicknessPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        trmV.getLayoutParams().width = trmO.width;
-        trmV.getLayoutParams().height = trmO.height;
-        trmV.setImageURI(trmO.getFullPath(this));
-        if(editMode)trmV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        trmV.requestLayout();
+        setConfig(trmV, trmO);
 
         blmO.setDefaults(this, ImageJsonObject.Position.bottom_left_middle, wSplitPX, thicknessPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        blmV.getLayoutParams().width = blmO.width;
-        blmV.getLayoutParams().height = blmO.height;
-        blmV.setImageURI(blmO.getFullPath(this));
-        if(editMode)blmV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        blmV.requestLayout();
+        setConfig(blmV, blmO);
 
         brmO.setDefaults(this, ImageJsonObject.Position.bottom_right_middle, wSplitPX, thicknessPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        brmV.getLayoutParams().width = brmO.width;
-        brmV.getLayoutParams().height = brmO.height;
-        brmV.setImageURI(brmO.getFullPath(this));
-        if(editMode)brmV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        brmV.requestLayout();
+        setConfig(brmV, brmO);
 
         //left side
         slbO.setDefaults(this, ImageJsonObject.Position.side_left_bottom, thicknessPX, hSplitPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        slbV.getLayoutParams().height = slbO.height;
-        slbV.getLayoutParams().width = slbO.width;
-        slbV.setImageURI(slbO.getFullPath(this));
-        if(editMode)slbV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        slbV.requestLayout();
+        setConfig(slbV, slbO);
 
         slmO.setDefaults(this, ImageJsonObject.Position.side_left_middle, thicknessPX, hSplitPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        slmV.getLayoutParams().height = slmO.height;
-        slmV.getLayoutParams().width = slmO.width;
-        slmV.setImageURI(slmO.getFullPath(this));
-        if(editMode)slmV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        slmV.requestLayout();
+        setConfig(slmV, slmO);
 
         sltO.setDefaults(this, ImageJsonObject.Position.side_left_top, thicknessPX, hSplitPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        sltV.getLayoutParams().height = sltO.height;
-        sltV.getLayoutParams().width = sltO.width;
-        sltV.setImageURI(sltO.getFullPath(this));
-        if(editMode)sltV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        sltV.requestLayout();
+        setConfig(sltV, sltO);
 
         //right side
         srbO.setDefaults(this, ImageJsonObject.Position.side_right_bottom, thicknessPX, hSplitPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        srbV.getLayoutParams().height = srbO.height;
-        srbV.getLayoutParams().width = srbO.width;
-        srbV.setImageURI(srbO.getFullPath(this));
-        if(editMode)srbV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        srbV.requestLayout();
+        setConfig(srbV, srbO);
 
         srmO.setDefaults(this, ImageJsonObject.Position.side_right_middle, thicknessPX, hSplitPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        srmV.getLayoutParams().height = srmO.height;
-        srmV.getLayoutParams().width = srmO.width;
-        srmV.setImageURI(srmO.getFullPath(this));
-        if(editMode)srmV.setBackgroundColor(getResources().getColor(R.color.edit_box_regular));
-        srmV.requestLayout();
+        setConfig(srmV, srmO);
 
         srtO.setDefaults(this, ImageJsonObject.Position.side_right_top, thicknessPX, hSplitPX, "", ImageJsonObject.SizeType.rectangle, resetPrefs);
-        srtV.getLayoutParams().height = srtO.height;
-        srtV.getLayoutParams().width = srtO.width;
-        srtV.setImageURI(srtO.getFullPath(this));
-        if(editMode)srtV.setBackgroundColor(getResources().getColor(R.color.edit_box_light));
-        srtV.requestLayout();
+        setConfig(srtV, srtO);
     }
 
     @Override public void onCreate() {
@@ -209,13 +200,6 @@ public class WorldService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         serviceView = (RelativeLayout) inflater.inflate(R.layout.service_view, null);
-
-        /*WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);*/
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 //WindowManager.LayoutParams.TYPE_INPUT_METHOD |

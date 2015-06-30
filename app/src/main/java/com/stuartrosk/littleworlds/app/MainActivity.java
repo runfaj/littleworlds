@@ -6,22 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.Switch;
 
 public class MainActivity extends Activity
     implements EditFragment.EditFragmentListener,
         HomeFragment.HomeFragmentListener,
-        ImageEditFragment.ImageEditFragmentListener {
+        ImageEditFragment.ImageEditFragmentListener,
+        PreferenceListFragment.PrefListFragmentListener {
 
     private HomeFragment fragmentHome;
     private EditFragment fragmentEdit;
     private SharedPreferences preferences;
+
+    /** service functions **/
 
     public boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -47,56 +44,93 @@ public class MainActivity extends Activity
             stopService(new Intent(getApplicationContext(), WorldService.class));
     }
 
+    /** edit screen functions **/
+
     public void showEditScreen() {
         getFragmentManager().beginTransaction()
-            .replace(R.id.mainFrame, fragmentEdit)
+            .replace(R.id.mainFrame, fragmentEdit, "E")
             .addToBackStack(null)
         .commit();
         onStartEdit();
     }
-
 
     public void hideEditScreen() {
         getFragmentManager().popBackStack();
         onFinishEdit();
     }
 
-    public void showImageEditScreen(String editPos) {
-        getFragmentManager().beginTransaction()
-            .replace(R.id.mainFrame, ImageEditFragment.newInstance(editPos))
-            .addToBackStack(null)
-        .commit();
-
-        fragmentEdit.updatePreferenceList(1);
-
-        stopWorldService();
-        startWorldService(true, editPos);
-    }
-
-    public void cancelImageEditScreen() {
-        //////// are you sure? dialog - if yes,
-        hideImageEditScreen();
-        stopWorldService();
-        startWorldService(true,"");
-    }
-
-    public void hideImageEditScreen() {
-        getFragmentManager().popBackStack();
-        stopWorldService();
-        startWorldService(true,"");
-    }
-
     @Override
     public void onFinishEdit() {
-        preferences.edit().putBoolean(getResources().getString(R.string.edit_mode_pref),false).commit();
         stopWorldService();
-        startWorldService(false,"");
+        if(preferences.getBoolean(getString(R.string.service_enabled_pref),false))
+            startWorldService(false, "");
     }
 
     @Override
     public void onStartEdit() {
         stopWorldService();
-        startWorldService(true,"");
+        startWorldService(true, "");
+    }
+
+    @Override
+    public void onThemeSelectionChange() {
+        EditFragment testFragment = (EditFragment)getFragmentManager().findFragmentByTag("E");
+        if(testFragment != null && testFragment.isVisible()) {
+            stopWorldService();
+            startWorldService(true, "");
+        }
+    }
+
+    /** image edit screen **/
+
+    public void showImageEditScreen(String editPos) {
+        getFragmentManager().beginTransaction()
+            .replace(R.id.mainFrame, ImageEditFragment.newInstance(editPos), "IE")
+            .addToBackStack(null)
+        .commit();
+
+        fragmentEdit.updatePreferenceList(1); //force theme to be "custom"
+        onStartImageEdit(editPos);
+    }
+
+    public void cancelImageEditScreen() {
+        //////// are you sure dialog?
+        hideImageEditScreen();
+        onFinishImageEdit();
+    }
+
+    public void hideImageEditScreen() {
+        getFragmentManager().popBackStack();
+        stopWorldService();
+        startWorldService(true, "");
+    }
+
+    @Override
+    public void onFinishImageEdit() {
+        stopWorldService();
+        if(preferences.getBoolean(getString(R.string.service_enabled_pref),false))
+            startWorldService(false, "");
+    }
+
+    @Override
+    public void onStartImageEdit(String editPos) {
+        stopWorldService();
+        startWorldService(true, editPos);
+    }
+
+    /** main activity functions **/
+
+    @Override
+    public void firstTimer() {
+        preferences.edit()
+            .putBoolean(getString(R.string.first_time_pref), false)
+            .putBoolean(getResources().getString(R.string.service_enabled_pref),true)
+            .putInt(getString(R.string.theme_id), 2)
+            .putString(getString(R.string.theme_key), "Cats")
+        .commit();
+        Log.d("testing", "balalda");
+        stopWorldService();
+        startWorldService(false,"");
     }
 
     @Override
@@ -108,11 +142,10 @@ public class MainActivity extends Activity
         fragmentEdit = new EditFragment();
 
         getFragmentManager().beginTransaction()
-            .add(R.id.mainFrame, fragmentHome)
+            .add(R.id.mainFrame, fragmentHome, "H")
         .commit();
 
-        preferences = getPreferences(MODE_PRIVATE);
-        preferences.edit().putBoolean(getResources().getString(R.string.edit_mode_pref), false);
+        preferences = getSharedPreferences("com.stuartrosk.littleworlds",MODE_PRIVATE);
     }
 
     @Override

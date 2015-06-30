@@ -2,13 +2,10 @@ package com.stuartrosk.littleworlds.app;
 
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -35,6 +32,7 @@ public class HomeFragment extends Fragment {
         public void stopWorldService();
         public void showEditScreen();
         public boolean isServiceRunning();
+        public void firstTimer();
     }
 
     @Override
@@ -55,8 +53,7 @@ public class HomeFragment extends Fragment {
         boolean firstTimer = preferences.getBoolean(getResources().getString(R.string.first_time_pref),true);
         if(firstTimer) {
             toggleSwitch.setChecked(true);
-            preferences.edit().putBoolean(getString(R.string.first_time_pref), false).commit();
-            listener.startWorldService(false,"");
+            listener.firstTimer();
         } else {
             boolean currServiceValue = preferences.getBoolean(getResources().getString(R.string.service_enabled_pref), false);
             preferences.edit().putBoolean(getString(R.string.service_enabled_pref), currServiceValue).commit();
@@ -85,8 +82,6 @@ public class HomeFragment extends Fragment {
         toggleSwitch = (Switch)v.findViewById(R.id.serviceSwitch);
         preferences = getActivity().getPreferences(getActivity().MODE_PRIVATE);
 
-        setServiceToggle();
-
         mainEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +101,12 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        setServiceToggle();
+        super.onStart();
+    }
+
+    @Override
     public void onResume() {
         setServiceToggle();
         super.onResume();
@@ -113,7 +114,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onPause() {
-
         super.onPause();
     }
 }

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ public class EditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        preferences = getActivity().getPreferences(getActivity().MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences("com.stuartrosk.littleworlds", getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
         preferenceListFragment = new PreferenceListFragment();
 
@@ -93,7 +92,7 @@ public class EditFragment extends Fragment {
     public void updatePreferenceList(int index) {
         if(preferenceListFragment != null) {
             preferences.edit()
-                .putString(getString(R.string.theme_id), ""+index)
+                .putInt(getString(R.string.theme_id), index)
                 .putString(getString(R.string.theme_key), "Custom")
             .commit();
             preferenceListFragment.updateThemeEntry(index);
@@ -102,26 +101,19 @@ public class EditFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        //if we were in edit mode, cancel it
-        if(preferences.getBoolean(getString(R.string.edit_mode_pref),false))
-            listener.onFinishEdit();
+        listener.onFinishEdit();
 
         super.onDestroy();
     }
     @Override
     public void onPause() {
-        //if we are supposed to keep service, restart without the edit controls
-        if(preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
-            listener.onFinishEdit();
-        }
+        listener.onFinishEdit();
 
         super.onPause();
     }
     @Override
     public void onResume() {
-        if(preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
-            listener.onStartEdit();
-        }
+        listener.onStartEdit();
 
         super.onResume();
     }

@@ -1,6 +1,5 @@
 package com.stuartrosk.littleworlds.app;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -74,6 +73,7 @@ public class FileDialog extends Dialog {
                 } else {
                     String p = file.getAbsolutePath();
                     p = p.substring(0,p.indexOf(file.getName())-1);
+                    Log.d("file",p + " " + file.getName() );
                     fileDialogListener.fileDialogOutput(p, file.getName());
                     dismiss();
                 }
@@ -100,17 +100,19 @@ public class FileDialog extends Dialog {
         for (int i = 0; i < files.length; i++)
         {
             File file = files[i];
-            path.add(file.getPath());
-            if (file.isDirectory())
+            if (file.isDirectory()) {
                 item.add(file.getName() + "/");
-            else {
+                path.add(file.getPath());
+            } else {
                 if(allowedExtensions.length > 0) {
                     for(String ext: allowedExtensions) {
                         String str = file.getName().toLowerCase();
                         int lastDot = str.lastIndexOf(".");
                         int matches = str.indexOf(ext.toLowerCase(),lastDot);
-                        if(matches > 0)
+                        if(matches > 0) {
                             item.add(file.getName());
+                            path.add(file.getPath());
+                        }
                     }
                 }
             }

@@ -2,21 +2,19 @@ package com.stuartrosk.littleworlds.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.*;
-
-import java.io.File;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ImageEditFragment extends Fragment {
 
@@ -43,6 +41,8 @@ public class ImageEditFragment extends Fragment {
         public void hideImageEditScreen();
         public boolean isServiceRunning();
         public void cancelImageEditScreen();
+        public void onStartImageEdit(String editPos);
+        public void onFinishImageEdit();
     }
 
     @Override
@@ -131,13 +131,15 @@ public class ImageEditFragment extends Fragment {
 
         setPreviewImage();
 
+        preferences.edit().putString("last_edit_pos",editPos).commit();
+
         return view;
     }
 
     @Override
     public void onPause() {
         //if we are supposed to keep service, restart without the edit controls
-
+        listener.onFinishImageEdit();
 
         super.onPause();
     }
@@ -145,13 +147,14 @@ public class ImageEditFragment extends Fragment {
     @Override
     public void onDestroy() {
         //if we are supposed to keep service, restart without the edit controls
-
-
+        listener.onFinishImageEdit();
+        preferences.edit().putString("last_edit_pos","").commit();
         super.onPause();
     }
 
     @Override
     public void onResume() {
+        listener.onStartImageEdit(preferences.getString("last_edit_pos",""));
 
         super.onResume();
     }
