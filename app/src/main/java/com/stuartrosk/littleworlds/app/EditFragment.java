@@ -20,7 +20,7 @@ public class EditFragment extends Fragment {
     private SharedPreferences preferences;
     private Button editDoneBtn;
     private EditFragmentListener listener;
-    private PreferenceListFragment preferenceListFragment;
+    private EditPrefListFragment editPrefListFragment;
 
     public EditFragment() {
         // Required empty public constructor
@@ -56,11 +56,11 @@ public class EditFragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences("com.stuartrosk.littleworlds", getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
-        preferenceListFragment = new PreferenceListFragment();
+        editPrefListFragment = new EditPrefListFragment();
 
         //init fragment
         getFragmentManager().beginTransaction()
-            .replace(R.id.myPrefFragmentCont, preferenceListFragment)
+            .replace(R.id.myPrefFragmentCont, editPrefListFragment)
         .commit();
 
         editDoneBtn.setOnClickListener(new View.OnClickListener() {
@@ -90,12 +90,12 @@ public class EditFragment extends Fragment {
     }
 
     public void updatePreferenceList(int index) {
-        if(preferenceListFragment != null) {
+        if(editPrefListFragment != null) {
             preferences.edit()
                 .putInt(getString(R.string.theme_id), index)
                 .putString(getString(R.string.theme_key), "Custom")
             .commit();
-            preferenceListFragment.updateThemeEntry(index);
+            editPrefListFragment.updateThemeEntry(index);
         }
     }
 

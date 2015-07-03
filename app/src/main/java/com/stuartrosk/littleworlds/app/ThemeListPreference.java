@@ -7,14 +7,14 @@ import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.widget.ListAdapter;
 
-public class EditListPreference extends ListPreference
+public class ThemeListPreference extends ListPreference
 {
     private String[] resourceNames = null;
     private String[] resourceImages = null;
     private String[] resourceValues = null;
     SharedPreferences preferences;
 
-    public EditListPreference(Context context, AttributeSet attrs) {
+    public ThemeListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         preferences = context.getSharedPreferences("com.stuartrosk.littleworlds", context.MODE_PRIVATE);

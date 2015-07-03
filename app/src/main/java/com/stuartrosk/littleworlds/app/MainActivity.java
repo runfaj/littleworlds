@@ -12,7 +12,7 @@ public class MainActivity extends Activity
     implements EditFragment.EditFragmentListener,
         HomeFragment.HomeFragmentListener,
         ImageEditFragment.ImageEditFragmentListener,
-        PreferenceListFragment.PrefListFragmentListener {
+        EditPrefListFragment.EditPrefListFragmentListener {
 
     private HomeFragment fragmentHome;
     private EditFragment fragmentEdit;

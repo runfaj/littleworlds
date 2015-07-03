@@ -7,17 +7,17 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-public class PreferenceListFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class EditPrefListFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    EditListPreference lp;
-    PrefListFragmentListener listener;
+    ThemeListPreference lp;
+    EditPrefListFragmentListener listener;
 
-    public interface PrefListFragmentListener {
+    public interface EditPrefListFragmentListener {
         public void onThemeSelectionChange();
     }
 
     public void updateThemeEntry() {
-        lp = (EditListPreference) findPreference("theme_list");
+        lp = (ThemeListPreference) findPreference("theme_list");
         lp.setSummary("Current: Custom");
         lp.setSummary("Current: " +
                 getActivity().getSharedPreferences("com.stuartrosk.littleworlds", getActivity().MODE_PRIVATE).
@@ -28,7 +28,7 @@ public class PreferenceListFragment extends PreferenceFragment implements Prefer
     }
     public void updateThemeEntry(int index) {
         Log.d("test",String.valueOf(index));
-        lp = (EditListPreference) findPreference("theme_list");
+        lp = (ThemeListPreference) findPreference("theme_list");
         lp.setResult(index);
         updateThemeEntry();
     }
@@ -40,7 +40,7 @@ public class PreferenceListFragment extends PreferenceFragment implements Prefer
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            listener = (PrefListFragmentListener) activity;
+            listener = (EditPrefListFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement PrefListFragmentListener");
@@ -52,9 +52,9 @@ public class PreferenceListFragment extends PreferenceFragment implements Prefer
         super.onCreate(savedInstanceState);
 
         // Load the preferences from XML resource
-        this.addPreferencesFromResource(R.layout.preference_list_fragment);
+        this.addPreferencesFromResource(R.layout.edit_pref_list_fragment);
 
-        lp = (EditListPreference) findPreference("theme_list");
+        lp = (ThemeListPreference) findPreference("theme_list");
         lp.setOnPreferenceChangeListener(this);
 
         ThemeJsonObject.Theme[] themes = ThemeJsonObject.getThemes(getActivity());

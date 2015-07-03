@@ -17,11 +17,11 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
     private String[] resourceNames = null;
     private String[] resourceImages = null;
     private String[] resourceValues = null;
-    private EditListPreference ts;
+    private ThemeListPreference ts;
 
     public ThemeListAdapter(Context context, int textViewResourceId,
                             CharSequence[] objects, String[] ids,
-                            String[] texts, String[] images, int i, EditListPreference ts) {
+                            String[] texts, String[] images, int i, ThemeListPreference ts) {
         super(context, textViewResourceId, objects);
 
         selected = i;
