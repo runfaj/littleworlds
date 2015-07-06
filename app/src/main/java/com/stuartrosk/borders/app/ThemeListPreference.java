@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -17,7 +17,7 @@ public class ThemeListPreference extends ListPreference
     public ThemeListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        preferences = context.getSharedPreferences("com.stuartrosk.littleworlds", context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences(context.getString(R.string.pref_namespace), context.MODE_PRIVATE);
 
         ThemeJsonObject.Theme[] themes = ThemeJsonObject.getThemes(context);
         resourceNames = new String[themes.length];

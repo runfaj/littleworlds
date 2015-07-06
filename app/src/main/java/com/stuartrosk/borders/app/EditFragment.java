@@ -1,15 +1,18 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 
 /**
@@ -21,6 +24,7 @@ public class EditFragment extends Fragment {
     private Button editDoneBtn;
     private EditFragmentListener listener;
     private EditPrefListFragment editPrefListFragment;
+    private View v;
 
     public EditFragment() {
         // Required empty public constructor
@@ -33,6 +37,22 @@ public class EditFragment extends Fragment {
         public void showImageEditScreen(String editPos);
     }
 
+
+    public void toggleEditIcons() {
+        int state;
+        if(preferences.getInt(getString(R.string.theme_id),1) == 1)
+            state = View.VISIBLE;
+        else
+            state = View.INVISIBLE;
+        Log.d("invisible?",(state == View.INVISIBLE)+"");
+        if(v==null)return;
+        RelativeLayout r = (RelativeLayout)v.findViewById(R.id.fragmentEdit);
+        for(int i=0;i<r.getChildCount();i++) {
+            if(r.getChildAt(i) instanceof ImageView) {
+                r.getChildAt(i).setVisibility(state);
+            }
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -52,9 +72,9 @@ public class EditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_edit, container, false);
+        v = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        preferences = getActivity().getSharedPreferences("com.stuartrosk.littleworlds", getActivity().MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
         editPrefListFragment = new EditPrefListFragment();
 
@@ -73,7 +93,7 @@ public class EditFragment extends Fragment {
         //set edit button handlers
         ViewGroup vg = (ViewGroup)v.findViewById(R.id.fragmentEdit);
         for(int i=0;i<vg.getChildCount();i++) {
-            if(vg.getChildAt(i) instanceof ImageButton) {
+            if(vg.getChildAt(i) instanceof ImageView) {
                 vg.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -114,7 +134,7 @@ public class EditFragment extends Fragment {
     @Override
     public void onResume() {
         listener.onStartEdit();
-
+        toggleEditIcons();
         super.onResume();
     }
 }

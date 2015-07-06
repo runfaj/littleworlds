@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.content.Context;
 import android.net.Uri;
@@ -132,7 +132,7 @@ public class ImageJsonObject {
     }
 
     public String readPreferences(Context context, Position p) {
-        String curJson = context.getSharedPreferences("com.stuartrosk.littleworlds",Context.MODE_PRIVATE).getString(p.toString(),EMPTY_JSON_VALUE);
+        String curJson = context.getSharedPreferences(context.getString(R.string.pref_namespace),Context.MODE_PRIVATE).getString(p.toString(),EMPTY_JSON_VALUE);
         //Log.d("test",curJson);
         ImageJsonObject newObj = JsonToObject(curJson);
 
@@ -152,7 +152,7 @@ public class ImageJsonObject {
 
     public void commitChanges(Context context) {
         String json = ObjectToJson(this);
-        context.getSharedPreferences("com.stuartrosk.littleworlds",Context.MODE_PRIVATE)
+        context.getSharedPreferences(context.getString(R.string.pref_namespace),Context.MODE_PRIVATE)
             .edit()
             .putString(this.position.toString(), json)
             .commit();

@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.content.Context;
 import android.util.Log;

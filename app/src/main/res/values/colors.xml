@@ -4,4 +4,6 @@
     <color name="edit_box_very_light">#ffeaeaea</color>
     <color name="edit_box_light">#ffbdbdbd</color>
     <color name="edit_box_regular">#ffa0a0a0</color>
+    <color name="red">#ffff0004</color>
+    <color name="star_pressed_background">#ffff0004</color>
 </resources>

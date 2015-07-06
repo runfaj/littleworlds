@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -20,8 +20,9 @@ public class EditPrefListFragment extends PreferenceFragment implements Preferen
         lp = (ThemeListPreference) findPreference("theme_list");
         lp.setSummary("Current: Custom");
         lp.setSummary("Current: " +
-                getActivity().getSharedPreferences("com.stuartrosk.littleworlds", getActivity().MODE_PRIVATE).
-                getString(getString(R.string.theme_key)
+                getActivity().
+                    getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE).
+                    getString(getString(R.string.theme_key)
                         , "Custom"));
 
         listener.onThemeSelectionChange();

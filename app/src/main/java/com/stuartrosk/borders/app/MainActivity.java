@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 public class MainActivity extends Activity
     implements EditFragment.EditFragmentListener,
@@ -68,16 +69,25 @@ public class MainActivity extends Activity
 
     @Override
     public void onStartEdit() {
+        boolean editMode = false;
+        if(preferences.getInt(getString(R.string.theme_id),1) == 1)
+            editMode = true;
         stopWorldService();
-        startWorldService(true, "");
+        startWorldService(editMode, "");
     }
 
     @Override
     public void onThemeSelectionChange() {
+        boolean editMode = false;
+        if(preferences.getInt(getString(R.string.theme_id),1) == 1)
+            editMode = true;
         EditFragment testFragment = (EditFragment)getFragmentManager().findFragmentByTag("E");
         if(testFragment != null && testFragment.isVisible()) {
             stopWorldService();
-            startWorldService(true, "");
+            startWorldService(editMode, "");
+        }
+        if(fragmentEdit != null && fragmentEdit.isAdded() && fragmentEdit.isVisible()) {
+            fragmentEdit.toggleEditIcons();
         }
     }
 
@@ -145,7 +155,7 @@ public class MainActivity extends Activity
             .add(R.id.mainFrame, fragmentHome, "H")
         .commit();
 
-        preferences = getSharedPreferences("com.stuartrosk.littleworlds",MODE_PRIVATE);
+        preferences = getSharedPreferences(getString(R.string.pref_namespace),MODE_PRIVATE);
     }
 
     @Override

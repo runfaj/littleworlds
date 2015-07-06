@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rowtext"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/rowimage"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"/>
+
+<TextView
+    android:id="@+id/rowtext"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingLeft="12dp"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:singleLine="false"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"/>
+    android:layout_alignParentTop="true"
+    android:layout_toRightOf="@+id/rowimage"
+    android:layout_toEndOf="@+id/rowimage"
+    android:paddingLeft="4dp"/>
+
+</RelativeLayout>

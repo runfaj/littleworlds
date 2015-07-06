@@ -1,5 +1,6 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -23,6 +24,7 @@ public class FileDialog extends Dialog {
     private Context context;
     private List<String> item = null;
     private List<String> path = null;
+    private List<Integer> image = null;
     private String root = DEFAULT_ROOT;
     private TextView myPath;
     private ListView list;
@@ -85,9 +87,10 @@ public class FileDialog extends Dialog {
 
     private void getDir(String dirPath)
     {
-        myPath.setText("Location: " + dirPath);
+        myPath.setText("Current Folder: " + dirPath);
         item = new ArrayList<String>();
         path = new ArrayList<String>();
+        image = new ArrayList<Integer>();
         File f = new File(dirPath);
         File[] files = f.listFiles();
 
@@ -95,6 +98,7 @@ public class FileDialog extends Dialog {
         {
             item.add("../");
             path.add(f.getParent());
+            image.add(R.drawable.ic_reply_black_48dp);
         }
 
         for (int i = 0; i < files.length; i++)
@@ -103,6 +107,7 @@ public class FileDialog extends Dialog {
             if (file.isDirectory()) {
                 item.add(file.getName() + "/");
                 path.add(file.getPath());
+                image.add(R.drawable.ic_folder_black_48dp);
             } else {
                 if(allowedExtensions.length > 0) {
                     for(String ext: allowedExtensions) {
@@ -112,15 +117,15 @@ public class FileDialog extends Dialog {
                         if(matches > 0) {
                             item.add(file.getName());
                             path.add(file.getPath());
+                            image.add(R.drawable.ic_insert_drive_file_black_48dp);
                         }
                     }
                 }
             }
         }
 
-        ArrayAdapter<String> fileList =
-                new ArrayAdapter<String>(context, R.layout.file_row, item);
-        list.setAdapter(fileList);
+        FileListAdapter adapter = new FileListAdapter((Activity)context, item, image);
+        list.setAdapter(adapter);
     }
 
 }

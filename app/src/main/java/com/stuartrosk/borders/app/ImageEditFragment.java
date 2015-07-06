@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -64,7 +64,7 @@ public class ImageEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_image_edit, container, false);
 
-        preferences = getActivity().getSharedPreferences("com.stuartrosk.littleworlds", Context.MODE_PRIVATE);
+        preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), Context.MODE_PRIVATE);
         String editPos = getArguments().getString("editPos","");
 
         //add various handlers

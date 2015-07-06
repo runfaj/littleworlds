@@ -1,4 +1,4 @@
-package com.stuartrosk.littleworlds.app;
+package com.stuartrosk.borders.app;
 
 import android.app.Service;
 import android.content.Intent;
@@ -196,7 +196,7 @@ public class WorldService extends Service {
     @Override public void onCreate() {
         super.onCreate();
 
-        preferences = getSharedPreferences("com.stuartrosk.littleworlds",MODE_PRIVATE);
+        preferences = getSharedPreferences(getString(R.string.pref_namespace),MODE_PRIVATE);
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         serviceView = (RelativeLayout) inflater.inflate(R.layout.service_view, null);

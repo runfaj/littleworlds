@@ -1,12 +1,37 @@
 <resources>
-    <string name="app_name">Little Worlds</string>
+    <string name="app_name">Borders</string>
     <string name="default_side_text">20</string>
     <string name="default_corner_text">40</string>
+
+    <!-- prefs -->
+    <string name="pref_namespace">com.stuartrosk.borders.app</string>
     <string name="edit_mode_pref">edit_mode</string> <!-- used to keep track of our service being edit more or regular -->
     <string name="first_time_pref">first_timer</string> <!-- used to see if we should hide/show initial worlds. Also for tutorial -->
     <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
-    <string name="default_file_path">/</string>
-    <string name="default_image_btn_text">(none)</string>
+    <string name="rate_us_pref">rated</string> <!-- true/false, if true, we hide the stars -->
+    <string name="unlocked_pref">unlocked</string>
     <string name="theme_key">imageList</string>
     <string name="theme_id">themeId</string>
+
+    <string name="default_file_path">/</string>
+    <string name="default_image_btn_text">(none)</string>
+
+    <string name="email_to">me@stuartrosk.com</string>
+    <string name="email_subject">Feedback for Borders App</string>
+
+    <string name="bad_rating_title">Help us improve!</string>
+    <string name="bad_rating_message">We noticed you clicked on a lower rating star. We strive to make the best apps we can, so if this rating is due to something not intuitive or a bug, please email us! We will do our best to respond as quickly as possible to address your issue!</string>
+    <string name="bad_rating_rate">Continue Rating</string>
+    <string name="bad_rating_email">Email Us!</string>
+
+    <string name="feedback_title">How are we doing?</string>
+    <string name="feedback_message">We are always trying to make your experience the best! If you have some positive feedback, make sure to rate us! You\'re also welcome to email us too. If you have run into a bug or would like an improvement, please email us and we\'ll try to update the app quickly!</string>
+    <string name="feedback_rate">Rate Us!</string>
+    <string name="feedback_email">Email Us!</string>
+
+    <string name="share_title">Share Something</string>
+    <string name="share_message">Which one would you like to share?</string>
+    <string name="share_app">App Link</string>
+    <string name="share_image">Image</string>
+    <string name="share_screenshot">Screenshot</string>
 </resources>
