@@ -6,11 +6,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public class FileDialog extends Dialog {
     private List<String> path = null;
     private List<Integer> image = null;
     private String root = DEFAULT_ROOT;
-    private TextView myPath;
+    private TextView myPath, downloadLink, cameraLink, picturesLink, sdcardLink;
     private ListView list;
     private FileDialogListener fileDialogListener;
     private String[] allowedExtensions = {};
@@ -46,13 +46,46 @@ public class FileDialog extends Dialog {
             allowedExtensions = extensions;
     }
 
+    private String getPathFromFullPath(String path, String fileName) {
+        return path.substring(0, path.indexOf(fileName) - 1);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_list_view);
         myPath = (TextView) findViewById(R.id.path);
         list = (ListView) findViewById(R.id.file_list);
+        downloadLink = (TextView) findViewById(R.id.downloadsRow);
+        cameraLink = (TextView) findViewById(R.id.cameraRow);
+        picturesLink = (TextView) findViewById(R.id.picturesRow);
+        sdcardLink = (TextView) findViewById(R.id.sdcardRow);
         getDir(root);
+
+        downloadLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+            }
+        });
+        cameraLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath());
+            }
+        });
+        picturesLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDir(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+            }
+        });
+        sdcardLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDir(Environment.getExternalStorageDirectory().getAbsolutePath());
+            }
+        });
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -74,8 +107,7 @@ public class FileDialog extends Dialog {
                     }
                 } else {
                     String p = file.getAbsolutePath();
-                    p = p.substring(0,p.indexOf(file.getName())-1);
-                    Log.d("file",p + " " + file.getName() );
+                    p = getPathFromFullPath(p, file.getName());
                     fileDialogListener.fileDialogOutput(p, file.getName());
                     dismiss();
                 }
@@ -87,12 +119,39 @@ public class FileDialog extends Dialog {
 
     private void getDir(String dirPath)
     {
-        myPath.setText("Current Folder: " + dirPath);
+        String currentDirName = dirPath;
         item = new ArrayList<String>();
         path = new ArrayList<String>();
         image = new ArrayList<Integer>();
         File f = new File(dirPath);
         File[] files = f.listFiles();
+
+        RelativeLayout
+            downloadLinkContainer = (RelativeLayout)downloadLink.getParent(),
+            cameraLinkContainer = (RelativeLayout)cameraLink.getParent(),
+            picturesLinkContainer = (RelativeLayout)picturesLink.getParent(),
+            sdcardLinkContainer = (RelativeLayout)sdcardLink.getParent();
+
+        downloadLinkContainer.setVisibility(View.VISIBLE);
+        cameraLinkContainer.setVisibility(View.VISIBLE);
+        picturesLinkContainer.setVisibility(View.VISIBLE);
+        sdcardLinkContainer.setVisibility(View.VISIBLE);
+
+        if(f.getAbsolutePath().equals(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath())) {
+            currentDirName = "Downloads";
+            downloadLinkContainer.setVisibility(View.GONE);
+        } else if(f.getAbsolutePath().equals(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath())) {
+            currentDirName = "Camera";
+            cameraLinkContainer.setVisibility(View.GONE);
+        } else if(f.getAbsolutePath().equals(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath())) {
+            currentDirName = "Pictures";
+            picturesLinkContainer.setVisibility(View.GONE);
+        } else if(f.getAbsolutePath().equals(Environment.getExternalStorageDirectory().getAbsolutePath())) {
+            currentDirName = "sdcard";
+            sdcardLinkContainer.setVisibility(View.GONE);
+        }
+
+        myPath.setText("Current Folder: " + currentDirName);
 
         if (!dirPath.equals(DEFAULT_ROOT))
         {

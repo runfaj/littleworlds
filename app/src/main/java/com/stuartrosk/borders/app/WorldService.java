@@ -19,8 +19,11 @@ import android.widget.RelativeLayout;
 
 public class WorldService extends Service {
 
+    public static WorldService runningInstance = null;
+
     private WindowManager windowManager;
-    private RelativeLayout serviceView;
+    public RelativeLayout serviceView;
+    private RelativeLayout homeFragment;
     private LayoutInflater inflater;
     private ImageView trcV, tlcV, brcV, blcV,
             tlmV, trmV, blmV, brmV,
@@ -211,6 +214,8 @@ public class WorldService extends Service {
 
         windowManager.addView(serviceView, params);
 
+        runningInstance = this;
+
         initVars();
     }
 
@@ -239,7 +244,10 @@ public class WorldService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (serviceView != null) windowManager.removeView(serviceView);
+        if (serviceView != null) {
+            windowManager.removeView(serviceView);
+            runningInstance = null;
+        }
     }
 
     @Override
@@ -249,8 +257,12 @@ public class WorldService extends Service {
         if(intent != null) {
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                editMode = (Boolean) extras.get("editMode");
-                editPos = (String) extras.get("editPos");
+                editMode = extras.get("editMode") != null ? (Boolean) extras.get("editMode") : false;
+                editPos =  extras.get("editPos") != null ? (String) extras.get("editPos") : "";
+                if(extras.get("screenshot") != null && (Boolean)extras.get("screenshot")) {
+                    homeFragment = (RelativeLayout) inflater.inflate(R.layout.fragment_home, null);
+                    serviceView.addView(homeFragment);
+                }
             }
         }
 

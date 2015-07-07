@@ -3,8 +3,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-    >
+              android:layout_height="fill_parent">
+
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.2dp"
+            android:visibility="visible"
+            android:background="@android:color/darker_gray"/>
+
     <TextView
         android:id="@+id/path"
         android:layout_width="fill_parent"
@@ -14,7 +20,160 @@
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
         android:paddingLeft="12dp"
-        android:textColor="#ff000000"/>
+        android:textColor="#ff000000"
+        android:text="Current Folder:"/>
+
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.2dp"
+            android:visibility="visible"
+            android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Common Folders"
+                android:id="@+id/textView2"
+                android:layout_gravity="center_horizontal"
+                android:textColor="#ff000000"/>
+
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+            <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/sdcardRowIcon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_sd_card_black_48dp"/>
+
+            <TextView
+                    android:id="@+id/sdcardRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:singleLine="false"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/sdcardRowIcon"
+                    android:layout_toEndOf="@+id/sdcardRowIcon"
+                    android:paddingLeft="4dp"
+                    android:text="SD Card"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+            <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/downloadsRowIcon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_get_app_black_48dp"/>
+
+            <TextView
+                    android:id="@+id/downloadsRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:singleLine="false"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/downloadsRowIcon"
+                    android:layout_toEndOf="@+id/downloadsRowIcon"
+                    android:paddingLeft="4dp"
+                    android:text="Downloads"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+            <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/cameraRowIcon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_photo_camera_black_48dp"/>
+
+            <TextView
+                    android:id="@+id/cameraRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:singleLine="false"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/cameraRowIcon"
+                    android:layout_toEndOf="@+id/cameraRowIcon"
+                    android:paddingLeft="4dp"
+                    android:text="Camera"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+            <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/picturesRowIcon"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/ic_image_black_48dp"/>
+
+            <TextView
+                    android:id="@+id/picturesRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:singleLine="false"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/picturesRowIcon"
+                    android:layout_toEndOf="@+id/picturesRowIcon"
+                    android:paddingLeft="4dp"
+                    android:text="Pictures"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.2dp"
+            android:visibility="visible"
+            android:background="@android:color/darker_gray"/>
+
     <ListView
         android:id="@+id/file_list"
         android:layout_width="fill_parent"

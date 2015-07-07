@@ -31,11 +31,12 @@
         <Switch
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:text="Enable Worlds"
+                android:text="Enable Borders"
                 android:id="@+id/serviceSwitch"
                 android:layout_below="@+id/imageView"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="24dp"
+                android:checked="true"/>
 
         <!--<Button
                 android:layout_width="105dp"

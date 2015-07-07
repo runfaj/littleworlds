@@ -8,12 +8,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -108,26 +116,80 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void shareImage() {
+    private void shareImage(Uri uri) {
+        PackageManager pm = getActivity().getPackageManager();
+        String installer = pm.getInstallerPackageName(getActivity().getApplicationContext().getPackageName());
+
+        String appLink = "https://play.google.com/store/apps/details?id=" + getString(R.string.pref_namespace);
+        if(installer != null && !installer.equals("") && installer.contains("amazon")) appLink = "http://www.amazon.com/gp/mas/dl/android?p=" + getString(R.string.pref_namespace);
+
+        try {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.putExtra(Intent.EXTRA_TEXT, "Here's an awesome image I used for my Borders app!\n\n" + appLink);
+            startActivity(Intent.createChooser(intent, "Choose One"));
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Unable to share image. Please send a bug report through the feedback link in the settings. Thanks!", Toast.LENGTH_LONG);
+        }
+    }
+
+    private void shareImageDialog() {
         String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
         FileDialog fd = new FileDialog(getActivity(), "/", extensions, new FileDialog.FileDialogListener() {
             @Override
             public void fileDialogOutput(String path, String name) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/*");
-                    intent.putExtra(Intent.EXTRA_STREAM, path + "/" + name);
-                    startActivity(Intent.createChooser(intent, "Choose One"));
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), "Unable to share image. Please send a bug report through the feedback link in the settings. Thanks!", Toast.LENGTH_LONG);
-                }
+                File file = new File(path+"/"+name);
+                Uri uri = Uri.fromFile(file);
+                shareImage(uri);
             }
         });
         fd.show();
     }
 
     private void shareScreenshot() {
+        //setup directory
+        File screenshotDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File temp = new File(screenshotDir.getAbsolutePath() + "/Borders_Screenshots");
+        if(!temp.exists() || !temp.isDirectory())
+            temp.mkdir();
+        screenshotDir = temp;
 
+
+        Intent i = null;
+        //setup default view
+        View v = getActivity().getWindow().getDecorView().getRootView();
+        if(WorldService.runningInstance != null)
+            v = WorldService.runningInstance.serviceView.getRootView();
+
+        //setup vars and file name
+        v.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
+        v.setDrawingCacheEnabled(false);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_hh:mm:ss");
+        String date = simpleDateFormat.format(new Date());
+        OutputStream out = null;
+        File imageFile = new File(screenshotDir.getAbsolutePath() + "/Borders_" + date + ".png");
+
+        //create image
+        try {
+            out = new FileOutputStream(imageFile);
+            // choose JPEG format
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(),"Unable to take screenshot. Please send a bug report through the feedback link in the settings. Thanks!",Toast.LENGTH_LONG);
+        } finally {
+            try {
+                if (out != null)
+                    out.close();
+            } catch (Exception exc) {
+                Toast.makeText(getActivity(),"Unable to take screenshot. Please send a bug report through the feedback link in the settings. Thanks!",Toast.LENGTH_LONG);
+            }
+        }
+
+        //share new image
+        shareImage(Uri.fromFile(imageFile));
     }
 
     private void showSharePopup() {
@@ -142,11 +204,12 @@ public class HomeFragment extends Fragment {
             })
             .setNeutralButton(getString(R.string.share_image), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    shareImage();
+                    shareImageDialog();
                 }
             })
             .setPositiveButton(getString(R.string.share_screenshot), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
                     shareScreenshot();
                 }
             });

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 public class MainActivity extends Activity
     implements EditFragment.EditFragmentListener,
@@ -36,8 +35,13 @@ public class MainActivity extends Activity
             Intent worldService = new Intent(getApplicationContext(), WorldService.class);
             worldService.putExtra("editMode",editMode);
             worldService.putExtra("editPos",editPos);
+            worldService.putExtra("screenshot",true);
             startService(worldService);
         }
+    }
+
+    public void startScreenshotWorldService() {
+
     }
 
     public void stopWorldService() {
