@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
              tools:context="com.stuartrosk.borders.app.HomeFragment"
-            android:id="@+id/fragmentHome">
+            android:id="@+id/fragmentHome"
+                android:background="@color/primary">
 
     <ImageButton
             android:layout_width="40dp"
@@ -36,7 +37,8 @@
                 android:layout_below="@+id/imageView"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="24dp"
-                android:checked="true"/>
+                android:checked="true"
+                android:textColor="@android:color/black"/>
 
         <!--<Button
                 android:layout_width="105dp"

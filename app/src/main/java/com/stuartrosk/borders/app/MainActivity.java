@@ -2,10 +2,9 @@ package com.stuartrosk.borders.app;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class MainActivity extends Activity
@@ -35,13 +34,23 @@ public class MainActivity extends Activity
             Intent worldService = new Intent(getApplicationContext(), WorldService.class);
             worldService.putExtra("editMode",editMode);
             worldService.putExtra("editPos",editPos);
-            worldService.putExtra("screenshot",true);
             startService(worldService);
         }
     }
 
     public void startScreenshotWorldService() {
+        stopWorldService();
+        if(!isServiceRunning()) {
+            Intent worldService = new Intent(getApplicationContext(), WorldService.class);
+            worldService.putExtra("screenshot",true);
+            startService(worldService);
+        }
+    }
 
+    public void stopScreenshotWorldService() {
+        stopWorldService();
+        if(preferences.getBoolean(getString(R.string.service_enabled_pref),false))
+            startWorldService(false, "");
     }
 
     public void stopWorldService() {
@@ -165,6 +174,24 @@ public class MainActivity extends Activity
     @Override
     protected void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(screenshotReceiver,
+                new IntentFilter("service-ready"));
+    }
+
+    // handler for received Intents for the "my-event" event
+    private BroadcastReceiver screenshotReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("testing","got intent");
+            fragmentHome.onScreenshotReady();
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is not visible
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(screenshotReceiver);
+        super.onPause();
     }
 
     /*

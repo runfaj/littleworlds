@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class HomeFragment extends Fragment {
         public void showEditScreen();
         public boolean isServiceRunning();
         public void firstTimer();
+        public void startScreenshotWorldService();
+        public void stopScreenshotWorldService();
     }
 
     private void showLowRatingPopup() {
@@ -116,7 +119,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void shareImage(Uri uri) {
+    private void shareImage(String message, Uri uri) {
         PackageManager pm = getActivity().getPackageManager();
         String installer = pm.getInstallerPackageName(getActivity().getApplicationContext().getPackageName());
 
@@ -127,7 +130,7 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
-            intent.putExtra(Intent.EXTRA_TEXT, "Here's an awesome image I used for my Borders app!\n\n" + appLink);
+            intent.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + appLink);
             startActivity(Intent.createChooser(intent, "Choose One"));
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Unable to share image. Please send a bug report through the feedback link in the settings. Thanks!", Toast.LENGTH_LONG);
@@ -141,13 +144,18 @@ public class HomeFragment extends Fragment {
             public void fileDialogOutput(String path, String name) {
                 File file = new File(path+"/"+name);
                 Uri uri = Uri.fromFile(file);
-                shareImage(uri);
+                shareImage("Here's an awesome image I used for my Borders app!",uri);
             }
         });
         fd.show();
     }
 
     private void shareScreenshot() {
+        listener.startScreenshotWorldService();
+    }
+    public void onScreenshotReady() {
+        /** this is called when the service is ready for a screenshot **/
+        Log.d("testing", "works!");
         //setup directory
         File screenshotDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File temp = new File(screenshotDir.getAbsolutePath() + "/Borders_Screenshots");
@@ -156,7 +164,6 @@ public class HomeFragment extends Fragment {
         screenshotDir = temp;
 
 
-        Intent i = null;
         //setup default view
         View v = getActivity().getWindow().getDecorView().getRootView();
         if(WorldService.runningInstance != null)
@@ -188,8 +195,10 @@ public class HomeFragment extends Fragment {
             }
         }
 
+        listener.stopScreenshotWorldService();
+
         //share new image
-        shareImage(Uri.fromFile(imageFile));
+        shareImage("Check out my border on the Borders app!", Uri.fromFile(imageFile));
     }
 
     private void showSharePopup() {

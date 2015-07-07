@@ -1,29 +1,39 @@
 package com.stuartrosk.borders.app;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class WorldService extends Service {
+    public class LocalBinder extends Binder {
+        WorldService getService() {
+            return WorldService.this;
+        }
+    }
+    private final IBinder mBinder = new LocalBinder();
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
 
     public static WorldService runningInstance = null;
 
     private WindowManager windowManager;
     public RelativeLayout serviceView;
-    private RelativeLayout homeFragment;
     private LayoutInflater inflater;
     private ImageView trcV, tlcV, brcV, blcV,
             tlmV, trmV, blmV, brmV,
@@ -40,13 +50,6 @@ public class WorldService extends Service {
     private String editPos;
 
     private ThemeJsonObject.Theme currTheme;
-
-    @Override public IBinder onBind(Intent intent) {
-        if(intent.getStringExtra("showEditMode").equals("true")){
-            //show borders
-        }
-        return null;
-    }
 
     private void initVars() {
         RelativeLayout s = serviceView;
@@ -143,7 +146,6 @@ public class WorldService extends Service {
         int thicknessPX = (int)(thicknessDP * density);
 
         currTheme = ThemeJsonObject.getTheme(this,preferences.getInt(getString(R.string.theme_id),1));
-        Log.d("cursel",""+preferences.getInt(getString(R.string.theme_id),1));
 
         /////force resetting defaults config for testing only
         boolean resetPrefs = false;
@@ -246,8 +248,8 @@ public class WorldService extends Service {
         super.onDestroy();
         if (serviceView != null) {
             windowManager.removeView(serviceView);
-            runningInstance = null;
         }
+        runningInstance = null;
     }
 
     @Override
@@ -260,8 +262,11 @@ public class WorldService extends Service {
                 editMode = extras.get("editMode") != null ? (Boolean) extras.get("editMode") : false;
                 editPos =  extras.get("editPos") != null ? (String) extras.get("editPos") : "";
                 if(extras.get("screenshot") != null && (Boolean)extras.get("screenshot")) {
-                    homeFragment = (RelativeLayout) inflater.inflate(R.layout.fragment_home, null);
-                    serviceView.addView(homeFragment);
+                    serviceView.findViewById(R.id.screenshot_image).setVisibility(View.VISIBLE);
+                    Intent i = new Intent("service-ready");
+                    // add data
+                    //i.putExtra("message", "data");
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(i);
                 }
             }
         }
