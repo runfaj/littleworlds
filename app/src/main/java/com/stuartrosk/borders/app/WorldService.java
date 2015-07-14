@@ -1,14 +1,14 @@
 package com.stuartrosk.borders.app;
 
+import android.app.Activity;
 import android.app.Service;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+import android.content.*;
+import android.gesture.*;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
 
 public class WorldService extends Service {
     public class LocalBinder extends Binder {
@@ -45,6 +47,8 @@ public class WorldService extends Service {
             srtO, srmO, srbO;
     private float startWindowWidth, startWindowHeight;
     SharedPreferences preferences;
+    //GestureLibrary gestureLibrary = null;
+    //GestureOverlayView gestureOverlayView;
 
     private boolean editMode = false;
     private String editPos;
@@ -207,8 +211,8 @@ public class WorldService extends Service {
         serviceView = (RelativeLayout) inflater.inflate(R.layout.service_view, null);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                //WindowManager.LayoutParams.TYPE_INPUT_METHOD |
-                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,// | WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                //WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
 
@@ -219,7 +223,25 @@ public class WorldService extends Service {
         runningInstance = this;
 
         initVars();
+
+        /*gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        gestureLibrary.load();
+
+        gestureOverlayView = (GestureOverlayView)serviceView.findViewById(R.id.gestures);
+        gestureOverlayView.addOnGesturePerformedListener(gesturePerformedListener);*/
     }
+
+    /*GestureOverlayView.OnGesturePerformedListener gesturePerformedListener = new GestureOverlayView.OnGesturePerformedListener(){
+        @Override
+        public void onGesturePerformed(GestureOverlayView view, Gesture gesture) {
+            // TODO Auto-generated method stub
+            ArrayList<Prediction> prediction = gestureLibrary.recognize(gesture);
+            Log.d("gesture-found","yup");
+            if(prediction.size() > 0){
+                Log.d("gesture",prediction.get(0).name);
+            }
+        }
+    };*/
 
     private void checkSpecificPos(ImageJsonObject.Position p) {
         switch (p) {

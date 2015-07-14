@@ -1,9 +1,9 @@
 package com.stuartrosk.borders.app;
 
-import android.app.Activity;
-import android.app.ActivityManager;
+import android.app.*;
 import android.content.*;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -16,6 +16,7 @@ public class MainActivity extends Activity
     private HomeFragment fragmentHome;
     private EditFragment fragmentEdit;
     private SharedPreferences preferences;
+    private SettingsPrefFragment fragmentSettings;
 
     /** service functions **/
 
@@ -36,6 +37,7 @@ public class MainActivity extends Activity
             worldService.putExtra("editPos",editPos);
             startService(worldService);
         }
+        showServiceNotification();
     }
 
     public void startScreenshotWorldService() {
@@ -56,6 +58,7 @@ public class MainActivity extends Activity
     public void stopWorldService() {
         if(isServiceRunning())
             stopService(new Intent(getApplicationContext(), WorldService.class));
+        showServiceNotification();
     }
 
     /** edit screen functions **/
@@ -141,7 +144,25 @@ public class MainActivity extends Activity
         startWorldService(true, editPos);
     }
 
-    /** main activity functions **/
+    /** settings functions **/
+
+    public void showSettings() {
+        getFragmentManager().beginTransaction()
+            .replace(R.id.mainFrame, fragmentSettings, "S")
+            .addToBackStack(null)
+        .commit();
+    }
+
+    public void hideSettings() {
+        getFragmentManager().popBackStack();
+        onFinishSettings();
+    }
+
+    public void onFinishSettings() {
+        showServiceNotification();
+    }
+
+    /** home fragment functions **/
 
     @Override
     public void firstTimer() {
@@ -151,10 +172,11 @@ public class MainActivity extends Activity
             .putInt(getString(R.string.theme_id), 2)
             .putString(getString(R.string.theme_key), "Cats")
         .commit();
-        Log.d("testing", "balalda");
         stopWorldService();
         startWorldService(false,"");
     }
+
+    /** main activity functions **/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,12 +185,33 @@ public class MainActivity extends Activity
 
         fragmentHome = new HomeFragment();
         fragmentEdit = new EditFragment();
+        fragmentSettings = new SettingsPrefFragment();
 
         getFragmentManager().beginTransaction()
             .add(R.id.mainFrame, fragmentHome, "H")
         .commit();
 
         preferences = getSharedPreferences(getString(R.string.pref_namespace),MODE_PRIVATE);
+
+        Boolean stopBordersExtra = getIntent().getBooleanExtra(getString(R.string.stopBordersExtra),false);
+        Boolean startBordersExtra = getIntent().getBooleanExtra(getString(R.string.startBordersExtra),false);
+
+        Log.d("borders",Boolean.toString(stopBordersExtra) + " " + Boolean.toString(startBordersExtra));
+
+        if(startBordersExtra) {
+            Log.d("starting","yup");
+            startWorldService(false, "");
+            preferences.edit().putBoolean(getString(R.string.service_enabled_pref),true).commit();
+            showServiceNotification();
+            finish();
+        }
+        if(stopBordersExtra) {
+            Log.d("stopping","yup");
+            stopWorldService();
+            preferences.edit().putBoolean(getString(R.string.service_enabled_pref),false).commit();
+            showServiceNotification();
+            finish();
+        }
     }
 
     @Override
@@ -178,7 +221,6 @@ public class MainActivity extends Activity
                 new IntentFilter("service-ready"));
     }
 
-    // handler for received Intents for the "my-event" event
     private BroadcastReceiver screenshotReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -192,6 +234,79 @@ public class MainActivity extends Activity
         // Unregister since the activity is not visible
         LocalBroadcastManager.getInstance(this).unregisterReceiver(screenshotReceiver);
         super.onPause();
+    }
+
+    private void showServiceNotification() {
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if(Boolean.valueOf(preferences.getString(getString(R.string.notification_pref),"true"))) {
+            //main intent for just clicking on notification
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent mainIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            //notification "play" button
+            Intent newWorldService = new Intent(this, MainActivity.class);
+            newWorldService.putExtra(getString(R.string.startBordersExtra),true);
+            newWorldService.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent startWorldService = PendingIntent.getActivity(this, 555, newWorldService, 0);
+
+            //notification "stop" button
+            Intent oldWorldService = new Intent(this, MainActivity.class);
+            oldWorldService.putExtra(getString(R.string.stopBordersExtra),true);
+            oldWorldService.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent stopWorldService = PendingIntent.getActivity(this, 556, oldWorldService, 0);
+
+            int iconId = android.R.color.transparent;
+            int toggleId = R.drawable.ic_stop_white_48dp;
+            String currState = "Stop";
+            String currStateTitle = "Running";
+            String currStateTitle2 = "stop";
+
+
+            if (Boolean.valueOf(preferences.getString("notification_icon_pref", "true"))) {
+                iconId = R.drawable.ic_image_black_48dp;
+            }
+            if (!preferences.getBoolean(getString(R.string.service_enabled_pref), false)) {
+                currState = "Start";
+                currStateTitle = "Stopped";
+                currStateTitle2 = "Start";
+                toggleId = R.drawable.ic_play_arrow_white_48dp;
+            }
+
+
+            NotificationCompat.Builder n = new NotificationCompat.Builder(this)
+                    .setContentTitle("Borders")
+                    .setContentText(currStateTitle + ", touch to " + currStateTitle2 + ".")
+                    .setSmallIcon(iconId)
+                    .setContentIntent(mainIntent)
+                    .setAutoCancel(false)
+                    .setOngoing(true);
+
+            if(!preferences.getBoolean(getString(R.string.service_enabled_pref), false)) {
+                Log.d("notif_start","here");
+                n.addAction(toggleId, currState, startWorldService);
+            } else {
+                Log.d("notif_end","here");
+                n.addAction(toggleId, currState, stopWorldService);
+            }
+
+            n.addAction(R.drawable.ic_get_app_black_48dp, "???", mainIntent); //////////////////////change this
+
+            notificationManager.notify(R.integer.service_notification_id, n.build());
+        } else {
+            notificationManager.cancel(R.integer.service_notification_id);
+        }
+
+        ////////////change title and play/stop based on pref
+    }
+
+    private void showUnlockNotification() {
+
+    }
+
+    private void showRatingNotification() {
+
     }
 
     /*

@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
         public void firstTimer();
         public void startScreenshotWorldService();
         public void stopScreenshotWorldService();
+        public void showSettings();
     }
 
     private void showLowRatingPopup() {
@@ -153,6 +154,7 @@ public class HomeFragment extends Fragment {
     private void shareScreenshot() {
         listener.startScreenshotWorldService();
     }
+
     public void onScreenshotReady() {
         /** this is called when the service is ready for a screenshot **/
         Log.d("testing", "works!");
@@ -332,6 +334,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showSharePopup();
+            }
+        });
+
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.showSettings();
             }
         });
 

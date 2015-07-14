@@ -3,6 +3,9 @@
     <string name="default_side_text">20</string>
     <string name="default_corner_text">40</string>
 
+    <string name="stopBordersExtra">stopBorders</string>
+    <string name="startBordersExtra">startBorers</string>
+
     <!-- prefs -->
     <string name="pref_namespace">com.stuartrosk.borders.app</string>
     <string name="edit_mode_pref">edit_mode</string> <!-- used to keep track of our service being edit more or regular -->
@@ -12,6 +15,9 @@
     <string name="unlocked_pref">unlocked</string>
     <string name="theme_key">imageList</string>
     <string name="theme_id">themeId</string>
+    <string name="startup_pref">startup_pref</string>
+    <string name="notification_pref">notification_pref</string>
+    <string name="notification_icon_pref">notification_icon_pref</string>
 
     <string name="default_file_path">/</string>
     <string name="default_image_btn_text">(none)</string>

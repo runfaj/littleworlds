@@ -152,4 +152,11 @@
             android:scaleType="fitXY"
         />
 
+    <android.gesture.GestureOverlayView
+        android:id="@+id/gestures"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gestureStrokeType="multiple"
+        android:eventsInterceptionEnabled="true"/>
+
 </RelativeLayout>

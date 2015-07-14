@@ -3,16 +3,27 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
     <CheckBoxPreference
-        android:key="startup_pref"
+        android:key="@string/startup_pref"
         android:title="Run at Startup"
-        android:summary="Run the world service (when toggled on) when the phone boots." />
+        android:summary="Run the world service (when toggled on) when the phone boots."
+        android:defaultValue="true"/>
     <CheckBoxPreference
-        android:key="notification_pref"
+        android:key="@string/notification_pref"
         android:title="Show Notification"
-        android:summary="Show the play/pause notification in the status bar." />
+        android:summary="Show the play/pause notification in the status bar."
+        android:defaultValue="true"/>
     <CheckBoxPreference
+        android:key="@string/notification_icon_pref"
+        android:title="Show Status Bar Icon"
+        android:summary="Show an icon in the status bar when borders are running."
+        android:defaultValue="true"/>
+    <!--<CheckBoxPreference
         android:key="gesture_pref"
         android:title="Enable Gesture"
-        android:summary="Draw a square to toggle borders on/off on any screen." />
+        android:summary="Draw a square to toggle borders on/off on any screen." />-->
+    <!--<CheckBoxPreference
+        android:key="black_bar_pref"
+        android:title="Black Navigation Bar"
+        android:summary="Attempt to always keep the black navigation bar on the bottom of the phone."/>-->
 
 </PreferenceScreen>
