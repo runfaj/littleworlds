@@ -32,7 +32,7 @@ public class FileDialog extends Dialog {
     private String[] allowedExtensions = {};
 
     public interface FileDialogListener {
-        public void fileDialogOutput(String path, String name);
+        public void fileDialogOutput(String path, String name, String extension);
     }
 
     public FileDialog(final Context context, String path, String[] extensions, FileDialogListener fileDialogListener) {
@@ -108,7 +108,9 @@ public class FileDialog extends Dialog {
                 } else {
                     String p = file.getAbsolutePath();
                     p = getPathFromFullPath(p, file.getName());
-                    fileDialogListener.fileDialogOutput(p, file.getName());
+                    String filenameArray[] = p.split("\\.");
+                    String extension = filenameArray[filenameArray.length-1];
+                    fileDialogListener.fileDialogOutput(p, file.getName(), extension);
                     dismiss();
                 }
             }

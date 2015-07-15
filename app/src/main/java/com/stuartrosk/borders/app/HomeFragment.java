@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void shareImage(String message, Uri uri) {
+    private void shareImage(String message, Uri uri, String extension) {
         PackageManager pm = getActivity().getPackageManager();
         String installer = pm.getInstallerPackageName(getActivity().getApplicationContext().getPackageName());
 
@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment {
 
         try {
             Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("image/*");
+            intent.setType("image/"+extension);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.putExtra(Intent.EXTRA_TEXT, message + "\n\n" + appLink);
             startActivity(Intent.createChooser(intent, "Choose One"));
@@ -142,10 +142,10 @@ public class HomeFragment extends Fragment {
         String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
         FileDialog fd = new FileDialog(getActivity(), "/", extensions, new FileDialog.FileDialogListener() {
             @Override
-            public void fileDialogOutput(String path, String name) {
+            public void fileDialogOutput(String path, String name, String ext) {
                 File file = new File(path+"/"+name);
                 Uri uri = Uri.fromFile(file);
-                shareImage("Here's an awesome image I used for my Borders app!",uri);
+                shareImage("Here's an awesome image I used for my Borders app!",uri,ext);
             }
         });
         fd.show();
@@ -200,7 +200,7 @@ public class HomeFragment extends Fragment {
         listener.stopScreenshotWorldService();
 
         //share new image
-        shareImage("Check out my border on the Borders app!", Uri.fromFile(imageFile));
+        shareImage("Check out my border on the Borders app!", Uri.fromFile(imageFile),"png");
     }
 
     private void showSharePopup() {

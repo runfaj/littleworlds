@@ -220,7 +220,7 @@ public class ImageEditFragment extends Fragment {
         String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
         FileDialog fd = new FileDialog(getActivity(), config.file_path, extensions, new FileDialog.FileDialogListener() {
             @Override
-            public void fileDialogOutput(String path, String name) {
+            public void fileDialogOutput(String path, String name, String ext) {
                 config.file_name = name;
                 config.file_path = path;
                 imageBtn.setText(name);
