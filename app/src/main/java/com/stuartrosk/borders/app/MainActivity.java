@@ -1,17 +1,49 @@
 package com.stuartrosk.borders.app;
 
-import android.app.*;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+/*****
+ *
+ * TODO:
+ * Fix sharing since it isn't including all apps (like email)
+ * Add start service/notification on boot
+ * Hook up notification to toggle switch when app is open
+ * Don't close existing open activity if open and notification is clicked
+ * Add reset option for image edit
+ * Add feedback popup to settings
+ * Add app info to settings
+ * test landscape mode
+ * Implement free/paid features:
+ *   locked custom areas
+ *   locked themes
+ *   unlock app and signed code checking
+ * material design
+ * images images images
+ * notifications for rating
+ * notifications for unlocking
+ * ads in free version
+ *
+ * MAYBE TODO:
+ * Add photo cropping and save to new folder
+ * First timer tutorial
+ *
+ */
+
+
 public class MainActivity extends Activity
     implements EditFragment.EditFragmentListener,
         HomeFragment.HomeFragmentListener,
         ImageEditFragment.ImageEditFragmentListener,
-        EditPrefListFragment.EditPrefListFragmentListener {
+        EditPrefListFragment.EditPrefListFragmentListener,
+        SettingsPrefFragment.SettingsPrefFragmentListener {
 
     private HomeFragment fragmentHome;
     private EditFragment fragmentEdit;
@@ -240,7 +272,7 @@ public class MainActivity extends Activity
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        if(Boolean.valueOf(preferences.getString(getString(R.string.notification_pref),"true"))) {
+        if(preferences.getBoolean(getString(R.string.notification_pref),true)) {
             //main intent for just clicking on notification
             Intent intent = new Intent(this, MainActivity.class);
             PendingIntent mainIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -264,7 +296,7 @@ public class MainActivity extends Activity
             String currStateTitle2 = "stop";
 
 
-            if (Boolean.valueOf(preferences.getString("notification_icon_pref", "true"))) {
+            if (preferences.getBoolean("notification_icon_pref", true)) {
                 iconId = R.drawable.ic_image_black_48dp;
             }
             if (!preferences.getBoolean(getString(R.string.service_enabled_pref), false)) {
@@ -291,7 +323,7 @@ public class MainActivity extends Activity
                 n.addAction(toggleId, currState, stopWorldService);
             }
 
-            n.addAction(R.drawable.ic_get_app_black_48dp, "???", mainIntent); //////////////////////change this
+            //n.addAction(R.drawable.ic_get_app_black_48dp, "???", mainIntent); //////////////////////change this
 
             notificationManager.notify(R.integer.service_notification_id, n.build());
         } else {

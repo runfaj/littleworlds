@@ -5,7 +5,7 @@
     <CheckBoxPreference
         android:key="@string/startup_pref"
         android:title="Run at Startup"
-        android:summary="Run the world service (when toggled on) when the phone boots."
+        android:summary="Show the borders (when enabled in the app) when the phone boots."
         android:defaultValue="true"/>
     <CheckBoxPreference
         android:key="@string/notification_pref"
@@ -15,7 +15,7 @@
     <CheckBoxPreference
         android:key="@string/notification_icon_pref"
         android:title="Show Status Bar Icon"
-        android:summary="Show an icon in the status bar when borders are running."
+        android:summary="Show an icon in the status bar when notification is running."
         android:defaultValue="true"/>
     <!--<CheckBoxPreference
         android:key="gesture_pref"

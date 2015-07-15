@@ -30,6 +30,7 @@ public class SettingsPrefFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getPreferenceManager().setSharedPreferencesName(getString(R.string.pref_namespace));
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.layout.settings_pref_fragment);
     }
