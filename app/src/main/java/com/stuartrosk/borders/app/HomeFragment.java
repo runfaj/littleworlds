@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
             })
             .setNegativeButton(getString(R.string.bad_rating_rate), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    jumpToStore();
+                    FeedbackUtils.jumpToStore(getActivity(), preferences);
                 }
             });
 
@@ -128,6 +128,7 @@ public class HomeFragment extends Fragment {
         if(installer != null && !installer.equals("") && installer.contains("amazon")) appLink = "http://www.amazon.com/gp/mas/dl/android?p=" + getString(R.string.pref_namespace);
 
         try {
+            if(extension.equals("jpg")) extension = "jpeg";
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("image/"+extension);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -208,12 +209,12 @@ public class HomeFragment extends Fragment {
         alertDialogBuilder.setTitle(getString(R.string.share_title));
         alertDialogBuilder
             .setMessage(getString(R.string.share_message))
-            .setNegativeButton(getString(R.string.share_app), new DialogInterface.OnClickListener() {
+            .setNeutralButton(getString(R.string.share_app), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     shareApp();
                 }
             })
-            .setNeutralButton(getString(R.string.share_image), new DialogInterface.OnClickListener() {
+            .setNegativeButton(getString(R.string.share_image), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     shareImageDialog();
                 }
@@ -232,14 +233,6 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void jumpToStore() {
-        PackageManager pm = getActivity().getPackageManager();
-        String installer = pm.getInstallerPackageName(getActivity().getApplicationContext().getPackageName());
-        if(installer == null) installer = "";
-        FeedbackUtils.openApp(getActivity(),installer);
-        preferences.edit().putBoolean(getString(R.string.rate_us_pref),true).commit();
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -250,7 +243,7 @@ public class HomeFragment extends Fragment {
             listener = (HomeFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement EditFragmentListener");
+                    + " must implement HomeFragmentListener");
         }
     }
 
@@ -268,6 +261,10 @@ public class HomeFragment extends Fragment {
             else
                 listener.stopWorldService();
         }
+    }
+
+    public void setToggleWithoutService(boolean toggled) {
+        toggleSwitch.setChecked(toggled);
     }
 
     private void setServiceToggle(boolean toggled) {
@@ -305,7 +302,7 @@ public class HomeFragment extends Fragment {
         good_rating = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jumpToStore();
+                FeedbackUtils.jumpToStore(getActivity(),preferences);
             }
         };
 

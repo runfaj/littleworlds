@@ -13,11 +13,16 @@
     <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
     <string name="rate_us_pref">rated</string> <!-- true/false, if true, we hide the stars -->
     <string name="unlocked_pref">unlocked</string>
+    <string name="unlocked_no_notify">unlockedNoNotify</string>
     <string name="theme_key">imageList</string>
     <string name="theme_id">themeId</string>
     <string name="startup_pref">startup_pref</string>
     <string name="notification_pref">notification_pref</string>
     <string name="notification_icon_pref">notification_icon_pref</string>
+    <string name="app_start_pref">appStartCount</string>
+    <string name="never_rate_pref">neverRate</string>
+    <string name="enable_notif_icon">enableNotifIcon</string>
+    <string name="edit_fragment_show_count">editFragmentShowCount</string>
 
     <string name="default_file_path">/</string>
     <string name="default_image_btn_text">(none)</string>
@@ -31,7 +36,7 @@
     <string name="bad_rating_email">Email Us!</string>
 
     <string name="feedback_title">How are we doing?</string>
-    <string name="feedback_message">We are always trying to make your experience the best! If you have some positive feedback, make sure to rate us! You\'re also welcome to email us too. If you have run into a bug or would like an improvement, please email us and we\'ll try to update the app quickly!</string>
+    <string name="feedback_message">We are always trying to make your experience the best! If you have some positive feedback, make sure to rate us! You\'re also welcome to email us too!\n\nIf you have run into a bug or would like an improvement, please email us and we\'ll try to update the app quickly!</string>
     <string name="feedback_rate">Rate Us!</string>
     <string name="feedback_email">Email Us!</string>
 
@@ -40,4 +45,9 @@
     <string name="share_app">App Link</string>
     <string name="share_image">Image</string>
     <string name="share_screenshot">Screenshot</string>
+
+    <string name="unlock_popup_title">Unlock the app?</string>
+    <string name="unlock_popup_message">If you\'d like to unlock all the features of the app, please press the "Unlock!" button.</string>
+    <string name="unlock_popup_go">Unlock!</string>
+    <string name="unlock_popup_cancel">Not yet</string>
 </resources>
