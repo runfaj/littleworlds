@@ -6,4 +6,5 @@
     <color name="edit_box_regular">#ffa0a0a0</color>
     <color name="red">#ffff0004</color>
     <color name="star_pressed_background">#ffff0004</color>
+    <color name="text_color">#000000</color>
 </resources>

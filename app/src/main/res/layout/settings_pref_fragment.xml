@@ -16,7 +16,8 @@
         android:key="@string/notification_icon_pref"
         android:title="Show Status Bar Icon"
         android:summary="Show an icon in the status bar when notification is running."
-        android:defaultValue="true"/>
+        android:defaultValue="true"
+        android:dependency="@string/notification_pref"/>
     <!--<CheckBoxPreference
         android:key="gesture_pref"
         android:title="Enable Gesture"
@@ -25,5 +26,23 @@
         android:key="black_bar_pref"
         android:title="Black Navigation Bar"
         android:summary="Attempt to always keep the black navigation bar on the bottom of the phone."/>-->
+
+    <PreferenceCategory
+        android:key="pref_screen_extras"
+        android:title="Borders App">
+
+        <com.stuartrosk.borders.app.FeedbackDialog
+            android:key="pref_screen_feedback"
+            android:title="Feedback"
+            android:summary="Rate us or provide feedback."
+            android:defaultValue="true"/>
+
+        <com.stuartrosk.borders.app.UnlockDialog
+            android:key="pref_screen_unlock"
+            android:title="Unlock!"
+            android:summary="Unlock all features on the app."
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

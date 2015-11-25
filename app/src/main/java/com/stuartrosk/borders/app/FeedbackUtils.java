@@ -1,18 +1,33 @@
 package com.stuartrosk.borders.app;
 
+import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
-public class FeedbackUtils {
+import java.util.List;
+
+public class FeedbackUtils extends Service {
     private static final String FEEDBACK_CHOOSER_TITLE = "Select feedback.";
     private static final String EMAIL_ADDRESS = "me@stuartrosk.com";
 
-    public static boolean openApp(Context context, String packageName) {
+    public static void jumpToStore(Context context, SharedPreferences preferences) {
+        openMarketLink(context);
+        preferences.edit().putBoolean(context.getString(R.string.rate_us_pref),true).commit();
+    }
+
+    /*public static boolean openApp(Context context, String packageName) {
         PackageManager manager = context.getPackageManager();
         try {
             if(packageName == "" || packageName == null) throw new PackageManager.NameNotFoundException();
@@ -25,7 +40,53 @@ public class FeedbackUtils {
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             Toast.makeText(context,"Unable to find installed store package " + packageName, Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
             return false;
+        }
+    }*/
+
+    public static void openMarketLink(Context context) {
+        String link = "";
+
+        PackageManager pm = context.getPackageManager();
+        String installer = pm.getInstallerPackageName(context.getApplicationContext().getPackageName());
+        if(installer == null) {
+            List<PackageInfo> installedPackages = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);
+            for (PackageInfo p : installedPackages) {
+                if (p.packageName.contains("samsungapps")) {
+                    installer = "samsung";
+                    break;
+                }
+            }
+        }
+
+        installer = installer.toLowerCase();
+
+        if(installer.contains("google") || installer.contains("android"))
+        {
+            link = "market://details?id=" + context.getString(R.string.pref_namespace);
+        }
+        else if(installer.contains("amazon"))
+        {
+            link = "amzn://apps/android?p=" + context.getString(R.string.pref_namespace);
+        }
+        else if(installer.contains("samsung"))
+        {
+            link = "samsungapps://ProductDetail/" + context.getString(R.string.pref_namespace);
+        }
+
+        if(link != "") {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(link));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context,"Unable to find installed store package.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         }
     }
 
@@ -95,5 +156,65 @@ public class FeedbackUtils {
 
     private static float getDeviceDensity(Context context) {
         return context.getResources().getDisplayMetrics().density;
+    }
+
+    //@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        /*super.onCreate(savedInstanceState);
+
+        boolean showStore = getIntent().getAction() == "show_rating";
+        boolean laterStore = getIntent().getAction() == "later_rating";
+        boolean neverStore = getIntent().getAction() == "never_rating";
+        SharedPreferences preferences = getSharedPreferences(getString(R.string.pref_namespace),MODE_PRIVATE);
+
+        //Toast.makeText(getApplicationContext(),"show: "+showStore+" later: "+laterStore+" never: "+neverStore,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),getIntent().getAction(),Toast.LENGTH_LONG).show();
+
+        if(neverStore)
+            preferences.edit().putBoolean(getString(R.string.never_rate_pref),true).commit();
+        else if(showStore && !preferences.getBoolean(getString(R.string.never_rate_pref),false)) {
+            jumpToStore(getApplicationContext(), preferences);
+            preferences.edit().putBoolean(getString(R.string.never_rate_pref),true).commit();
+        } else if (laterStore) {
+            //do nothing since the dialog auto cancels
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(R.integer.rating_notification_id);
+
+        finish();*/
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+
+        if(intent != null) {
+            boolean showStore = intent.getAction() == "show_rating";
+            boolean laterStore = intent.getAction() == "later_rating";
+            boolean neverStore = intent.getAction() == "never_rating";
+            SharedPreferences preferences = getSharedPreferences(getString(R.string.pref_namespace), MODE_PRIVATE);
+
+            if(neverStore)
+                preferences.edit().putBoolean(getString(R.string.never_rate_pref),true).commit();
+            else if(showStore && !preferences.getBoolean(getString(R.string.never_rate_pref),false)) {
+                jumpToStore(getApplicationContext(), preferences);
+                preferences.edit().putBoolean(getString(R.string.never_rate_pref),true).commit();
+            } else if (laterStore) {
+                //do nothing since the dialog auto cancels
+            }
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.cancel(R.integer.rating_notification_id);
+        }
+
+        this.stopSelf();
+
+        return START_NOT_STICKY;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
