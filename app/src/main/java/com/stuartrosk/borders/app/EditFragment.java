@@ -3,7 +3,6 @@ package com.stuartrosk.borders.app;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,11 +40,11 @@ public class EditFragment extends Fragment {
 
     public void toggleEditIcons() {
         int state;
-        //if a custom theme, then show the edit buttons
         if(preferences.getInt(getString(R.string.theme_id),1) == 1)
             state = View.VISIBLE;
         else
             state = View.INVISIBLE;
+        Log.d("invisible?",(state == View.INVISIBLE)+"");
         if(v==null)return;
         RelativeLayout r = (RelativeLayout)v.findViewById(R.id.fragmentEdit);
         for(int i=0;i<r.getChildCount();i++) {
@@ -95,56 +94,19 @@ public class EditFragment extends Fragment {
         ViewGroup vg = (ViewGroup)v.findViewById(R.id.fragmentEdit);
         for(int i=0;i<vg.getChildCount();i++) {
             if(vg.getChildAt(i) instanceof ImageView) {
-                testUnlocked(vg.getChildAt(i));
+                vg.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String btnName = v.getTag().toString();
+                        listener.showImageEditScreen(btnName);
+                    }
+                });
             }
         }
 
+        preferences.edit().putBoolean(getString(R.string.edit_mode_pref),false).commit();
+
         return v;
-    }
-
-    //iterable
-    private void testUnlocked(View v){
-        //return true if still showing the button
-        String pos = v.getTag().toString();
-        if(pos == null) return;
-
-        //only giving the user 6 options if its locked
-        boolean lockIt = false;
-        switch(pos){
-            case "top_left_corner":
-            case "top_right_corner":
-            case "top_left_middle":
-            case "top_right_middle":
-            case "side_left_middle":
-            case "side_left_top":
-            case "side_left_bottom":
-            case "side_right_top":
-                lockIt = true; break;
-        }
-
-        if(preferences.getBoolean(getString(R.string.unlocked_pref),false))
-            lockIt = false;
-
-        if(lockIt) {
-            v.setRotation(0F);
-            ((ImageView) v).setImageResource(R.drawable.ic_lock_outline_black_48dp);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    UnlockDialog unlockDialog = new UnlockDialog(view.getContext(),null);
-                    unlockDialog.showDialog();
-                }
-            });
-        } else {
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String btnName = v.getTag().toString();
-                    listener.showImageEditScreen(btnName);
-                }
-            });
-
-        }
     }
 
     public void updatePreferenceList(int index) {

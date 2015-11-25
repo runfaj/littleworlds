@@ -42,13 +42,4 @@
             android:drawableRight="@android:drawable/btn_radio"
             android:paddingLeft="20dp"></RadioButton>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/lockedIcon"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0"
-            android:src="@drawable/ic_lock_outline_black_48dp"
-            android:visibility="gone"/>
-
 </LinearLayout>

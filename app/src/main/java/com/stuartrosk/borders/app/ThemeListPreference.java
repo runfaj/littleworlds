@@ -9,15 +9,33 @@ import android.widget.ListAdapter;
 
 public class ThemeListPreference extends ListPreference
 {
-    ThemeJsonObject.Theme[] themes;
+    private String[] resourceNames = null;
+    private String[] resourceImages = null;
+    private String[] resourceValues = null;
     SharedPreferences preferences;
 
     public ThemeListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         preferences = context.getSharedPreferences(context.getString(R.string.pref_namespace), context.MODE_PRIVATE);
-        themes = ThemeJsonObject.getThemes(context);
+
+        ThemeJsonObject.Theme[] themes = ThemeJsonObject.getThemes(context);
+        resourceNames = new String[themes.length];
+        resourceImages = new String[themes.length];
+        resourceValues = new String[themes.length];
+
+        for(int i=0;i<themes.length;++i) {
+            resourceNames[i] = themes[i].title;
+            resourceImages[i] = themes[i].theme_image_name;
+            resourceValues[i] = String.valueOf(themes[i].id);
+        }
+
+        //resourceNames = context.getResources().getStringArray(R.array.imageListNames);
+        //resourceImages = context.getResources().obtainTypedArray(R.array.imageListImages);
+        //resourceValues = context.getResources().getStringArray(R.array.imageListValues);
     }
+
+
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
@@ -27,7 +45,7 @@ public class ThemeListPreference extends ListPreference
 
         ListAdapter listAdapter = new ThemeListAdapter(getContext(),
                 R.layout.image_list_row, this.getEntries(),
-                themes, index,
+                resourceValues, resourceNames, resourceImages, index,
                 this);
 
         builder.setAdapter(listAdapter, this);
@@ -36,17 +54,16 @@ public class ThemeListPreference extends ListPreference
 
     public void setResult(int clicked)
     {
+        System.out.println("Sel: "+clicked);
+        System.out.println("SelName: "+resourceNames[clicked-1]);
+
         preferences.edit()
                 .putInt(getContext().getString(R.string.theme_id), clicked)
-                .putString(getContext().getString(R.string.theme_key), themes[clicked-1].title)
+                .putString(getContext().getString(R.string.theme_key), resourceNames[clicked-1])
         .commit();
 
         this.callChangeListener(""+clicked);
 
-        hideDialog();
-    }
-
-    public void hideDialog() {
         if(this.getDialog()!=null)
             this.getDialog().dismiss();
     }

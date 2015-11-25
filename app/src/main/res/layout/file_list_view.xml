@@ -49,8 +49,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
                 android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:id="@+id/sdcardRow">
+                android:paddingBottom="4dp">
 
             <ImageView
                     android:layout_width="20dp"
@@ -61,7 +60,7 @@
                     android:src="@drawable/ic_sd_card_black_48dp"/>
 
             <TextView
-                    android:id="@+id/sdcardText"
+                    android:id="@+id/sdcardRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -81,8 +80,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
                 android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:id="@+id/downloadsRow">
+                android:paddingBottom="4dp">
 
             <ImageView
                     android:layout_width="20dp"
@@ -93,7 +91,7 @@
                     android:src="@drawable/ic_get_app_black_48dp"/>
 
             <TextView
-                    android:id="@+id/downloadsText"
+                    android:id="@+id/downloadsRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -113,8 +111,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
                 android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:id="@+id/cameraRow">
+                android:paddingBottom="4dp">
 
             <ImageView
                     android:layout_width="20dp"
@@ -125,7 +122,7 @@
                     android:src="@drawable/ic_photo_camera_black_48dp"/>
 
             <TextView
-                    android:id="@+id/cameraText"
+                    android:id="@+id/cameraRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -145,8 +142,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="8dp"
                 android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:id="@+id/picturesRow">
+                android:paddingBottom="4dp">
 
             <ImageView
                     android:layout_width="20dp"
@@ -157,7 +153,7 @@
                     android:src="@drawable/ic_image_black_48dp"/>
 
             <TextView
-                    android:id="@+id/picturesText"
+                    android:id="@+id/picturesRow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"

@@ -15,21 +15,3 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
-# GOOGLE
--keep class com.android.vending.billing.**
-
-# AMAZON
--dontwarn com.amazon.**
--keep class com.amazon.** {*;}
--keepattributes *Annotation*
--dontoptimize
-
-# SAMSUNG
--keep class com.sec.android.iap.**
-
-# NOKIA
--keep class com.nokia.payment.iap.aidl.**
-
-#FORTUMO
--keep class mp.** { *; }

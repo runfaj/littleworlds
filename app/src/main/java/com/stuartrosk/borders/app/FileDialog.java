@@ -26,8 +26,7 @@ public class FileDialog extends Dialog {
     private List<String> path = null;
     private List<Integer> image = null;
     private String root = DEFAULT_ROOT;
-    private TextView myPath;
-    RelativeLayout downloadLink, cameraLink, picturesLink, sdcardLink;
+    private TextView myPath, downloadLink, cameraLink, picturesLink, sdcardLink;
     private ListView list;
     private FileDialogListener fileDialogListener;
     private String[] allowedExtensions = {};
@@ -57,10 +56,10 @@ public class FileDialog extends Dialog {
         setContentView(R.layout.file_list_view);
         myPath = (TextView) findViewById(R.id.path);
         list = (ListView) findViewById(R.id.file_list);
-        downloadLink = (RelativeLayout) findViewById(R.id.downloadsRow);
-        cameraLink = (RelativeLayout) findViewById(R.id.cameraRow);
-        picturesLink = (RelativeLayout) findViewById(R.id.picturesRow);
-        sdcardLink = (RelativeLayout) findViewById(R.id.sdcardRow);
+        downloadLink = (TextView) findViewById(R.id.downloadsRow);
+        cameraLink = (TextView) findViewById(R.id.cameraRow);
+        picturesLink = (TextView) findViewById(R.id.picturesRow);
+        sdcardLink = (TextView) findViewById(R.id.sdcardRow);
         getDir(root);
 
         downloadLink.setOnClickListener(new View.OnClickListener() {
@@ -130,10 +129,10 @@ public class FileDialog extends Dialog {
         File[] files = f.listFiles();
 
         RelativeLayout
-            downloadLinkContainer = downloadLink,
-            cameraLinkContainer = cameraLink,
-            picturesLinkContainer = picturesLink,
-            sdcardLinkContainer = sdcardLink;
+            downloadLinkContainer = (RelativeLayout)downloadLink.getParent(),
+            cameraLinkContainer = (RelativeLayout)cameraLink.getParent(),
+            picturesLinkContainer = (RelativeLayout)picturesLink.getParent(),
+            sdcardLinkContainer = (RelativeLayout)sdcardLink.getParent();
 
         downloadLinkContainer.setVisibility(View.VISIBLE);
         cameraLinkContainer.setVisibility(View.VISIBLE);

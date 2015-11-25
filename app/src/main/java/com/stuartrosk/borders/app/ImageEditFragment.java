@@ -25,7 +25,7 @@ public class ImageEditFragment extends Fragment {
     private Button saveBtn, cancelBtn, sizeBtn, imageBtn;
     private ImageJsonObject config;
     private TextView titleText;
-    private ImageView previewImage, imageClear;
+    private ImageView previewImage;
 
     public ImageEditFragment(){}
 
@@ -87,7 +87,6 @@ public class ImageEditFragment extends Fragment {
         imageBtn = (Button)view.findViewById(R.id.imageBtn);
         titleText = (TextView)view.findViewById(R.id.imageEditTitleTxt);
         previewImage = (ImageView)view.findViewById(R.id.previewImage);
-        imageClear = (ImageView)view.findViewById(R.id.imageClear);
 
         config = new ImageJsonObject(getActivity(), ImageJsonObject.Position.valueOf(editPos));
 
@@ -111,11 +110,7 @@ public class ImageEditFragment extends Fragment {
         sizeBtn.setText(config.width + "x" + config.height);
 
         String imageText = config.file_name;
-        if(imageText.equals("")) {
-            imageText = getString(R.string.default_image_btn_text);
-        } else {
-            imageClear.setVisibility(View.VISIBLE);
-        }
+        if(imageText.equals("")) imageText = getString(R.string.default_image_btn_text);
         imageBtn.setText(imageText);
 
         //setRadio(config.alignment);
@@ -126,12 +121,7 @@ public class ImageEditFragment extends Fragment {
                 showSizeDialog();
             }
         });
-        imageClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetImageSource();
-            }
-        });
+
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,14 +216,6 @@ public class ImageEditFragment extends Fragment {
         a.show();
     }
 
-    private void resetImageSource() {
-        config.file_name="";
-        config.file_path="/";
-        imageBtn.setText(getString(R.string.default_image_btn_text));
-        setPreviewImage();
-        imageClear.setVisibility(View.GONE);
-    }
-
     private void showFileDialog() {
         String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
         FileDialog fd = new FileDialog(getActivity(), config.file_path, extensions, new FileDialog.FileDialogListener() {
@@ -243,7 +225,6 @@ public class ImageEditFragment extends Fragment {
                 config.file_path = path;
                 imageBtn.setText(name);
                 setPreviewImage();
-                imageClear.setVisibility(View.VISIBLE);
             }
         });
         fd.show();
