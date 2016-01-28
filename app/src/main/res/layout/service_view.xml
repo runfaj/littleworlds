@@ -11,11 +11,12 @@
             android:id="@+id/screenshot_image"
             android:visibility="invisible">
                 <ImageView
-                    android:layout_width="220dp"
-                    android:layout_height="100dp"
+                    android:layout_width="260dp"
+                    android:layout_height="73dp"
                     android:id="@+id/imageView"
-                    android:background="#ffff0000"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/logo"
+                    />
         </RelativeLayout>
 
         <ImageView
@@ -39,22 +40,22 @@
         />
 
     <ImageView
-            android:id="@+id/topLeftMiddle"
-            android:layout_width="152dp"
-            android:layout_height="@dimen/barThickness"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/topLeftCorner"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/topLeftMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/barThickness"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
+        android:layout_toRightOf="@+id/topLeftCorner"
+        android:layout_toLeftOf="@+id/space"/>
 
     <ImageView
-            android:id="@+id/topRightMiddle"
-            android:layout_width="152dp"
-            android:layout_height="@dimen/barThickness"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/topRightCorner"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/topRightMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/barThickness"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/topRightCorner"
+        android:scaleType="fitXY"
+        android:layout_toRightOf="@+id/space"/>
 
     <ImageView
             android:id="@+id/bottomLeftCorner"
@@ -75,32 +76,33 @@
         />
 
     <ImageView
-            android:id="@+id/bottomLeftMiddle"
-            android:layout_width="152dp"
-            android:layout_height="@dimen/barThickness"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/bottomLeftCorner"
-            android:scaleType="fitXY"
+        android:id="@+id/bottomLeftMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/barThickness"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/bottomLeftCorner"
+        android:scaleType="fitXY"
+        android:layout_toLeftOf="@+id/space"
         />
 
     <ImageView
-            android:id="@+id/bottomRightMiddle"
-            android:layout_width="152dp"
-            android:layout_height="@dimen/barThickness"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/bottomRightCorner"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/bottomRightMiddle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/barThickness"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/bottomRightCorner"
+        android:scaleType="fitXY"
+        android:layout_toRightOf="@+id/space"/>
 
     <ImageView
-            android:id="@+id/sideLeftTop"
-            android:layout_width="@dimen/barThickness"
-            android:layout_height="140dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/topLeftCorner"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/sideLeftTop"
+        android:layout_width="@dimen/barThickness"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/topLeftCorner"
+        android:scaleType="fitXY"
+        android:layout_above="@+id/sideLeftMiddle"/>
 
     <ImageView
             android:id="@+id/sideLeftMiddle"
@@ -113,24 +115,24 @@
         />
 
     <ImageView
-            android:id="@+id/sideLeftBottom"
-            android:layout_width="@dimen/barThickness"
-            android:layout_height="140dp"
-            android:layout_above="@+id/bottomLeftCorner"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/sideLeftBottom"
+        android:layout_width="@dimen/barThickness"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomLeftCorner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="fitXY"
+        android:layout_below="@+id/sideLeftMiddle"/>
 
     <ImageView
-            android:id="@+id/sideRightTop"
-            android:layout_width="@dimen/barThickness"
-            android:layout_height="140dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/topRightCorner"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/sideRightTop"
+        android:layout_width="@dimen/barThickness"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/topRightCorner"
+        android:scaleType="fitXY"
+        android:layout_above="@+id/sideRightMiddle"/>
 
     <ImageView
             android:id="@+id/sideRightMiddle"
@@ -143,20 +145,27 @@
         />
 
     <ImageView
-            android:id="@+id/sideRightBottom"
-            android:layout_width="@dimen/barThickness"
-            android:layout_height="140dp"
-            android:layout_above="@+id/bottomRightCorner"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:scaleType="fitXY"
-        />
+        android:id="@+id/sideRightBottom"
+        android:layout_width="@dimen/barThickness"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottomRightCorner"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="fitXY"
+        android:layout_below="@+id/sideRightMiddle"/>
 
-    <android.gesture.GestureOverlayView
+    <!--<android.gesture.GestureOverlayView
         android:id="@+id/gestures"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gestureStrokeType="multiple"
-        android:eventsInterceptionEnabled="true"/>
+        android:eventsInterceptionEnabled="true"/>-->
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        android:id="@+id/space"/>
 
 </RelativeLayout>

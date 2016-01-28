@@ -1,16 +1,16 @@
 package com.stuartrosk.borders.app;
 
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.content.*;
 import android.gesture.*;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Binder;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.IBinder;
+import android.os.*;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -51,6 +51,7 @@ public class WorldService extends Service {
     //GestureOverlayView gestureOverlayView;
 
     private boolean editMode = false;
+    private boolean lockScreen = false;
     private String editPos;
 
     private ThemeJsonObject.Theme currTheme;
@@ -115,13 +116,15 @@ public class WorldService extends Service {
             try {
                 String asset = ThemeJsonObject.getFileFromPosition(currTheme, o.position);
                 if(asset.toLowerCase().equals("error")) throw new Exception("Image cannot be loaded, bad position");
+                BitmapDrawable b = ((BitmapDrawable)v.getDrawable());
+                if(b!=null) b.getBitmap().recycle();
                 v.setImageDrawable(
-                        Drawable.createFromStream(
-                                getAssets().open(
-                                        asset
-                                ),
-                                null
-                        )
+                    Drawable.createFromStream(
+                        getAssets().open(
+                            asset
+                        ),
+                        null
+                    )
                 );
             } catch (Exception e) {
                 Log.e("error", e.getMessage());
@@ -144,10 +147,16 @@ public class WorldService extends Service {
 
         float thicknessDP = getResources().getDimension(R.dimen.barThickness) / density;
         float cornerDP = thicknessDP * 2;
-        int hSplitPX = (int)(((startWindowHeight - 2*cornerDP) / 3) * density);
-        int wSplitPX = (int)(((startWindowWidth - 2*cornerDP) / 2) * density);
+        int hSplitPX = (int)Math.round(((startWindowHeight - 2*cornerDP) / 3.0) * density);
+        int wSplitPX = (int)Math.round(((startWindowWidth - 2*cornerDP) / 2.0) * density);
         int cornerPX = (int)(cornerDP * density);
         int thicknessPX = (int)(thicknessDP * density);
+
+        Log.d("dimens","thickness: "+thicknessPX);
+        Log.d("dimens","hsplit: "+hSplitPX);
+        Log.d("dimens","wsplit: "+wSplitPX);
+        Log.d("dimens","corner: "+cornerPX);
+        Log.d("dimens","screenh: "+outMetrics.heightPixels);
 
         currTheme = ThemeJsonObject.getTheme(this,preferences.getInt(getString(R.string.theme_id),1));
 
@@ -202,6 +211,46 @@ public class WorldService extends Service {
         setConfig(srtV, srtO);
     }
 
+    private View.OnSystemUiVisibilityChangeListener systemUiVisibilityChangeListener = new View.OnSystemUiVisibilityChangeListener() {
+        @Override
+        public void onSystemUiVisibilityChange(int visibility) {
+            // Note that system bars will only be "visible" if none of the
+            // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                //system bars are visible
+                showViews();
+            } else {
+                // The system bars are NOT visible.
+                if(preferences.getBoolean(getString(R.string.system_fullscreen_pref),false)) {
+                    hideViews();
+                }
+            }
+        }
+    };
+
+    ViewTreeObserver.OnGlobalLayoutListener globalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+
+            Rect r = new Rect();
+            serviceView.getWindowVisibleDisplayFrame(r);
+            int screenHeight = serviceView.getRootView().getHeight();
+
+            // r.bottom is the position above soft keypad or device button.
+            // if keypad is shown, the r.bottom is smaller than that before.
+            int keypadHeight = screenHeight - r.bottom;
+
+            Log.d("service", "keypadHeight = " + keypadHeight);
+
+            if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                Log.d("service","keyboard open");
+            }
+            else {
+                Log.d("service","keyboard closed");
+            }
+        }
+    };
+
     @Override public void onCreate() {
         super.onCreate();
 
@@ -209,6 +258,9 @@ public class WorldService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         serviceView = (RelativeLayout) inflater.inflate(R.layout.service_view, null);
+
+        serviceView.setOnSystemUiVisibilityChangeListener(systemUiVisibilityChangeListener);
+        serviceView.getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
@@ -224,12 +276,85 @@ public class WorldService extends Service {
 
         initVars();
 
+        //detect screen lock
+        final IntentFilter theFilter = new IntentFilter();
+        theFilter.addAction(Intent.ACTION_SCREEN_ON);
+        theFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        getApplicationContext().registerReceiver(screenOnOffReceiver, theFilter);
+
         /*gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
         gestureLibrary.load();
 
         gestureOverlayView = (GestureOverlayView)serviceView.findViewById(R.id.gestures);
         gestureOverlayView.addOnGesturePerformedListener(gesturePerformedListener);*/
     }
+
+    private void hideViews(){
+        trcV.setVisibility(View.INVISIBLE);
+        tlcV.setVisibility(View.INVISIBLE);
+        brcV.setVisibility(View.INVISIBLE);
+        blcV.setVisibility(View.INVISIBLE);
+        // top and bottom
+        brmV.setVisibility(View.INVISIBLE);
+        blmV.setVisibility(View.INVISIBLE);
+        trmV.setVisibility(View.INVISIBLE);
+        tlmV.setVisibility(View.INVISIBLE);
+        //left side
+        slbV.setVisibility(View.INVISIBLE);
+        slmV.setVisibility(View.INVISIBLE);
+        sltV.setVisibility(View.INVISIBLE);
+        //right side
+        srbV.setVisibility(View.INVISIBLE);
+        srmV.setVisibility(View.INVISIBLE);
+        srtV.setVisibility(View.INVISIBLE);
+    }
+
+    private void showViews(){
+        trcV.setVisibility(View.VISIBLE);
+        tlcV.setVisibility(View.VISIBLE);
+        brcV.setVisibility(View.VISIBLE);
+        blcV.setVisibility(View.VISIBLE);
+        // top and bottom
+        brmV.setVisibility(View.VISIBLE);
+        blmV.setVisibility(View.VISIBLE);
+        trmV.setVisibility(View.VISIBLE);
+        tlmV.setVisibility(View.VISIBLE);
+        //left side
+        slbV.setVisibility(View.VISIBLE);
+        slmV.setVisibility(View.VISIBLE);
+        sltV.setVisibility(View.VISIBLE);
+        //right side
+        srbV.setVisibility(View.VISIBLE);
+        srmV.setVisibility(View.VISIBLE);
+        srtV.setVisibility(View.VISIBLE);
+    }
+
+    private BroadcastReceiver screenOnOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String strAction = intent.getAction();
+            KeyguardManager myKM = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+
+            if (strAction.equals(Intent.ACTION_SCREEN_OFF) || strAction.equals(Intent.ACTION_USER_PRESENT))
+            {
+                Log.d("XXXXXXXXXXXxx",strAction);
+                if(strAction.equals(Intent.ACTION_SCREEN_OFF))
+                {
+                    Log.d("XXXXXXXXXXXxx","screen locked");
+                    if(preferences.getBoolean(getString(R.string.lockscreen_pref),false)) {
+                        hideViews();
+                    } else {
+                        showViews();
+                    }
+                }
+                else
+                {
+                    Log.d("XXXXXXXXXXXxx","screen unlocked");
+                    showViews();
+                }
+            }
+        }
+    };
 
     /*GestureOverlayView.OnGesturePerformedListener gesturePerformedListener = new GestureOverlayView.OnGesturePerformedListener(){
         @Override
@@ -245,29 +370,30 @@ public class WorldService extends Service {
 
     private void checkSpecificPos(ImageJsonObject.Position p) {
         switch (p) {
-            case    top_left_corner: tlcV.setBackgroundColor(Color.YELLOW); tlcV.requestLayout(); break;
-            case    top_left_middle: tlmV.setBackgroundColor(Color.YELLOW); tlmV.requestLayout(); break;
-            case    top_right_middle: trmV.setBackgroundColor(Color.YELLOW); trmV.requestLayout(); break;
-            case    top_right_corner: trcV.setBackgroundColor(Color.YELLOW); trcV.requestLayout(); break;
+            case    top_left_corner: tlcV.setBackgroundColor(getResources().getColor(R.color.color_accent)); tlcV.requestLayout(); break;
+            case    top_left_middle: tlmV.setBackgroundColor(getResources().getColor(R.color.color_accent)); tlmV.requestLayout(); break;
+            case    top_right_middle: trmV.setBackgroundColor(getResources().getColor(R.color.color_accent)); trmV.requestLayout(); break;
+            case    top_right_corner: trcV.setBackgroundColor(getResources().getColor(R.color.color_accent)); trcV.requestLayout(); break;
 
-            case    bottom_left_corner: blcV.setBackgroundColor(Color.YELLOW); blcV.requestLayout(); break;
-            case    bottom_left_middle: blmV.setBackgroundColor(Color.YELLOW); blmV.requestLayout(); break;
-            case    bottom_right_middle: brmV.setBackgroundColor(Color.YELLOW); brmV.requestLayout(); break;
-            case    bottom_right_corner: brcV.setBackgroundColor(Color.YELLOW); brcV.requestLayout(); break;
+            case    bottom_left_corner: blcV.setBackgroundColor(getResources().getColor(R.color.color_accent)); blcV.requestLayout(); break;
+            case    bottom_left_middle: blmV.setBackgroundColor(getResources().getColor(R.color.color_accent)); blmV.requestLayout(); break;
+            case    bottom_right_middle: brmV.setBackgroundColor(getResources().getColor(R.color.color_accent)); brmV.requestLayout(); break;
+            case    bottom_right_corner: brcV.setBackgroundColor(getResources().getColor(R.color.color_accent)); brcV.requestLayout(); break;
 
-            case    side_left_top: sltV.setBackgroundColor(Color.YELLOW); sltV.requestLayout(); break;
-            case    side_left_middle: slmV.setBackgroundColor(Color.YELLOW); slmV.requestLayout(); break;
-            case    side_left_bottom: slbV.setBackgroundColor(Color.YELLOW); slbV.requestLayout(); break;
+            case    side_left_top: sltV.setBackgroundColor(getResources().getColor(R.color.color_accent)); sltV.requestLayout(); break;
+            case    side_left_middle: slmV.setBackgroundColor(getResources().getColor(R.color.color_accent)); slmV.requestLayout(); break;
+            case    side_left_bottom: slbV.setBackgroundColor(getResources().getColor(R.color.color_accent)); slbV.requestLayout(); break;
 
-            case    side_right_top: srtV.setBackgroundColor(Color.YELLOW); srtV.requestLayout(); break;
-            case    side_right_middle: srmV.setBackgroundColor(Color.YELLOW); srmV.requestLayout(); break;
-            case    side_right_bottom: srbV.setBackgroundColor(Color.YELLOW); srbV.requestLayout(); break;
+            case    side_right_top: srtV.setBackgroundColor(getResources().getColor(R.color.color_accent)); srtV.requestLayout(); break;
+            case    side_right_middle: srmV.setBackgroundColor(getResources().getColor(R.color.color_accent)); srmV.requestLayout(); break;
+            case    side_right_bottom: srbV.setBackgroundColor(getResources().getColor(R.color.color_accent)); srbV.requestLayout(); break;
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getApplicationContext().unregisterReceiver(screenOnOffReceiver);
         if (serviceView != null) {
             windowManager.removeView(serviceView);
         }
@@ -293,6 +419,18 @@ public class WorldService extends Service {
             }
         }
 
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if(pm.isInteractive()) {
+            Log.d("XXXXXXXXXXXxx","show views");
+            showViews();
+        } else {
+            Log.d("XXXXXXXXXXXxx","hide views");
+            if(preferences.getBoolean(getString(R.string.lockscreen_pref),false)) {
+                hideViews();
+            } else {
+                showViews();
+            }
+        }
         setSizes();
 
         if(editPos != null && !editPos.equals(""))

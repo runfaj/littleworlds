@@ -45,13 +45,13 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
         tv.setText(themes[position].title);
 
         //set image
-        ImageView ti = (ImageView) row.findViewById(R.id.themeImage);
+        final ImageView ti = (ImageView) row.findViewById(R.id.themeImage);
         try {
             ti.setImageDrawable(
-                    Drawable.createFromStream(
-                            getContext().getAssets().open(themes[position].theme_image_name),
-                            null
-                    )
+                Drawable.createFromStream(
+                    getContext().getAssets().open(themes[position].theme_image_name),
+                    null
+                )
             );
         } catch (Exception e) {
             Log.e("error", e.getMessage());

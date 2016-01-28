@@ -40,9 +40,9 @@ public class ImageEditFragment extends Fragment {
     public interface ImageEditFragmentListener {
         public void hideImageEditScreen();
         public boolean isServiceRunning();
-        public void cancelImageEditScreen();
         public void onStartImageEdit(String editPos);
-        public void onFinishImageEdit();
+        public void onFinishImageEditDestroy();
+        public boolean appPermissions(boolean requestPerms);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ImageEditFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.cancelImageEditScreen();
+                listener.hideImageEditScreen();
             }
         });
 
@@ -149,7 +149,7 @@ public class ImageEditFragment extends Fragment {
     @Override
     public void onPause() {
         //if we are supposed to keep service, restart without the edit controls
-        listener.onFinishImageEdit();
+        listener.onFinishImageEditDestroy();
 
         super.onPause();
     }
@@ -157,14 +157,18 @@ public class ImageEditFragment extends Fragment {
     @Override
     public void onDestroy() {
         //if we are supposed to keep service, restart without the edit controls
-        listener.onFinishImageEdit();
+        listener.onFinishImageEditDestroy();
         preferences.edit().putString("last_edit_pos","").commit();
         super.onPause();
     }
 
     @Override
     public void onResume() {
-        listener.onStartImageEdit(preferences.getString("last_edit_pos",""));
+        if(listener.appPermissions(false)) {
+            listener.onStartImageEdit(preferences.getString("last_edit_pos", ""));
+        } else {
+            listener.hideImageEditScreen();
+        }
 
         super.onResume();
     }

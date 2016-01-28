@@ -62,6 +62,7 @@ public class FeedbackUtils extends Service {
             }
         }
 
+        if(installer == null) installer = "";
         installer = installer.toLowerCase();
 
         if(installer.contains("google") || installer.contains("android"))

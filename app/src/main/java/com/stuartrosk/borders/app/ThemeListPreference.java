@@ -21,7 +21,7 @@ public class ThemeListPreference extends ListPreference
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
-        int index = preferences.getInt(getContext().getString(R.string.theme_id),1);
+        int index = preferences.getInt(getContext().getString(R.string.theme_id),getContext().getResources().getInteger(R.integer.default_theme_id));
 
         System.out.println(index);
 
@@ -37,6 +37,8 @@ public class ThemeListPreference extends ListPreference
     public void setResult(int clicked)
     {
         preferences.edit()
+                .putInt(getContext().getString(R.string.prev_theme_id), preferences.getInt(getContext().getString(R.string.theme_id), getContext().getResources().getInteger(R.integer.default_theme_id)))
+                .putString(getContext().getString(R.string.prev_theme_key), preferences.getString(getContext().getString(R.string.theme_key), getContext().getString(R.string.default_theme_key)))
                 .putInt(getContext().getString(R.string.theme_id), clicked)
                 .putString(getContext().getString(R.string.theme_key), themes[clicked-1].title)
         .commit();

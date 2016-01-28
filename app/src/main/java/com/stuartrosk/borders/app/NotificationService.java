@@ -1,9 +1,6 @@
 package com.stuartrosk.borders.app;
 
-import android.app.ActivityManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -49,7 +46,14 @@ public class NotificationService extends Service {
     }
 
     public void startWorldService(boolean editMode, String editPos) {
-        if(!isServiceRunning()) {
+        if(!isServiceRunning()
+                && !preferences.getBoolean(getString(R.string.service_enabled_pref),false)){
+            Log.d("service","starting service");
+            preferences.edit()
+                    .putBoolean(getString(R.string.service_enabled_pref),true)
+                    .putBoolean(getString(R.string.service_editmode),editMode)
+                    .putString(getString(R.string.service_editpos),editPos)
+                    .commit();
             Intent worldService = new Intent(getApplicationContext(), WorldService.class);
             worldService.putExtra("editMode",editMode);
             worldService.putExtra("editPos",editPos);
@@ -59,11 +63,17 @@ public class NotificationService extends Service {
     }
 
     public void stopWorldService() {
-        if(isServiceRunning())
+        Log.d("service","stopping service");
+        if (isServiceRunning() || preferences.getBoolean(getString(R.string.service_enabled_pref),false)) {
+            preferences.edit()
+                    .putBoolean(getString(R.string.service_enabled_pref),false)
+                    .putBoolean(getString(R.string.service_editmode),false)
+                    .putString(getString(R.string.service_editpos),"")
+                    .commit();
             stopService(new Intent(getApplicationContext(), WorldService.class));
+        }
         showServiceNotification();
     }
-
 
     @Override
     public void onCreate() {
@@ -84,6 +94,7 @@ public class NotificationService extends Service {
             }
         }
 
+        Log.d("service","notification onstartcommand");
         if(startBordersExtra) {
             startWorldService(false, "");
             preferences.edit().putBoolean(getString(R.string.service_enabled_pref),true).commit();
@@ -101,6 +112,8 @@ public class NotificationService extends Service {
     }
 
     private void setToggleSwitch(boolean state) {
+        Log.d("service","notif settoggleswitch " + state);
+        preferences.edit().putBoolean(getString(R.string.service_toggled_pref), state).commit();
         Intent intent = new Intent("toggle-switch");
         intent.putExtra("toggle", state);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -111,7 +124,7 @@ public class NotificationService extends Service {
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         if (preferences.getBoolean(getString(R.string.notification_pref), true)
-            && !preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
+            && !preferences.getBoolean(getString(R.string.image_edit_mode_pref),false)) {
             //main intent for just clicking on notification
             Intent intent = new Intent(this, MainActivity.class);
             PendingIntent mainIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -135,9 +148,9 @@ public class NotificationService extends Service {
             String currStateTitle2 = "stop";
 
 
-            if (preferences.getBoolean("notification_icon_pref", true)) {
-                iconId = R.drawable.ic_image_black_48dp;
-            }
+            //if (preferences.getBoolean("notification_icon_pref", true)) {
+                iconId = R.drawable.app_notif_icon;
+            //}
             if (!preferences.getBoolean(getString(R.string.service_enabled_pref), false)) {
                 currState = "Start";
                 currStateTitle = "Stopped";
@@ -154,10 +167,20 @@ public class NotificationService extends Service {
                     .setAutoCancel(false)
                     .setOngoing(true);
 
+            if(!preferences.getBoolean(getString(R.string.notification_icon_pref),true))
+                n.setPriority(Notification.PRIORITY_MIN);
+
             if (!preferences.getBoolean(getString(R.string.service_enabled_pref), false)) {
                 n.addAction(toggleId, currState, startWorldService);
             } else {
                 n.addAction(toggleId, currState, stopWorldService);
+            }
+
+            if (!preferences.getBoolean(getString(R.string.unlocked_pref),false)) {
+                Intent unlock = new Intent(this, MainActivity.class);
+                unlock.putExtra("unlock_app", true);
+                PendingIntent unlockApp = PendingIntent.getActivity(this, 0, unlock, 0);
+                n.addAction(R.drawable.ic_lock_open_black_48dp, "Unlock", unlockApp);
             }
 
             //n.addAction(R.drawable.ic_get_app_black_48dp, "???", mainIntent); //////////////////////change this

@@ -16,23 +16,8 @@ public class ThemeJsonObject {
     public class Theme {
         public int id;
         public String title,
-                theme_image_name;
-
-        public String
-                top_left_corner,
-                top_left_middle,
-                top_right_middle,
-                top_right_corner,
-                bottom_left_corner,
-                bottom_left_middle,
-                bottom_right_middle,
-                bottom_right_corner,
-                side_left_top,
-                side_left_middle,
-                side_left_bottom,
-                side_right_top,
-                side_right_middle,
-                side_right_bottom;
+                theme_image_name,
+                file_prefix;
 
         public boolean paid_content = true;
     }
@@ -82,23 +67,23 @@ public class ThemeJsonObject {
 
     public static String getFileFromPosition(Theme t, ImageJsonObject.Position p) {
         switch(p) {
-            case top_left_corner: return t.top_left_corner;
-            case top_left_middle: return t.top_left_middle;
-            case top_right_middle: return t.top_left_middle;
-            case top_right_corner: return t.top_right_corner;
+            case top_left_corner: return t.file_prefix + "_TLC.png";
+            case top_left_middle: return t.file_prefix + "_TLM.png";
+            case top_right_middle: return t.file_prefix + "_TRM.png";
+            case top_right_corner: return t.file_prefix + "_TRC.png";
 
-            case bottom_left_corner: return t.bottom_left_corner;
-            case bottom_left_middle: return t.bottom_left_middle;
-            case bottom_right_middle: return t.bottom_right_middle;
-            case bottom_right_corner: return t.bottom_right_corner;
+            case bottom_left_corner: return t.file_prefix + "_BLC.png";
+            case bottom_left_middle: return t.file_prefix + "_BLM.png";
+            case bottom_right_middle: return t.file_prefix + "_BRM.png";
+            case bottom_right_corner: return t.file_prefix + "_BRC.png";
 
-            case side_left_top: return t.side_left_top;
-            case side_left_middle: return t.side_left_middle;
-            case side_left_bottom: return t.side_left_bottom;
+            case side_left_top: return t.file_prefix + "_SLT.png";
+            case side_left_middle: return t.file_prefix + "_SLM.png";
+            case side_left_bottom: return t.file_prefix + "_SLB.png";
 
-            case side_right_top: return t.side_right_top;
-            case side_right_middle: return t.side_right_middle;
-            case side_right_bottom: return t.side_right_bottom;
+            case side_right_top: return t.file_prefix + "_SRT.png";
+            case side_right_middle: return t.file_prefix + "_SRM.png";
+            case side_right_bottom: return t.file_prefix + "_SRB.png";
         }
 
         return "Error";

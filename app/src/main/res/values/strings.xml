@@ -1,4 +1,6 @@
 <resources>
+    <string name="default_theme_key">Aliens</string>
+
     <string name="app_name">Borders</string>
     <string name="default_side_text">20</string>
     <string name="default_corner_text">40</string>
@@ -8,27 +10,51 @@
 
     <!-- prefs -->
     <string name="pref_namespace">com.stuartrosk.borders.app</string>
-    <string name="edit_mode_pref">edit_mode</string> <!-- used to keep track of our service being edit more or regular -->
+    <string name="edit_mode_pref">edit_mode</string> <!-- used to keep track of our service being edit mode or regular -->
+    <string name="image_edit_mode_pref">image_edit_mode</string>
     <string name="first_time_pref">first_timer</string> <!-- used to see if we should hide/show initial worlds. Also for tutorial -->
     <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
+    <string name="service_toggled_pref">service_toggled</string> <!-- see if the service toggle switch is on/off -->
     <string name="rate_us_pref">rated</string> <!-- true/false, if true, we hide the stars -->
     <string name="unlocked_pref">unlocked</string>
     <string name="unlocked_no_notify">unlockedNoNotify</string>
     <string name="theme_key">imageList</string>
     <string name="theme_id">themeId</string>
+    <string name="prev_theme_key">prevImageList</string>
+    <string name="prev_theme_id">prevThemeId</string>
     <string name="startup_pref">startup_pref</string>
+    <string name="lockscreen_pref">lockscreen_pref</string> <!--true to hide on lockscreen-->
     <string name="notification_pref">notification_pref</string>
     <string name="notification_icon_pref">notification_icon_pref</string>
     <string name="app_start_pref">appStartCount</string>
+    <string name="system_pulldown_pref">systemPullDown</string> <!-- true to hide on pulldown -->
+    <string name="system_fullscreen_pref">systemFullscreen</string> <!-- true to hide on fullscreen -->
+    <string name="system_keyboard_pref">systemKeyboard</string> <!-- true to hide on keyboard showing -->
     <string name="never_rate_pref">neverRate</string>
     <string name="enable_notif_icon">enableNotifIcon</string>
     <string name="edit_fragment_show_count">editFragmentShowCount</string>
+    <string name="ad_rotation">adRotation</string>
+    <string name="temp_perm_dialog">tempPermDialog</string>
+    <string name="b_points">bPoints</string>
+
+    <string name="service_started">serviceStarted</string>
+    <string name="service_editmode">serviceEditMode</string>
+    <string name="service_editpos">serviceEditPos</string>
 
     <string name="default_file_path">/</string>
     <string name="default_image_btn_text">(none)</string>
 
     <string name="email_to">me@stuartrosk.com</string>
     <string name="email_subject">Feedback for Borders App</string>
+
+    <string name="ads_permission_title">Borders App Usage</string>
+    <string name="ads_permission_msg">Hi! This app requires a few special permissions to function properly. In order to proceed, you\'ll need to accept the following permission items:\n\n&#8212; Access Location\n\u0020\u0020\u0020\u0020(For Notifications)\n&#8212; Read Phone State\n\u0020\u0020\u0020\u0020(For Notifications)\n&#8212; Get Accounts\n\u0020\u0020\u0020\u0020(For free version ads)\n&#8212; Write External Storage\n\u0020\u0020\u0020\u0020(For Theme Customizing and Sharing)\n&#8212; Receive Boot Completed\n\u0020\u0020\u0020\u0020(For Themes to Show After Restart)\n&#8212; System Alert Window\n\u0020\u0020\u0020\u0020(For Drawing the Themes)\n\nTo proceed using the app, please accept these permissions on the next screen!</string>
+    <string name="ads_permission_yes">Okay!</string>
+    <string name="ads_permission_no">Nope :(</string>
+
+    <string name="overlay_permission_title">Required Permission</string>
+    <string name="overlay_permission_msg">This app\'s purpose is to allow you to have persistent themes on all screens. This requires a special overlay permission to be enabled in order to work. Please click "okay", then enable the permission on the next screen.</string>
+    <string name="overlay_permission_yes">Okay</string>
 
     <string name="bad_rating_title">Help us improve!</string>
     <string name="bad_rating_message">We noticed you clicked on a lower rating star. We strive to make the best apps we can, so if this rating is due to something not intuitive or a bug, please email us! We will do our best to respond as quickly as possible to address your issue!</string>
@@ -46,8 +72,17 @@
     <string name="share_image">Image</string>
     <string name="share_screenshot">Screenshot</string>
 
+    <string name="voluntary_title">Borders Points</string>
+    <string name="voluntary_message">Earn Borders Points to unlock the full version of the app! Once you reach 750, you can unlock the app for free!\n\nYou can come back to this popup to view your current points and do a voluntary video ad anytime to earn points. Note, after earning points, it may take a little time to process before they appear.</string>
+    <string name="voluntary_unlock">Unlock!</string>
+    <string name="voluntary_cancel">Cancel</string>
+    <string name="voluntary_video">Play Video</string>
+
     <string name="unlock_popup_title">Unlock the app?</string>
-    <string name="unlock_popup_message">If you\'d like to unlock all the features of the app, please press the "Unlock!" button.</string>
+    <string name="unlock_popup_message">If you\'d like to unlock all the features of the app, please press the "Unlock!" button.\n\nAlternately, you can unlock the app with B-Points on the app home screen.</string>
     <string name="unlock_popup_go">Unlock!</string>
     <string name="unlock_popup_cancel">Not yet</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

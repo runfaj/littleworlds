@@ -1,8 +1,11 @@
 package com.stuartrosk.borders.app;
 
 
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.os.Build;
+import android.support.v7.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,16 +15,22 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 
@@ -36,9 +45,10 @@ public class HomeFragment extends Fragment {
     private HomeFragmentListener listener;
     private ImageView rank1, rank2, rank3, rank4, rank5;
     private View.OnClickListener bad_rating, good_rating;
-    private Button shareBtn, settingsBtn;
+    private Button shareBtn, settingsBtn, pointsBtn;
     private View mainView;
     private RelativeLayout ratingCont;
+    private CompoundButton.OnCheckedChangeListener checkedChangeListener = null;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -47,12 +57,18 @@ public class HomeFragment extends Fragment {
     public interface HomeFragmentListener {
         public void startWorldService(boolean editMode, String editPos);
         public void stopWorldService();
-        public void showEditScreen();
+        public void showEditScreen(float x, float y);
         public boolean isServiceRunning();
         public void firstTimer();
         public void startScreenshotWorldService();
         public void stopScreenshotWorldService();
         public void showSettings();
+        public void onShowSharePopup();
+        //public boolean requestOverlayPermission();
+        public boolean appPermissions(boolean requestPerms);
+        public void showRationalDialog();
+        public int getTJPoints();
+        public void showVoluntaryAd();
     }
 
     private void showLowRatingPopup() {
@@ -204,7 +220,7 @@ public class HomeFragment extends Fragment {
         shareImage("Check out my border on the Borders app!", Uri.fromFile(imageFile),"png");
     }
 
-    private void showSharePopup() {
+    public void showSharePopup() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(getString(R.string.share_title));
         alertDialogBuilder
@@ -233,6 +249,39 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
+    public void showVoluntaryAdPopup(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setTitle(getString(R.string.voluntary_title));
+        alertDialogBuilder
+                .setMessage(getString(R.string.voluntary_message)+"\n\n------------------------------------------------------------\nYour B-Points:  "+listener.getTJPoints()+"/"+getResources().getInteger(R.integer.unlock_points)+"\n------------------------------------------------------------")
+                .setNegativeButton(getString(R.string.voluntary_cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(getString(R.string.voluntary_video), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        listener.showVoluntaryAd();
+                    }
+                });
+
+        if(listener.getTJPoints() >= 750) {
+            alertDialogBuilder.setNeutralButton(getString(R.string.voluntary_unlock), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                    /////////////////////////////////////////////////////////////////////////////unlock it manually
+                }
+            });
+        }
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -247,32 +296,34 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void setServiceToggle() {
+    public void setServiceToggle() {
+        Log.d("service","setservicetoggle");
+        Log.d("prefs","homef ft: "+Boolean.toString(preferences.getBoolean(getString(R.string.first_time_pref),true)));
         boolean firstTimer = preferences.getBoolean(getResources().getString(R.string.first_time_pref),true);
         if(firstTimer) {
-            toggleSwitch.setChecked(true);
+            //toggleSwitch.setChecked(true);
             listener.firstTimer();
         } else {
-            boolean currServiceValue = preferences.getBoolean(getResources().getString(R.string.service_enabled_pref), false);
-            preferences.edit().putBoolean(getString(R.string.service_enabled_pref), currServiceValue).commit();
+            boolean currServiceValue = preferences.getBoolean(getResources().getString(R.string.service_toggled_pref), false);
             toggleSwitch.setChecked(currServiceValue);
-            if(currServiceValue)
-                listener.startWorldService(false,"");
-            else
-                listener.stopWorldService();
         }
     }
 
-    public void setToggleWithoutService(boolean toggled) {
-        toggleSwitch.setChecked(toggled);
-    }
-
     private void setServiceToggle(boolean toggled) {
-        preferences.edit().putBoolean(getString(R.string.service_enabled_pref), toggled).commit();
+        Log.d("service","setservicetoggle bool");
+        preferences.edit().putBoolean(getString(R.string.service_toggled_pref), toggled).commit();
         if(toggled)
             listener.startWorldService(false,"");
         else
             listener.stopWorldService();
+    }
+
+    public void setToggleWithoutService(boolean toggled) {
+        Log.d("service","settoggleWOservice");
+        toggleSwitch.setOnCheckedChangeListener(null);
+        toggleSwitch.setChecked(toggled);
+        toggleSwitch.setOnCheckedChangeListener(checkedChangeListener);
+        preferences.edit().putBoolean(getString(R.string.service_toggled_pref), toggled).commit();
     }
 
     @Override
@@ -292,6 +343,7 @@ public class HomeFragment extends Fragment {
         ///////////////////feedbackBtn = (Button)mainView.findViewById(R.id.feedbackBtn);
         settingsBtn = (Button)mainView.findViewById(R.id.settingsBtn);
         shareBtn = (Button)mainView.findViewById(R.id.shareBtn);
+        pointsBtn = (Button)mainView.findViewById(R.id.pointsBtn);
 
         bad_rating = new View.OnClickListener() {
             @Override
@@ -309,17 +361,28 @@ public class HomeFragment extends Fragment {
         mainEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.showEditScreen();
+                if(listener.appPermissions(false))
+                    listener.showEditScreen(v.getX()+v.getWidth()/2,v.getY()+v.getHeight()/2);
+                else
+                    listener.showRationalDialog();
             }
         });
 
-        toggleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
-                setServiceToggle(isChecked);
+                Log.d("service","check changed");
+                if(listener.appPermissions(false)) {
+                    setServiceToggle(isChecked);
+                } else {
+                    setServiceToggle(false);
+                    listener.showRationalDialog();
+                }
             }
-        });
+        };
+
+        toggleSwitch.setOnCheckedChangeListener(checkedChangeListener);
 
         rank1.setOnClickListener(bad_rating);
         rank2.setOnClickListener(bad_rating);
@@ -330,14 +393,27 @@ public class HomeFragment extends Fragment {
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSharePopup();
+                if(listener.appPermissions(false))
+                    listener.onShowSharePopup();
+                else
+                    listener.showRationalDialog();
             }
         });
 
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.showSettings();
+                if(listener.appPermissions(false))
+                    listener.showSettings();
+                else
+                    listener.showRationalDialog();
+            }
+        });
+
+        pointsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showVoluntaryAdPopup();
             }
         });
 
@@ -353,17 +429,23 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onStart() {
-        setServiceToggle();
         if(preferences.getBoolean(getString(R.string.rate_us_pref),false))
-            ratingCont.setVisibility(View.INVISIBLE);
+            ratingCont.setVisibility(View.GONE);
+        if(preferences.getBoolean(getString(R.string.unlocked_pref),false))
+            pointsBtn.setVisibility(View.GONE);
+
         super.onStart();
     }
 
     @Override
     public void onResume() {
-        setServiceToggle();
         if(preferences.getBoolean(getString(R.string.rate_us_pref),false))
-            ratingCont.setVisibility(View.INVISIBLE);
+            ratingCont.setVisibility(View.GONE);
+        if(preferences.getBoolean(getString(R.string.unlocked_pref),false))
+            pointsBtn.setVisibility(View.GONE);
+
+        Log.d("service","home onresume");
+        setServiceToggle();
         super.onResume();
     }
 

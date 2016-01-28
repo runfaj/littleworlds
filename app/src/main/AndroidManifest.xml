@@ -1,97 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.stuartrosk.borders.app">
+    package="com.stuartrosk.borders.app" >
 
     <!-- for the app itself -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- for tapjoy -->
-    <uses-permission
-        android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission
-        android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission
-        android:name="android.permission.access_fine_location"/>
-    <uses-permission
-        android:name="android.permission.access_coarse_location"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
 
     <permission
         android:name="com.stuartrosk.borders.app.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.stuartrosk.borders.app.permission.C2D_MESSAGE"/>
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.stuartrosk.borders.app.permission.C2D_MESSAGE" />
 
     <!-- for tapjoy and IAB -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!--Google Play-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Google Play -->
     <uses-permission android:name="com.android.vending.BILLING" />
-    <!--Open Store-->
+    <!-- Open Store -->
     <uses-permission android:name="org.onepf.openiab.permission.BILLING" />
-    <!--Amazon requires no permissions -->
-    <!--Samsung Apps-->
-    <!--<uses-permission android:name="com.sec.android.iap.permission.BILLING" />-->
-    <!--Nokia-->
-    <!--<uses-permission android:name="com.nokia.payment.BILLING"/>-->
-    <!--Fortumo-->
-    <!--<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
+    <!-- Amazon requires no permissions -->
+    <!-- Samsung Apps -->
+    <!-- <uses-permission android:name="com.sec.android.iap.permission.BILLING" /> -->
+    <!-- Nokia -->
+    <!-- <uses-permission android:name="com.nokia.payment.BILLING"/> -->
+    <!-- Fortumo -->
+    <!--
+<uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.SEND_SMS" />-->
-    <!--SlideME-->
-    <!--<uses-permission android:name="com.slideme.sam.manager.inapp.permission.BILLING" />-->
-
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    -->
+    <!-- SlideME -->
+    <!-- <uses-permission android:name="com.slideme.sam.manager.inapp.permission.BILLING" /> -->
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/icon"
-            android:label="@string/app_name">
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name="com.stuartrosk.borders.app.WorldService" ></service>
-        <service android:name="com.stuartrosk.borders.app.NotificationService" ></service>
-        <service android:name=".FeedbackUtils"></service>
+        <service
+            android:name=".WorldService"
+            android:screenOrientation="portrait" />
+        <service
+            android:name=".NotificationService"
+            android:screenOrientation="portrait" />
+        <service
+            android:name=".FeedbackUtils"
+            android:screenOrientation="portrait" />
+
         <activity
-                android:name="com.stuartrosk.borders.app.MainActivity"
-                android:label="@string/app_name"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme">
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".autostart">
+
+        <receiver android:name=".autostart" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
         <activity
             android:name="com.tapjoy.TJAdUnitActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
         <activity
             android:name="com.tapjoy.mraid.view.ActionHandler"
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name="com.tapjoy.mraid.view.Browser"
             android:configChanges="orientation|keyboardHidden|screenSize" />
+
         <receiver
             android:name="com.tapjoy.GCMReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <action android:name="com.google.android.gcm.intent.RETRY"/>
-                <category android:name="com.stuartrosk.borders.app"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.gcm.intent.RETRY" />
+
+                <category android:name="com.stuartrosk.borders.app" />
             </intent-filter>
         </receiver>
         <receiver android:name="com.tapjoy.TapjoyReceiver" />

@@ -1,19 +1,29 @@
 package com.stuartrosk.borders.app;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 
 /**
@@ -26,6 +36,9 @@ public class EditFragment extends Fragment {
     private EditFragmentListener listener;
     private EditPrefListFragment editPrefListFragment;
     private View v;
+    private float animationX = 0,
+                  animationY = 0,
+                  animationDuration = 1250;
 
     public EditFragment() {
         // Required empty public constructor
@@ -36,6 +49,7 @@ public class EditFragment extends Fragment {
         public void onStartEdit();
         public void hideEditScreen();
         public void showImageEditScreen(String editPos);
+        public boolean appPermissions(boolean requestPerms);
     }
 
 
@@ -69,7 +83,49 @@ public class EditFragment extends Fragment {
         }
     }
 
+    /**
+     * Get the animator to unreveal the circle
+     *
+     * @return Animator object that will be used for the animation
+     */
+    @TargetApi(21)
+    public Animator prepareUnrevealAnimator() {
+        int cx = (int)animationX;
+        int cy = (int)animationY;
+        int radius = getEnclosingCircleRadius((int) cx, (int) cy);
+        Animator anim = ViewAnimationUtils.createCircularReveal(v, (int) cx, (int) cy, radius, 0);
+        anim.setInterpolator(new AccelerateInterpolator(2f));
+        anim.setDuration((long)animationDuration);
+        return anim;
+    }
 
+    /**
+     * To be really accurate we have to start the circle on the furthest corner of the view
+     *
+     * @param cx center x of the circle
+     * @param cy center y of the circle
+     * @return the maximum radius
+     */
+    private int getEnclosingCircleRadius(int cx, int cy) {
+        int realCenterX = cx + v.getLeft();
+        int realCenterY = cy + v.getTop();
+        int distanceTopLeft = (int) Math.hypot(realCenterX - v.getLeft(), realCenterY - v.getTop());
+        int distanceTopRight = (int) Math.hypot(v.getRight() - realCenterX, realCenterY - v.getTop());
+        int distanceBottomLeft = (int) Math.hypot(realCenterX - v.getLeft(), v.getBottom() - realCenterY);
+        int distanceBottomRight = (int) Math.hypot(v.getRight() - realCenterX, v.getBottom() - realCenterY);
+
+        Integer[] distances = new Integer[]{distanceTopLeft, distanceTopRight, distanceBottomLeft,
+                distanceBottomRight};
+
+        return Collections.max(Arrays.asList(distances));
+    }
+
+    public void setAnimationXY(float x, float y){
+        animationX = x;
+        animationY = y;
+    }
+
+    @TargetApi(21)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -78,6 +134,36 @@ public class EditFragment extends Fragment {
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
         editPrefListFragment = new EditPrefListFragment();
+
+        //animation for fragment opening
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            v.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(final View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
+                                           int oldRight, int oldBottom) {
+                    v.removeOnLayoutChangeListener(this);
+                    //int cx = getArguments().getInt("cx");
+                    //int cy = getArguments().getInt("cy");
+                    int cx = (int)animationX;
+                    int cy = (int)animationY;
+
+                    // get the hypothenuse so the radius is from one corner to the other
+                    int radius = (int) Math.hypot(right, bottom);
+
+                    Animator reveal = ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, radius);
+                    reveal.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            listener.onStartEdit();
+                            super.onAnimationEnd(animation);
+                        }
+                    });
+                    reveal.setInterpolator(new DecelerateInterpolator(2f));
+                    reveal.setDuration((long)animationDuration);
+                    reveal.start();
+                }
+            });
+        }
 
         //init fragment
         getFragmentManager().beginTransaction()
@@ -171,8 +257,12 @@ public class EditFragment extends Fragment {
     }
     @Override
     public void onResume() {
-        listener.onStartEdit();
-        toggleEditIcons();
+        if(listener.appPermissions(false)) {
+            listener.onStartEdit();
+            toggleEditIcons();
+        } else {
+            listener.hideEditScreen();
+        }
         super.onResume();
     }
 }

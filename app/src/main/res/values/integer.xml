@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="default_theme_id">2</integer>
+
     <integer name="service_notification_id">1</integer>
     <integer name="rating_notification_id">2</integer>
     <integer name="unlock_notification_id">3</integer>
     <integer name="popup_interval">2</integer>
+    <integer name="unlock_points">750</integer>
 </resources>
