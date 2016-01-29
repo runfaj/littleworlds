@@ -155,6 +155,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    /*
     private void shareImageDialog() {
         String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
         FileDialog fd = new FileDialog(getActivity(), "/", extensions, new FileDialog.FileDialogListener() {
@@ -167,6 +168,7 @@ public class HomeFragment extends Fragment {
         });
         fd.show();
     }
+    */
 
     private void shareScreenshot() {
         listener.startScreenshotWorldService();
@@ -225,14 +227,9 @@ public class HomeFragment extends Fragment {
         alertDialogBuilder.setTitle(getString(R.string.share_title));
         alertDialogBuilder
             .setMessage(getString(R.string.share_message))
-            .setNeutralButton(getString(R.string.share_app), new DialogInterface.OnClickListener() {
+            .setNegativeButton(getString(R.string.share_app), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     shareApp();
-                }
-            })
-            .setNegativeButton(getString(R.string.share_image), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    shareImageDialog();
                 }
             })
             .setPositiveButton(getString(R.string.share_screenshot), new DialogInterface.OnClickListener() {

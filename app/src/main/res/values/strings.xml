@@ -67,9 +67,8 @@
     <string name="feedback_email">Email Us!</string>
 
     <string name="share_title">Share Something</string>
-    <string name="share_message">Which one would you like to share?</string>
+    <string name="share_message">Which one would you like to share?\n\nThemes can be shared in the edit screen.</string>
     <string name="share_app">App Link</string>
-    <string name="share_image">Image</string>
     <string name="share_screenshot">Screenshot</string>
 
     <string name="voluntary_title">Borders Points</string>

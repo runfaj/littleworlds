@@ -6,19 +6,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -34,7 +28,7 @@ public class EditFragment extends Fragment {
     private SharedPreferences preferences;
     private Button editDoneBtn;
     private EditFragmentListener listener;
-    private EditPrefListFragment editPrefListFragment;
+    private ThemeListFragment themeListFragment;
     private View v;
     private float animationX = 0,
                   animationY = 0,
@@ -133,7 +127,7 @@ public class EditFragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
-        editPrefListFragment = new EditPrefListFragment();
+        themeListFragment = new ThemeListFragment();
 
         //animation for fragment opening
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -167,7 +161,7 @@ public class EditFragment extends Fragment {
 
         //init fragment
         getFragmentManager().beginTransaction()
-            .replace(R.id.myPrefFragmentCont, editPrefListFragment)
+            .replace(R.id.themeFragmentCont, themeListFragment)
         .commit();
 
         editDoneBtn.setOnClickListener(new View.OnClickListener() {
@@ -234,12 +228,12 @@ public class EditFragment extends Fragment {
     }
 
     public void updatePreferenceList(int index) {
-        if(editPrefListFragment != null) {
+        if(themeListFragment != null) {
             preferences.edit()
                 .putInt(getString(R.string.theme_id), index)
                 .putString(getString(R.string.theme_key), "Custom")
             .commit();
-            editPrefListFragment.updateThemeEntry(index);
+            themeListFragment.updateThemeEntry(index);
         }
     }
 

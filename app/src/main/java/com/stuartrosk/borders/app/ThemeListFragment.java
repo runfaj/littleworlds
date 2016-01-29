@@ -7,7 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-public class EditPrefListFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class ThemeListFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     ThemeListPreference lp;
     EditPrefListFragmentListener listener;
