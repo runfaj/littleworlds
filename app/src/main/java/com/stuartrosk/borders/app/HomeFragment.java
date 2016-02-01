@@ -178,11 +178,14 @@ public class HomeFragment extends Fragment {
         /** this is called when the service is ready for a screenshot **/
         Log.d("testing", "works!");
         //setup directory
-        File screenshotDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File temp = new File(screenshotDir.getAbsolutePath() + "/Borders_Screenshots");
+        File screenshotDir = Environment.getExternalStorageDirectory();
+        File temp = new File(screenshotDir.getAbsolutePath() + "/Borders");
         if(!temp.exists() || !temp.isDirectory())
             temp.mkdir();
-        screenshotDir = temp;
+        File temp2 = new File(temp + "/Screenshots");
+        if(!temp2.exists() || !temp2.isDirectory())
+            temp2.mkdir();
+        screenshotDir = temp2;
 
 
         //setup default view

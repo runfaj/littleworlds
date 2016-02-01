@@ -7,30 +7,32 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-public class ThemeListFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class CustomListFragment extends PreferenceFragment
+        implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    ThemeListPreference lp;
-    EditPrefListFragmentListener listener;
+    CustomListPreference lp;
+    CustomListFragmentListener listener;
 
-    public interface EditPrefListFragmentListener {
-        public void onThemeSelectionChange();
+    public interface CustomListFragmentListener {
+        public void onCustomSelectionChange(); //////////////////////////////////////////////////////////////////////////
     }
 
     public void updateThemeEntry() {
-        lp = (ThemeListPreference) findPreference("theme_list");
-        lp.setSummary("Current: Custom");
+        lp = (CustomListPreference) findPreference("custom_list");
+        lp.setSummary("Current: (None)");
         lp.setSummary("Current: " +
                 getActivity().
-                    getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE).
-                    getString(getString(R.string.theme_key)
-                        , "Custom"));
+                        getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE).
+                        getString(getString(R.string.custom_key)
+                                , "(None)"));
 
-        listener.onThemeSelectionChange();
+        listener.onCustomSelectionChange();
     }
-    public void updateThemeEntry(int index) {
-        Log.d("test",String.valueOf(index));
-        lp = (ThemeListPreference) findPreference("theme_list");
-        lp.setResult(index);
+
+    public void updateThemeEntry(int id) {
+        Log.d("test",String.valueOf(id));
+        lp = (CustomListPreference) findPreference("custom_list");
+        lp.setResult(id);
         updateThemeEntry();
     }
 
@@ -41,10 +43,10 @@ public class ThemeListFragment extends PreferenceFragment implements Preference.
         // This makes sure that the container activity has implemented
         // the callback interface. If not, it throws an exception
         try {
-            listener = (EditPrefListFragmentListener) activity;
+            listener = (CustomListFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement PrefListFragmentListener");
+                    + " must implement CustomListFragmentListener");
         }
     }
 
@@ -53,9 +55,9 @@ public class ThemeListFragment extends PreferenceFragment implements Preference.
         super.onCreate(savedInstanceState);
 
         // Load the preferences from XML resource
-        this.addPreferencesFromResource(R.xml.edit_pref_list_fragment);
+        this.addPreferencesFromResource(R.xml.custom_list_fragment);
 
-        lp = (ThemeListPreference) findPreference("theme_list");
+        lp = (CustomListPreference) findPreference("custom_list");
         lp.setOnPreferenceChangeListener(this);
 
         ThemeJsonObject.Theme[] themes = ThemeJsonObject.getThemes(getActivity());

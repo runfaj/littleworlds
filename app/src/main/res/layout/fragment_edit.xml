@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_centerInParent="true"
         >
 
@@ -19,52 +19,69 @@
             android:layout_centerHorizontal="true"
             />
 
-        <RelativeLayout
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/themeFragmentCont"
             android:id="@+id/custom_cont"
             android:visibility="invisible">
 
-            <RelativeLayout
+            <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/customFragmentCont"
-                android:layout_centerHorizontal="true"
-                />
+                >
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/custom_import_btn"
-                android:background="@drawable/btn_pressed"
-                android:src="@drawable/ic_archive_black_48dp"
-                android:layout_marginLeft="25dp"
-                android:layout_alignTop="@+id/custom_add_btn"
-                android:layout_toRightOf="@+id/custom_add_btn"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/customFragmentCont"
+                    android:layout_centerHorizontal="true"
+                    android:layout_span="4"/>
+            </TableRow>
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/custom_add_btn"
-                android:layout_below="@+id/customFragmentCont"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="false"
-                android:background="@drawable/btn_pressed"
-                android:src="@drawable/ic_library_add_black_48dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"/>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:visibility="invisible">
 
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:id="@+id/custom_edit_btn"
-                android:background="@drawable/btn_pressed"
-                android:src="@drawable/ic_border_color_black_48dp"
-                android:layout_alignTop="@+id/custom_add_btn"
-                android:layout_toLeftOf="@+id/custom_add_btn"
-                android:layout_marginRight="25dp"/>
-        </RelativeLayout>
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/custom_add_btn"
+                    android:background="@drawable/btn_pressed"
+                    android:src="@drawable/ic_library_add_black_48dp"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/custom_edit_btn"
+                    android:background="@drawable/btn_pressed"
+                    android:src="@drawable/ic_border_color_black_48dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/custom_share_btn"
+                    android:background="@drawable/btn_pressed"
+                    android:src="@drawable/ic_share_black_48dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/custom_import_btn"
+                    android:background="@drawable/btn_pressed"
+                    android:src="@drawable/ic_archive_black_48dp"
+                    android:layout_marginLeft="10dp"/>
+
+
+            </TableRow>
+        </TableLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -72,8 +89,7 @@
             android:text="Done"
             android:id="@+id/editDoneBtn"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/custom_cont"/>
+            android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 

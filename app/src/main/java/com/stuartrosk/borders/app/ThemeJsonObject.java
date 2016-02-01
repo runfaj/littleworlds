@@ -1,12 +1,15 @@
 package com.stuartrosk.borders.app;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class ThemeJsonObject {
     private static String themesFile = "themes.json";
@@ -16,7 +19,6 @@ public class ThemeJsonObject {
     public class Theme {
         public int id;
         public String title,
-                theme_image_name,
                 file_prefix;
 
         public boolean paid_content = true;
@@ -53,6 +55,48 @@ public class ThemeJsonObject {
         return null;
     }
 
+    public static Theme[] getCustomThemes(Context context){
+        ArrayList<Theme> themes = new ArrayList<Theme>();
+
+        File bordersDir = Environment.getExternalStorageDirectory();
+        File temp = new File(bordersDir.getAbsolutePath() + "/Borders");
+        if(!temp.exists() || !temp.isDirectory())
+            temp.mkdir();
+        bordersDir = temp;
+
+        File temp2 = new File(bordersDir.getAbsolutePath() + "/Themes");
+        if(!temp2.exists() || !temp2.isDirectory())
+            temp2.mkdir();
+        bordersDir = temp2;
+
+        File f = new File(bordersDir.toString());
+        File[] files = f.listFiles();
+        for (File inFile : files) {
+            if (inFile.isDirectory()) {
+                Log.d("tjo reading",inFile.toString());
+                Theme t = getThemeFromFile(context, inFile.getAbsolutePath() + "/manifest.json");
+                if(t != null) {
+                    t.id = Integer.parseInt(inFile.toString());
+                    themes.add(t);
+                }
+            }
+        }
+
+        return themes.toArray(new Theme[themes.size()]);
+    }
+
+    public static Theme getThemeFromFile(Context context, String path) {
+        Gson gson = new GsonBuilder().create();
+        Theme i = null;
+        try {
+            i = gson.fromJson(loadJSONFromAsset(context,path), Theme.class);
+            return i;
+        } catch (Exception e) {
+            Log.e("error", e.getMessage());
+        }
+        return null;
+    }
+
     public static Theme[] getThemes(Context context) {
         Gson gson = new GsonBuilder().create();
         ThemeJsonObject i = new ThemeJsonObject();
@@ -63,6 +107,10 @@ public class ThemeJsonObject {
         }
 
         return i.themes;
+    }
+
+    public static String getPreviewFile(Theme t){
+        return t.file_prefix + "_preview.png";
     }
 
     public static String getFileFromPosition(Theme t, ImageJsonObject.Position p) {

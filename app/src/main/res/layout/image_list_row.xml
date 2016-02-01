@@ -22,14 +22,15 @@
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/themeName"
                 android:textSize="22sp"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="8dp">
         </TextView>
 
         <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:id="@+id/themeImage"
-                android:scaleType="fitCenter"/>
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/themeImage"
+            android:scaleType="fitCenter"
+            />
     </LinearLayout>
 
     <RadioButton

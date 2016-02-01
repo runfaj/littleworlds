@@ -3,7 +3,6 @@ package com.stuartrosk.borders.app;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +13,15 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View.OnClickListener {
+public class CustomListAdapter extends ArrayAdapter<CharSequence> implements View.OnClickListener {
     int selected = 0;
     ThemeJsonObject.Theme[] themes;
 
-    private ThemeListPreference ts;
+    private CustomListPreference ts;
     private SharedPreferences preferences;
 
-    public ThemeListAdapter(Context context, int textViewResourceId,
-                            CharSequence[] objects, ThemeJsonObject.Theme[] themes, int i, ThemeListPreference ts) {
+    public CustomListAdapter(Context context, int textViewResourceId,
+                            CharSequence[] objects, ThemeJsonObject.Theme[] themes, int i, CustomListPreference ts) {
         super(context, textViewResourceId, objects);
 
         selected = i;
@@ -48,9 +47,6 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
         //set image
         final ImageView ti = (ImageView) row.findViewById(R.id.themeImage);
         try {
-            BitmapDrawable b = ((BitmapDrawable)ti.getDrawable());
-            if(b!=null) b.getBitmap().recycle();
-
             ti.setImageDrawable(
                 Drawable.createFromStream(
                     getContext().getAssets().open(ThemeJsonObject.getPreviewFile(themes[position])),
@@ -65,8 +61,6 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
         //set checkbox
         RadioButton tb = (RadioButton) row.findViewById(R.id.ckbox);
         ImageView iv = (ImageView) row.findViewById(R.id.lockedIcon);
-        if((preferences.getBoolean(getContext().getString(R.string.unlocked_pref),false) && themes[position].paid_content)
-                || !themes[position].paid_content) {
             if (themes[position].id == selected) {
                 tb.setChecked(true);
             } else {
@@ -77,20 +71,6 @@ public class ThemeListAdapter extends ArrayAdapter<CharSequence> implements View
 
             //set on click listener for row
             row.setOnClickListener(this);
-        } else {
-            tb.setVisibility(View.GONE);
-            iv.setVisibility(View.VISIBLE);
-
-            row.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ts.hideDialog();
-
-                    UnlockDialog unlockDialog = new UnlockDialog(getContext(),null);
-                    unlockDialog.showDialog();
-                }
-            });
-        }
 
         return row;
     }

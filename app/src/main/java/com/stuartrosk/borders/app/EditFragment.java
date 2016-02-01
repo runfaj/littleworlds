@@ -7,17 +7,21 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.*;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 
 /**
@@ -27,8 +31,11 @@ public class EditFragment extends Fragment {
 
     private SharedPreferences preferences;
     private Button editDoneBtn;
+    private TableLayout custom_cont;
+    private ImageView addButton, shareButton, editButton, importButton;
     private EditFragmentListener listener;
     private ThemeListFragment themeListFragment;
+    private CustomListFragment customListFragment;
     private View v;
     private float animationX = 0,
                   animationY = 0,
@@ -42,26 +49,10 @@ public class EditFragment extends Fragment {
         public void onFinishEdit();
         public void onStartEdit();
         public void hideEditScreen();
-        public void showImageEditScreen(String editPos);
         public boolean appPermissions(boolean requestPerms);
+        public void showCustomScreen();
     }
 
-
-    public void toggleEditIcons() {
-        int state;
-        //if a custom theme, then show the edit buttons
-        if(preferences.getInt(getString(R.string.theme_id),1) == 1)
-            state = View.VISIBLE;
-        else
-            state = View.INVISIBLE;
-        if(v==null)return;
-        RelativeLayout r = (RelativeLayout)v.findViewById(R.id.fragmentEdit);
-        for(int i=0;i<r.getChildCount();i++) {
-            if(r.getChildAt(i) instanceof ImageView) {
-                r.getChildAt(i).setVisibility(state);
-            }
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -127,7 +118,13 @@ public class EditFragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
         editDoneBtn = (Button)v.findViewById(R.id.editDoneBtn);
+        addButton = (ImageView)v.findViewById(R.id.custom_add_btn); //////////////////////////////////////////////////////////////
+        importButton = (ImageView)v.findViewById(R.id.custom_import_btn);
+        shareButton = (ImageView)v.findViewById(R.id.custom_share_btn); //////////////////////////////////////////////////////////////
+        editButton = (ImageView)v.findViewById(R.id.custom_edit_btn);
         themeListFragment = new ThemeListFragment();
+        customListFragment = new CustomListFragment();
+        custom_cont = (TableLayout)v.findViewById(R.id.custom_cont);
 
         //animation for fragment opening
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -157,11 +154,17 @@ public class EditFragment extends Fragment {
                     reveal.start();
                 }
             });
+        } else {
+            listener.onStartEdit();
         }
 
         //init fragment
         getFragmentManager().beginTransaction()
             .replace(R.id.themeFragmentCont, themeListFragment)
+        .commit();
+
+        getFragmentManager().beginTransaction()
+            .replace(R.id.customFragmentCont, customListFragment)
         .commit();
 
         editDoneBtn.setOnClickListener(new View.OnClickListener() {
@@ -170,71 +173,135 @@ public class EditFragment extends Fragment {
                 listener.hideEditScreen();
             }
         });
-
-        //set edit button handlers
-        ViewGroup vg = (ViewGroup)v.findViewById(R.id.fragmentEdit);
-        for(int i=0;i<vg.getChildCount();i++) {
-            if(vg.getChildAt(i) instanceof ImageView) {
-                testUnlocked(vg.getChildAt(i));
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.showCustomScreen();
             }
-        }
+        });
+        importButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                importCustomTheme();
+            }
+        });
 
         return v;
     }
 
-    //iterable
-    private void testUnlocked(View v){
-        //return true if still showing the button
-        String pos = v.getTag().toString();
-        if(pos == null) return;
-
-        //only giving the user 6 options if its locked
-        boolean lockIt = false;
-        switch(pos){
-            case "top_left_corner":
-            case "top_right_corner":
-            case "top_left_middle":
-            case "top_right_middle":
-            case "side_left_middle":
-            case "side_left_top":
-            case "side_left_bottom":
-            case "side_right_top":
-                lockIt = true; break;
-        }
-
-        if(preferences.getBoolean(getString(R.string.unlocked_pref),false))
-            lockIt = false;
-
-        if(lockIt) {
-            v.setRotation(0F);
-            ((ImageView) v).setImageResource(R.drawable.ic_lock_outline_black_48dp);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    UnlockDialog unlockDialog = new UnlockDialog(view.getContext(),null);
-                    unlockDialog.showDialog();
-                }
-            });
-        } else {
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String btnName = v.getTag().toString();
-                    listener.showImageEditScreen(btnName);
-                }
-            });
-
-        }
-    }
-
-    public void updatePreferenceList(int index) {
+    public void updatePreferenceList(int index, String name) {
         if(themeListFragment != null) {
             preferences.edit()
                 .putInt(getString(R.string.theme_id), index)
-                .putString(getString(R.string.theme_key), "Custom")
+                .putString(getString(R.string.theme_key), name)
             .commit();
             themeListFragment.updateThemeEntry(index);
         }
+    }
+
+    private String unpackZip(String inFullPath, String outFullPath)
+    {
+        //// returns path to theme manifest
+
+        if(outFullPath != "" && outFullPath.charAt(outFullPath.length() -1) != '/')
+            outFullPath = outFullPath + "/";
+
+        InputStream is;
+        ZipInputStream zis;
+        try
+        {
+            String filename;
+            is = new FileInputStream(inFullPath);
+            zis = new ZipInputStream(new BufferedInputStream(is));
+            ZipEntry ze;
+            byte[] buffer = new byte[1024];
+            int count;
+
+            while ((ze = zis.getNextEntry()) != null)
+            {
+                filename = ze.getName();
+
+                // Need to create directories if not exists, or
+                // it will generate an Exception...
+                if (ze.isDirectory()) {
+                    File fmd = new File(outFullPath + filename);
+                    fmd.mkdirs();
+                    continue;
+                }
+
+                FileOutputStream fout = new FileOutputStream(outFullPath + filename);
+
+                while ((count = zis.read(buffer)) != -1)
+                {
+                    fout.write(buffer, 0, count);
+                }
+
+                fout.close();
+                zis.closeEntry();
+            }
+
+            zis.close();
+        }
+        catch(IOException e)
+        {
+            Toast.makeText(getActivity().getApplicationContext(),"Error unpacking imported theme.",Toast.LENGTH_LONG);
+            return "";
+        }
+
+        return outFullPath + "manifest.json";
+    }
+
+    public void importCustomTheme(){
+        String[] extensions = {"btheme"};
+        FileDialog fd = new FileDialog(getActivity(), "/", extensions, new FileDialog.FileDialogListener() {
+            @Override
+            public void fileDialogOutput(String path, String name, String ext) {
+            File file = new File(path+"/"+name);
+
+            File bordersDir = Environment.getExternalStorageDirectory();
+            File temp = new File(bordersDir.getAbsolutePath() + "/Borders");
+            if(!temp.exists() || !temp.isDirectory())
+                temp.mkdir();
+            bordersDir = temp;
+
+            File temp2 = new File(bordersDir.getAbsolutePath() + "/Themes");
+            if(!temp2.exists() || !temp2.isDirectory())
+                temp2.mkdir();
+            bordersDir = temp2;
+
+            File f = new File(bordersDir.toString());
+            File[] files = f.listFiles();
+            File largest = files[0];
+            for (File inFile : files) {
+                if (inFile.isDirectory() && inFile.toString().compareTo(largest.toString()) == 1) {
+                    largest = inFile;
+                }
+            }
+            Log.d("ef reading",largest.toString());
+            int newNum = Integer.parseInt(largest.toString());
+            newNum++;
+
+            File temp3 = new File(bordersDir.getAbsolutePath() + "/" + newNum);
+            if(!temp3.exists() || !temp3.isDirectory())
+                temp3.mkdir();
+            bordersDir = temp3;
+
+            String manifestPath = unpackZip(file.toString(), bordersDir.getAbsolutePath());
+            if(manifestPath != "") {
+                ThemeJsonObject.Theme manifest = ThemeJsonObject.getThemeFromFile(getActivity().getApplicationContext(),manifestPath);
+                customListFragment.updateThemeEntry(newNum);
+                Toast.makeText(getActivity().getApplicationContext(),"\""+ manifest.title +"\" imported!", Toast.LENGTH_LONG);
+            }
+            }
+        });
+        fd.show();
+    }
+
+    public void hideCustomCont(){
+        custom_cont.setVisibility(View.INVISIBLE);
+    }
+    public void showCustomCont(){
+        custom_cont.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -253,7 +320,10 @@ public class EditFragment extends Fragment {
     public void onResume() {
         if(listener.appPermissions(false)) {
             listener.onStartEdit();
-            toggleEditIcons();
+            if(preferences.getInt(getString(R.string.theme_id),2) == 1)
+                showCustomCont();
+            else
+                hideCustomCont();
         } else {
             listener.hideEditScreen();
         }

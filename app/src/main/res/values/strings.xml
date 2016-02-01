@@ -20,6 +20,8 @@
     <string name="unlocked_no_notify">unlockedNoNotify</string>
     <string name="theme_key">imageList</string>
     <string name="theme_id">themeId</string>
+    <string name="custom_key">customList</string>
+    <string name="custom_id">customId</string>
     <string name="prev_theme_key">prevImageList</string>
     <string name="prev_theme_id">prevThemeId</string>
     <string name="startup_pref">startup_pref</string>

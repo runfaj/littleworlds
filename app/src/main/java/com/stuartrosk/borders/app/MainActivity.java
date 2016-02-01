@@ -61,18 +61,23 @@ import java.util.List;
 
 
 public class MainActivity extends Activity
-    implements EditFragment.EditFragmentListener,
+    implements
+        EditFragment.EditFragmentListener,
         EditFragmentTransition.EditFragmentTransitionListener,
         HomeFragment.HomeFragmentListener,
         WelcomeFragment.WelcomeFragmentListener,
         ImageEditFragment.ImageEditFragmentListener,
         ThemeListFragment.EditPrefListFragmentListener,
         SettingsPrefFragment.SettingsPrefFragmentListener,
-        TJConnectListener, TJPlacementListener {
+        CustomFragment.CustomFragmentListener,
+        CustomListFragment.CustomListFragmentListener,
+        TJConnectListener, TJPlacementListener
+{
 
     private WelcomeFragment fragmentWelcome;
     private HomeFragment fragmentHome;
     private EditFragment fragmentEdit;
+    private CustomFragment fragmentCustom;
     private SharedPreferences preferences;
     private SettingsPrefFragment fragmentSettings;
     private EditFragmentTransition fragmentEditTransition;
@@ -321,6 +326,9 @@ public class MainActivity extends Activity
         else if (fragmentEdit != null && fragmentEdit.isVisible()) { // and then you define a method allowBackPressed with the logic to allow back pressed or not
             hideEditScreen();
         }
+        else if (fragmentCustom != null && fragmentCustom.isVisible()) {
+            fragmentCustom.onBackPressed();
+        }
         else {
             super.onBackPressed();
         }
@@ -477,6 +485,16 @@ public class MainActivity extends Activity
         }
     }
 
+    public void showCustomScreen(){
+        getFragmentManager().beginTransaction()
+                .add(R.id.mainFrame, fragmentCustom, "C")
+                .addToBackStack(null)
+                .commit();
+        getFragmentManager().executePendingTransactions();
+
+        fragmentEdit.updatePreferenceList(1,"Custom"); //force theme to be "custom"
+    }
+
     @Override
     public void onThemeSelectionChange() {
         if(appPermissions(false)) {
@@ -484,6 +502,10 @@ public class MainActivity extends Activity
         } else {
             setThemeChange(true);
         }
+    }
+
+    public void onCustomSelectionChange() {
+        setThemeChange(false);
     }
 
     private void setThemeChange(boolean revert) {
@@ -494,17 +516,17 @@ public class MainActivity extends Activity
             .commit();
         }
 
+        EditFragment editFragment = (EditFragment)getFragmentManager().findFragmentByTag("E");
         boolean editMode = false;
-        if(preferences.getInt(getString(R.string.theme_id),1) == 1)
-            editMode = true;
-        EditFragment testFragment = (EditFragment)getFragmentManager().findFragmentByTag("E");
-        if(testFragment != null && testFragment.isVisible()) {
+
+        if(editFragment != null && editFragment.isVisible()) {
+            if(preferences.getInt(getString(R.string.theme_id),1) == 1)
+                editFragment.showCustomCont();
+            else
+                editFragment.hideCustomCont();
             Log.d("service","setthemechange");
             stopWorldService();
             startWorldService(editMode, "");
-        }
-        if(fragmentEdit != null && fragmentEdit.isAdded() && fragmentEdit.isVisible()) {
-            fragmentEdit.toggleEditIcons();
         }
     }
 
@@ -518,7 +540,7 @@ public class MainActivity extends Activity
         .commit();
         getFragmentManager().executePendingTransactions();
 
-        fragmentEdit.updatePreferenceList(1); //force theme to be "custom"
+        fragmentEdit.updatePreferenceList(1,"Custom"); //force theme to be "custom"
         onStartImageEdit(editPos);
         showInvoluntaryAd();
     }

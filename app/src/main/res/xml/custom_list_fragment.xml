@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+    <com.stuartrosk.borders.app.CustomListPreference
+        android:key="custom_list"
+        android:title="Select Custom Theme"
+        android:summary="Current: (None)"
+        android:dialogTitle="Select Custom Theme"/>
+</PreferenceScreen>
