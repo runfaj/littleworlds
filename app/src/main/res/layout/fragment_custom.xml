@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.stuartrosk.borders.app.CustomFragment"
+                tools:context="com.stuartrosk.borders.CustomFragment"
                 android:id="@+id/fragmentCustom"
                 android:background="#ffffff">
 
@@ -14,9 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
         android:rotation="90"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:scaleType="fitXY"
@@ -31,8 +30,7 @@
         android:layout_alignBottom="@+id/topLeftCornerEditBtn"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:rotation="180"
         android:scaleType="fitXY"
         android:background="@drawable/btn_pressed"/>
@@ -46,7 +44,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/topRightCornerEditBtn"
         android:layout_alignEnd="@+id/topRightCornerEditBtn"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="40dp"
         android:rotation="270"
         android:scaleType="fitXY"
         android:background="@drawable/btn_pressed"/>
@@ -68,8 +66,7 @@
         android:layout_height="40dp"
         android:id="@+id/topLeftMiddleEditBtn"
         android:tag="top_left_middle"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="35dp"
+        android:layout_marginLeft="30dp"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:layout_alignTop="@+id/topLeftCornerEditBtn"
         android:layout_toRightOf="@+id/topLeftCornerEditBtn"
@@ -88,8 +85,7 @@
         android:layout_alignTop="@+id/topRightCornerEditBtn"
         android:layout_toLeftOf="@+id/topRightCornerEditBtn"
         android:layout_toStartOf="@+id/topRightCornerEditBtn"
-        android:layout_marginRight="50dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginRight="30dp"
         android:layout_marginTop="-20dp"
         android:rotation="157.5"
         android:scaleType="fitXY"
@@ -156,7 +152,7 @@
         android:layout_height="40dp"
         android:id="@+id/sideLeftTopEditBtn"
         android:tag="side_left_top"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:layout_below="@+id/topLeftCornerEditBtn"
         android:layout_alignLeft="@+id/topLeftCornerEditBtn"
@@ -189,7 +185,7 @@
         android:layout_above="@+id/bottomLeftCornerEditBtn"
         android:layout_alignLeft="@+id/bottomLeftCornerEditBtn"
         android:layout_alignStart="@+id/bottomLeftCornerEditBtn"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginLeft="-20dp"
         android:rotation="22.5"
         android:scaleType="fitXY"
@@ -215,6 +211,13 @@
         android:layout_centerInParent="true"
         >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Theme Name"
+            android:id="@+id/theme_name_label_tv"
+            android:editable="false"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -225,14 +228,21 @@
             android:layout_below="@+id/theme_name_label_tv"
             android:gravity="center_horizontal"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Theme Name"
-            android:id="@+id/theme_name_label_tv"
-            android:editable="false"/>
-
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:textAppearance="?android:attr/textAppearanceSmall" android:text="Preview Image"
+                  android:id="@+id/preview_image_label_tv" android:editable="false" android:layout_below="@+id/theme_name_tv"
+                  android:layout_marginTop="12dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:id="@+id/preview_image" android:layout_below="@+id/preview_image_label_tv"
+            android:layout_centerHorizontal="true" android:layout_marginTop="6dp"
+            android:background="#efefef" android:scaleType="fitCenter"/>
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:id="@+id/preview_edit_btn"
+                   android:tag="preview" android:src="@drawable/ic_mode_edit_black_48dp"
+                   android:scaleType="fitXY"
+                   android:background="@drawable/btn_pressed_white" android:layout_alignRight="@+id/preview_image"
+                   android:layout_alignTop="@+id/preview_image"/>
         <ImageView
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -260,8 +270,16 @@
             android:background="@drawable/btn_pressed"
             android:src="@drawable/ic_unarchive_black_48dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:layout_below="@+id/theme_name_tv"/>
+            android:layout_below="@+id/preview_image" android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="You can also edit themes directly in the Borders/Themes folder as well as find additional resources."
+            android:id="@+id/textView4"
+            android:layout_below="@+id/custom_save_btn"
+            android:layout_marginTop="20dp"/>
 
     </RelativeLayout>
 

@@ -3,122 +3,175 @@
     {
       "id": "1",
       "title": "Custom",
-      "theme_image_name": "",
-      "file_prefix": "",
+      "file_prefix": "custom",
       "paid_content": false
     },
     {
       "id": "2",
-      "title": "Aliens",
-      "file_prefix": "aliens",
-      "paid_content": false
-    },
-    {
-      "id": "3",
       "title": "Android",
       "file_prefix": "android",
       "paid_content": false
     },
     {
-      "id": "4",
-      "title": "Balloons",
-      "file_prefix": "balloons",
-      "paid_content": false
-    },
-    {
-      "id": "5",
+      "id": "3",
       "title": "Beach",
       "file_prefix": "beach",
       "paid_content": false
     },
     {
-      "id": "6",
+      "id": "4",
+      "title": "Bikes",
+      "file_prefix": "bikes",
+      "paid_content": false
+    },
+    {
+      "id": "5",
       "title": "Brushed",
       "file_prefix": "brushed",
       "paid_content": false
     },
     {
+      "id": "6",
+      "title": "Cats",
+      "file_prefix": "cats",
+      "paid_content": false
+    },
+    {
       "id": "7",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "City",
+      "file_prefix": "city",
       "paid_content": false
     },
     {
       "id": "8",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Digital",
+      "file_prefix": "digital",
       "paid_content": false
     },
     {
       "id": "9",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Dogs",
+      "file_prefix": "dogs",
       "paid_content": false
     },
     {
       "id": "10",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Elephants",
+      "file_prefix": "elephants",
       "paid_content": false
     },
     {
       "id": "11",
-      "title": "Chameleons",
-      "file_prefix": "",
-      "paid_content": true
+      "title": "Gradient 1",
+      "file_prefix": "gradient1",
+      "paid_content": false
     },
     {
       "id": "12",
-      "title": "Chameleons",
-      "file_prefix": "",
-      "paid_content": true
+      "title": "Gradient 2",
+      "file_prefix": "gradient2",
+      "paid_content": false
     },
     {
       "id": "13",
-      "title": "Chameleons",
-      "file_prefix": "",
-      "paid_content": true
+      "title": "Gradient 3",
+      "file_prefix": "gradient3",
+      "paid_content": false
     },
     {
       "id": "14",
-      "title": "Chameleons",
-      "file_prefix": "",
-      "paid_content": true
+      "title": "Gradient 4",
+      "file_prefix": "gradient4",
+      "paid_content": false
     },
     {
       "id": "15",
-      "title": "Chameleons",
-      "file_prefix": "",
-      "paid_content": true
+      "title": "Music",
+      "file_prefix": "music",
+      "paid_content": false
     },
     {
       "id": "16",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Aliens",
+      "file_prefix": "aliens",
       "paid_content": true
     },
     {
       "id": "17",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Birds",
+      "file_prefix": "birds",
       "paid_content": true
     },
     {
       "id": "18",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Balloons",
+      "file_prefix": "balloons",
       "paid_content": true
     },
     {
       "id": "19",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Circuits",
+      "file_prefix": "circuits",
       "paid_content": true
     },
     {
       "id": "20",
-      "title": "Chameleons",
-      "file_prefix": "",
+      "title": "Flowers",
+      "file_prefix": "flowers",
+      "paid_content": true
+    },
+    {
+      "id": "21",
+      "title": "Forest",
+      "file_prefix": "forest",
+      "paid_content": true
+    },
+    {
+      "id": "22",
+      "title": "Space Invaders",
+      "file_prefix": "space_invaders",
+      "paid_content": true
+    },
+    {
+      "id": "23",
+      "title": "Pigs",
+      "file_prefix": "pigs",
+      "paid_content": false
+    },
+    {
+      "id": "24",
+      "title": "Pixels Large",
+      "file_prefix": "pixels2",
+      "paid_content": true
+    },
+    {
+      "id": "25",
+      "title": "Pixels Small",
+      "file_prefix": "pixels",
+      "paid_content": true
+    },
+    {
+      "id": "26",
+      "title": "Tribal 1",
+      "file_prefix": "tribal1",
+      "paid_content": true
+    },
+    {
+      "id": "27",
+      "title": "Tribal 2",
+      "file_prefix": "tribal2",
+      "paid_content": true
+    },
+    {
+      "id": "28",
+      "title": "Vines",
+      "file_prefix": "vines",
+      "paid_content": true
+    },
+    {
+      "id": "29",
+      "title": "Western",
+      "file_prefix": "western",
       "paid_content": true
     }
   ]

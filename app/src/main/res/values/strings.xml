@@ -1,20 +1,26 @@
 <resources>
-    <string name="default_theme_key">Aliens</string>
+    <string name="package_name">com.stuartrosk.borders</string>
 
-    <string name="app_name">Borders</string>
-    <string name="default_side_text">20</string>
-    <string name="default_corner_text">40</string>
-
+    <!-- extras and filters -->
     <string name="stopBordersExtra">stopBorders</string>
-    <string name="startBordersExtra">startBorers</string>
+    <string name="startBordersExtra">startBorders</string>
+    <string name="unlockAppExtra">unlockApp</string>
+    <string name="unlockAppLaterExtra">unlockLater</string>
+    <string name="unlockAppNeverExtra">unlockNever</string>
+    <string name="unlockAppProcessExtra">process_unlock_app</string>
+    <string name="editModeExtra">editMode</string>
+    <string name="editPosExtra">editPos</string>
+    <string name="screenshotExtra">screenshot</string>
+    <string name="toggleExtra">toggle</string>
+    <string name="intent_filter_service_ready">service-ready</string>
+    <string name="intent_filter_toggle_switch">toggle-switch</string>
+    <string name="stop_notif_extra">stopNotif</string>
 
     <!-- prefs -->
-    <string name="pref_namespace">com.stuartrosk.borders.app</string>
+    <string name="dismiss_thank_you">ty_dismiss</string>
     <string name="edit_mode_pref">edit_mode</string> <!-- used to keep track of our service being edit mode or regular -->
     <string name="image_edit_mode_pref">image_edit_mode</string>
     <string name="first_time_pref">first_timer</string> <!-- used to see if we should hide/show initial worlds. Also for tutorial -->
-    <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
-    <string name="service_toggled_pref">service_toggled</string> <!-- see if the service toggle switch is on/off -->
     <string name="rate_us_pref">rated</string> <!-- true/false, if true, we hide the stars -->
     <string name="unlocked_pref">unlocked</string>
     <string name="unlocked_no_notify">unlockedNoNotify</string>
@@ -27,7 +33,7 @@
     <string name="startup_pref">startup_pref</string>
     <string name="lockscreen_pref">lockscreen_pref</string> <!--true to hide on lockscreen-->
     <string name="notification_pref">notification_pref</string>
-    <string name="notification_icon_pref">notification_icon_pref</string>
+    <string name="notification_icon_pref">notification_icon_pref</string> <!-- true to hide icon, false to show -->
     <string name="app_start_pref">appStartCount</string>
     <string name="system_pulldown_pref">systemPullDown</string> <!-- true to hide on pulldown -->
     <string name="system_fullscreen_pref">systemFullscreen</string> <!-- true to hide on fullscreen -->
@@ -38,52 +44,172 @@
     <string name="ad_rotation">adRotation</string>
     <string name="temp_perm_dialog">tempPermDialog</string>
     <string name="b_points">bPoints</string>
+    <string name="last_edit_pos_pref">last_edit_pos</string>
 
+    <!-- service prefs -->
     <string name="service_started">serviceStarted</string>
     <string name="service_editmode">serviceEditMode</string>
     <string name="service_editpos">serviceEditPos</string>
+    <string name="service_enabled_pref">service_enabled</string> <!-- used to keep track of if the service is enabled or not -->
+    <string name="service_toggled_pref">service_toggled</string> <!-- see if the service toggle switch is on/off -->
 
+    <!-- default values -->
     <string name="default_file_path">/</string>
-    <string name="default_image_btn_text">(none)</string>
+    <string name="default_image_btn_text">(Select)</string>
+    <string name="default_theme_key">Android</string>
+    <string name="default_side_text">20</string>
+    <string name="default_corner_text">40</string>
+    <string name="empty_custom_list_text">(Select One)</string>
 
+    <!-- email values -->
     <string name="email_to">me@stuartrosk.com</string>
     <string name="email_subject">Feedback for Borders App</string>
+    <string name="share_theme_gp_free">Check out this theme I made on Borders!\n\nCheck out the app on Google Play - https://goo.gl/HVhic2\n\n#android #borders #bordersapp #borderstheme #theme #personalization</string>
+    <string name="share_theme_gp_paid">Check out this theme I made on Borders!\n\nCheck out the app on Google Play - https://goo.gl/3Vrtf3\n\n#android #borders #bordersapp #borderstheme #theme #personalization</string>
+    <string name="share_theme_azn_free">Check out this theme I made on Borders!\n\nCheck out the app on Amazon - http://goo.gl/fhR74Y\n\n#android #borders #bordersapp #borderstheme #theme #personalization</string>
+    <string name="share_theme_azn_paid">Check out this theme I made on Borders!\n\nCheck out the app on Amazon - http://goo.gl/ngLDBi\n\n#android #borders #bordersapp #borderstheme #theme #personalization</string>
 
-    <string name="ads_permission_title">Borders App Usage</string>
-    <string name="ads_permission_msg">Hi! This app requires a few special permissions to function properly. In order to proceed, you\'ll need to accept the following permission items:\n\n&#8212; Access Location\n\u0020\u0020\u0020\u0020(For Notifications)\n&#8212; Read Phone State\n\u0020\u0020\u0020\u0020(For Notifications)\n&#8212; Get Accounts\n\u0020\u0020\u0020\u0020(For free version ads)\n&#8212; Write External Storage\n\u0020\u0020\u0020\u0020(For Theme Customizing and Sharing)\n&#8212; Receive Boot Completed\n\u0020\u0020\u0020\u0020(For Themes to Show After Restart)\n&#8212; System Alert Window\n\u0020\u0020\u0020\u0020(For Drawing the Themes)\n\nTo proceed using the app, please accept these permissions on the next screen!</string>
-    <string name="ads_permission_yes">Okay!</string>
-    <string name="ads_permission_no">Nope :(</string>
+    <!-- tapjoy -->
+    <string name="tapjoy_key">xlKCXThXS0i5KGsSUMX-uwECBweWa3E6RxmgvJtIK1vHJ2vds-VfRy-ifft0</string>
+    <string name="tapjoy_news_placement">News</string>
+    <string name="tapjoy_interstitial_placement">Interstitial</string>
+    <string name="tapjoy_video_placement">Video</string>
+    <string name="tapjoy_offerwall_placement">Offerwall</string>
 
-    <string name="overlay_permission_title">Required Permission</string>
-    <string name="overlay_permission_msg">This app\'s purpose is to allow you to have persistent themes on all screens. This requires a special overlay permission to be enabled in order to work. Please click "okay", then enable the permission on the next screen.</string>
-    <string name="overlay_permission_yes">Okay</string>
+    <!-- image types -->
+    <string name="image_type_png">png</string>
+    <string name="image_type_jpg">jpg</string>
+    <string name="image_type_jpeg">jpeg</string>
+    <string name="image_mimetype_start">image/</string>
 
-    <string name="bad_rating_title">Help us improve!</string>
-    <string name="bad_rating_message">We noticed you clicked on a lower rating star. We strive to make the best apps we can, so if this rating is due to something not intuitive or a bug, please email us! We will do our best to respond as quickly as possible to address your issue!</string>
-    <string name="bad_rating_rate">Continue Rating</string>
-    <string name="bad_rating_email">Email Us!</string>
+    <!-- store specific items -->
+    <string name="installer_amazon">amazon</string>
+    <string name="google_play_url">https://play.google.com/store/apps/details?id=</string>
+    <string name="amazon_url">http://www.amazon.com/gp/mas/dl/android?p=</string>
+    <string name="samsung_package_contains">samsungapps</string>
+    <string name="installer_samsung">samsung</string>
+    <string name="installer_google">google</string>
+    <string name="installer_android">android</string>
 
-    <string name="feedback_title">How are we doing?</string>
-    <string name="feedback_message">We are always trying to make your experience the best! If you have some positive feedback, make sure to rate us! You\'re also welcome to email us too!\n\nIf you have run into a bug or would like an improvement, please email us and we\'ll try to update the app quickly!</string>
-    <string name="feedback_rate">Rate Us!</string>
-    <string name="feedback_email">Email Us!</string>
+    <!-- share image/app general -->
+    <string name="share_image_theme_flag">theme</string>
+    <string name="share_image_chooser_message">Choose One</string>
+    <string name="share_image_error_message">Unable to share image. Please send a bug report through the feedback link in the settings. Thanks!</string>
+    <string name="share_app_message_prefix">"\nI love this app!\n\nBorders: "</string>
 
-    <string name="share_title">Share Something</string>
-    <string name="share_message">Which one would you like to share?\n\nThemes can be shared in the edit screen.</string>
-    <string name="share_app">App Link</string>
-    <string name="share_screenshot">Screenshot</string>
+    <!-- folder and file prefixes -->
+    <string name="borders_folder">Borders</string>
+    <string name="logo_filename">logo.png</string>
+    <string name="screenshots_folder">Screenshots</string>
+    <string name="screenshot_prefix">Borders_</string>
+    <string name="screenshot_extension">.png</string>
 
-    <string name="voluntary_title">Borders Points</string>
-    <string name="voluntary_message">Earn Borders Points to unlock the full version of the app! Once you reach 750, you can unlock the app for free!\n\nYou can come back to this popup to view your current points and do a voluntary video ad anytime to earn points. Note, after earning points, it may take a little time to process before they appear.</string>
-    <string name="voluntary_unlock">Unlock!</string>
-    <string name="voluntary_cancel">Cancel</string>
-    <string name="voluntary_video">Play Video</string>
+    <!-- error and loading messages -->
+    <string name="app_crash_message">Borders has crashed. Please describe how you reached this error so we can fix it!</string>
+    <string name="themes_directory_error">Unable to create or retrieve themes directory. Corrupted or locked external storage directory.</string>
+    <string name="importing_toast">Importing File -- Please wait!!</string>
+    <string name="locked_file_message">Unable to open file. Is the file locked?</string>
+    <string name="unimplemented_feature_message">This feature isn\'t implemented yet. Would you be willing to send us information on how you reached this message?</string>
+    <string name="screenshot_error_message">Unable to take screenshot. Please send a bug report through the feedback link in the settings. Thanks!</string>
 
-    <string name="unlock_popup_title">Unlock the app?</string>
-    <string name="unlock_popup_message">If you\'d like to unlock all the features of the app, please press the "Unlock!" button.\n\nAlternately, you can unlock the app with B-Points on the app home screen.</string>
-    <string name="unlock_popup_go">Unlock!</string>
-    <string name="unlock_popup_cancel">Not yet</string>
+    <!-- fragment tags -->
+    <string name="fragment_tag_edit_transition">T</string>
+    <string name="fragment_tag_edit">E</string>
+    <string name="fragment_tag_custom">C</string>
+    <string name="fragment_tag_image_edit">IE</string>
+    <string name="fragment_tag_settings">S</string>
+    <string name="fragment_tag_home">H</string>
+    <string name="fragment_tag_welcome">W</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- other/misc strings -->
+    <string name="accessibility_service_description">This service is used to enable detection when the system bar is expanded, or when a keyboard is open on the phone. We added these features because a custom border can be obstructive sometimes when trying to view an expanded system bar or a keyboard and the theme blocks the view. Because Android doesn\'t allow this natively, it must be enabled through accessibility settings.</string>
+    <string name="log_tag">Borders</string>
+    <string name="theme_custom_title">Custom</string>
+    <string name="developer_name">stuartrosk</string>
+    <string name="dummy_text">don\'t care</string>
+    <string name="package_search_prefix">package:</string>
+    <string name="scheme_http">http</string>
+    <string name="paid_app_name">com.stuartrosk.borders.full</string>
+    <string name="free_app_name">com.stuartrosk.borders.app</string>
+
+
+    <!-- _____________________ popups and notifications ______________________ -->
+
+        <!-- permission popup -->
+        <string name="ads_permission_title">Borders App Usage</string>
+        <string name="ads_permission_msg">Hi! This app requires a few special permissions to function properly. In order to proceed, you\'ll need to accept the following permission items:\n\n&#8212; Access Location\n\u0020\u0020\u0020\u0020(For Notifications)\n&#8212; Read Phone State\n\u0020\u0020\u0020\u0020(For Notifications)\n&#8212; Get Accounts\n\u0020\u0020\u0020\u0020(For free version ads)\n&#8212; Write External Storage\n\u0020\u0020\u0020\u0020(For Theme Customizing and Sharing)\n&#8212; Receive Boot Completed\n\u0020\u0020\u0020\u0020(For Themes to Show After Restart)\n&#8212; System Alert Window\n\u0020\u0020\u0020\u0020(For Drawing the Themes)\n\nTo proceed using the app, please accept these permissions on the next screen!</string>
+        <string name="ads_permission_yes">Okay!</string>
+        <string name="ads_permission_no">Nope :(</string>
+        <string name="overlay_permission_title">Required Permission</string>
+        <string name="overlay_permission_msg">This app\'s purpose is to allow you to have persistent themes on all screens. This requires a special overlay permission to be enabled in order to work. Please click "okay", then enable the permission on the next screen.</string>
+        <string name="overlay_permission_yes">Okay</string>
+
+        <!-- rate popup -->
+        <string name="bad_rating_title">Help us improve!</string>
+        <string name="bad_rating_message">We noticed you clicked on a lower rating star. We strive to make the best apps we can, so if this rating is due to something not intuitive or a bug, please email us! We will do our best to respond as quickly as possible to address your issue!</string>
+        <string name="bad_rating_rate">Continue Rating</string>
+        <string name="bad_rating_email">Email Us!</string>
+
+        <!-- feedback popup -->
+        <string name="feedback_title">How are we doing?</string>
+        <string name="feedback_message">We are always trying to make your experience the best! If you have some positive feedback, make sure to rate us! You\'re also welcome to email us too!\n\nIf you have run into a bug or would like an improvement, please email us and we\'ll try to update the app quickly!</string>
+        <string name="feedback_rate">Rate Us!</string>
+        <string name="feedback_email">Email Us!</string>
+
+        <!-- share link/screenshot popup -->
+        <string name="share_title">Share Something</string>
+        <string name="share_message">Which one would you like to share?\n\n*** Themes can be shared in the edit screen.</string>
+        <string name="share_app">App Link</string>
+        <string name="share_screenshot">Screenshot</string>
+
+        <!-- b-points popup -->
+        <string name="voluntary_title">Borders Points</string>
+        <string name="voluntary_message">Earn Borders Points to unlock the full version of the app! Once you reach 750, you can unlock the app for free!\n\nYou can come back to this popup to view your current points and do a voluntary video ad anytime to earn points. Note, after earning points, it may take a little time to process before they appear.</string>
+        <string name="voluntary_unlock">Unlock!</string>
+        <string name="voluntary_offer">Show Offers</string>
+        <string name="voluntary_video">Play Video</string>
+
+        <!-- unlock popup -->
+        <string name="unlock_popup_title">Unlock the app?</string>
+        <string name="unlock_popup_message">If you\'d like to unlock all the features of the app, please press the "Unlock!" button.\n\nAlternately, you can unlock the app with B-Points on the app home screen.</string>
+        <string name="unlock_popup_go">Unlock!</string>
+        <string name="unlock_popup_cancel">Not yet</string>
+
+        <!-- thank you/uninstall popup -->
+        <string name="uninstall_popup_title">"Thank you!!"</string>
+        <string name="uninstall_popup_message">Thank you for purchasing Borders! You now have everything unlocked, no ads, and additional themes available!</string>
+        <string name="uninstall_popup_extra_message">\n\nWe see that you have the free version of Borders installed. Since this is no longer needed, would you like to uninstall it? We\'ll keep all your customized themes and screenshots in the same location.</string>
+        <string name="uninstall_popup_default_go">Sweet!</string>
+        <string name="uninstall_popup_uninstall_go">"Yes, Remove It"</string>
+        <string name="uninstall_popup_cancel">Not yet.</string>
+
+        <!-- ads unlocked dialog -->
+        <string name="ads_unlocked_title">Unlocked!</string>
+        <string name="ads_unlocked_message">You\'ve unlocked the app! Ads are now hidden and all themes and customizable positions are available. As this is an ads unlock, it only applies to this device while the app is installed.</string>
+        <string name="ads_unlocked_go">Cool</string>
+
+        <!-- reset image edit dialog -->
+        <string name="reset_title">Reset Image?</string>
+        <string name="reset_message">Are you sure you want to reset the image on this position? The copied image will be removed from the theme folder.</string>
+        <string name="reset_go">Reset</string>
+        <string name="reset_cancel">Cancel</string>
+
+        <!-- unlock notification -->
+        <string name="unlock_notification_title">Unlock Borders</string>
+        <string name="unlock_notification_message">Like Borders? Unlock to get all the features!</string>
+        <string name="unlock_notification_unlock">Unlock!</string>
+        <string name="unlock_notification_later">Later...</string>
+        <string name="unlock_notification_never">Never :(</string>
+
+        <!-- rating notification -->
+        <string name="rating_action_show">show_rating</string>
+        <string name="rating_action_later">later_rating</string>
+        <string name="rating_action_never">never_rating</string>
+        <string name="rating_notification_title">Rate Borders</string>
+        <string name="rating_notification_message">Like Borders? Touch to rate it!</string>
+        <string name="rating_notification_rate">Rate Us!</string>
+        <string name="rating_notification_later">Later...</string>
+        <string name="rating_notification_never">Never :(</string>
+
+    <!-- ________________________ end popup section _________________________ -->
 </resources>

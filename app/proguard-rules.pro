@@ -16,20 +16,6 @@
 #   public *;
 #}
 
-# GOOGLE
--keep class com.android.vending.billing.**
-
-# AMAZON
--dontwarn com.amazon.**
--keep class com.amazon.** {*;}
--keepattributes *Annotation*
--dontoptimize
-
-# SAMSUNG
--keep class com.sec.android.iap.**
-
-# NOKIA
--keep class com.nokia.payment.iap.aidl.**
-
-#FORTUMO
--keep class mp.** { *; }
+-dontwarn android.support.v4.**
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**

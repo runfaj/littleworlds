@@ -2,4 +2,6 @@
 <resources>
     <dimen name="barThickness">20dp</dimen>
     <dimen name="cornerThickness">40dp</dimen>
+    <dimen name="previewWidth">200dp</dimen>
+    <dimen name="previewHeight">32dp</dimen>
 </resources>

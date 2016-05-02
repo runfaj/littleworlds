@@ -2,6 +2,7 @@
 <resources>
     <color name="primary">#ffffff</color>
     <color name="light_gray_background">#eaeaea</color>
+    <color name="edit_box_super_light">#f4f4f4</color>
     <color name="edit_box_very_light">#ffeaeaea</color>
     <color name="edit_box_light">#ffbdbdbd</color>
     <color name="edit_box_regular">#ffa0a0a0</color>

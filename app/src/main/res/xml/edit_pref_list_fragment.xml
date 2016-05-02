@@ -2,9 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-    <com.stuartrosk.borders.app.ThemeListPreference
+    <com.stuartrosk.borders.ThemeListPreference
             android:key="theme_list"
             android:title="Select Theme"
             android:summary="Current: Custom"
             android:dialogTitle="Select Theme"/>
+    <com.stuartrosk.borders.CustomListPreference
+        android:key="custom_list"
+        android:title="Select Custom Theme"
+        android:summary="Current: (None)"
+        android:dialogTitle="Select Custom Theme"/>
 </PreferenceScreen>

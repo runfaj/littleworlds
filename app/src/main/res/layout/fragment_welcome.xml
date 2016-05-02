@@ -13,7 +13,7 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:scaleType="fitXY"
-        android:background="#07e800"/>
+        android:src="@drawable/tribal2_tlc"/>
 
     <ImageView
         android:id="@+id/welcome_topRightCorner"
@@ -23,7 +23,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleType="fitXY"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_topLeftMiddle"
@@ -33,7 +33,7 @@
         android:scaleType="fitXY"
         android:layout_toRightOf="@+id/welcome_topLeftCorner"
         android:layout_toLeftOf="@+id/welcome_space"
-        android:background="#07e800"/>
+        android:src="@drawable/tribal2_tlm"/>
 
     <ImageView
         android:id="@+id/welcome_topRightMiddle"
@@ -43,7 +43,7 @@
         android:layout_toLeftOf="@+id/welcome_topRightCorner"
         android:scaleType="fitXY"
         android:layout_toRightOf="@+id/welcome_space"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_bottomLeftCorner"
@@ -52,7 +52,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:scaleType="fitXY"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_bottomRightCorner"
@@ -61,7 +61,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:scaleType="fitXY"
-        android:background="#07e800"/>
+        android:src="@drawable/tribal2_brc"/>
 
     <ImageView
         android:id="@+id/welcome_bottomLeftMiddle"
@@ -71,7 +71,7 @@
         android:layout_toRightOf="@+id/welcome_bottomLeftCorner"
         android:scaleType="fitXY"
         android:layout_toLeftOf="@+id/welcome_space"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_bottomRightMiddle"
@@ -81,7 +81,7 @@
         android:layout_toLeftOf="@+id/welcome_bottomRightCorner"
         android:scaleType="fitXY"
         android:layout_toRightOf="@+id/welcome_space"
-        android:background="#07e800"/>
+        android:src="@drawable/tribal2_brm"/>
 
     <ImageView
         android:id="@+id/welcome_sideLeftTop"
@@ -92,7 +92,7 @@
         android:layout_below="@+id/welcome_topLeftCorner"
         android:scaleType="fitXY"
         android:layout_above="@+id/welcome_sideLeftMiddle"
-        android:background="#07e800"/>
+        android:src="@drawable/tribal2_slt"/>
 
     <ImageView
         android:id="@+id/welcome_sideLeftMiddle"
@@ -102,7 +102,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:scaleType="fitXY"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_sideLeftBottom"
@@ -113,7 +113,7 @@
         android:layout_alignParentStart="true"
         android:scaleType="fitXY"
         android:layout_below="@+id/welcome_sideLeftMiddle"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_sideRightTop"
@@ -124,7 +124,7 @@
         android:layout_below="@+id/welcome_topRightCorner"
         android:scaleType="fitXY"
         android:layout_above="@+id/welcome_sideRightMiddle"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_sideRightMiddle"
@@ -134,7 +134,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:scaleType="fitXY"
-        android:background="#07e800"/>
+    />
 
     <ImageView
         android:id="@+id/welcome_sideRightBottom"
@@ -145,7 +145,7 @@
         android:layout_alignParentRight="true"
         android:scaleType="fitXY"
         android:layout_below="@+id/welcome_sideRightMiddle"
-        android:background="#07e800"/>
+        android:src="@drawable/tribal2_srb"/>
 
     <!--<android.gesture.GestureOverlayView
         android:id="@+id/gestures"

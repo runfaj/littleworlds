@@ -2,13 +2,13 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.stuartrosk.borders.app.EditFragment"
+                tools:context="com.stuartrosk.borders.EditFragment"
                 android:id="@+id/fragmentEdit"
                 android:background="#ffffff">
 
     <RelativeLayout
         android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
         >
 
@@ -22,28 +22,16 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/themeFragmentCont"
             android:id="@+id/custom_cont"
-            android:visibility="invisible">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/customFragmentCont"
-                    android:layout_centerHorizontal="true"
-                    android:layout_span="4"/>
-            </TableRow>
+            android:visibility="invisible"
+            android:layout_above="@+id/editDoneBtn"
+            android:layout_marginBottom="30dp">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:visibility="invisible">
+                >
 
                 <ImageView
                     android:layout_width="35dp"
@@ -51,7 +39,8 @@
                     android:id="@+id/custom_add_btn"
                     android:background="@drawable/btn_pressed"
                     android:src="@drawable/ic_library_add_black_48dp"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"/>
 
                 <ImageView
                     android:layout_width="35dp"
@@ -59,6 +48,16 @@
                     android:id="@+id/custom_edit_btn"
                     android:background="@drawable/btn_pressed"
                     android:src="@drawable/ic_border_color_black_48dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/custom_import_btn"
+                    android:background="@drawable/btn_pressed"
+                    android:src="@drawable/ic_archive_black_48dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"/>
 
@@ -69,15 +68,8 @@
                     android:background="@drawable/btn_pressed"
                     android:src="@drawable/ic_share_black_48dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/custom_import_btn"
-                    android:background="@drawable/btn_pressed"
-                    android:src="@drawable/ic_archive_black_48dp"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginRight="10dp"
+                    />
 
 
             </TableRow>

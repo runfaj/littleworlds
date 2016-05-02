@@ -3,9 +3,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                tools:context="com.stuartrosk.borders.app.HomeFragment"
+                tools:context="com.stuartrosk.borders.HomeFragment"
                 android:id="@+id/fragmentHome"
-    >
+                android:background="@color/primary">
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/mainEditButton"
@@ -43,7 +43,7 @@
                 android:src="@drawable/logo"/>
 
         <Switch
-            android:layout_width="220dp"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:text="Enable Borders"
             android:id="@+id/serviceSwitch"
@@ -154,8 +154,9 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="B-Points"
+            android:layout_height="50dp"
+            android:drawableLeft="@drawable/app_notif_icon"
+            android:text="-Points"
             android:id="@+id/pointsBtn"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/rating_container"

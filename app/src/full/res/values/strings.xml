@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_namespace">com.stuartrosk.borders.full</string>
+    <string name="app_name">Borders</string>
+</resources>
