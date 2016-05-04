@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.widget.Button;
@@ -38,7 +40,7 @@ public class WelcomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fragment_welcome, container, false);
 
-        Button mainButton = (Button) mainView.findViewById(R.id.welcome_button);
+        AppCompatButton mainButton = (AppCompatButton) mainView.findViewById(R.id.welcome_button);
 
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +71,7 @@ public class WelcomeFragment extends Fragment {
 
     private void setSizes() {
         WindowManager windowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-        ImageView trcV, tlcV, brcV, blcV,
+        AppCompatImageView trcV, tlcV, brcV, blcV,
                 tlmV, trmV, blmV, brmV,
                 sltV, slmV, slbV,
                 srtV, srmV, srbV;
@@ -78,23 +80,23 @@ public class WelcomeFragment extends Fragment {
         View s = mainView;
 
         // corners
-        trcV = (ImageView)s.findViewById(R.id.welcome_topRightCorner);
-        tlcV = (ImageView)s.findViewById(R.id.welcome_topLeftCorner);
-        brcV = (ImageView)s.findViewById(R.id.welcome_bottomRightCorner);
-        blcV = (ImageView)s.findViewById(R.id.welcome_bottomLeftCorner);
+        trcV = (AppCompatImageView)s.findViewById(R.id.welcome_topRightCorner);
+        tlcV = (AppCompatImageView)s.findViewById(R.id.welcome_topLeftCorner);
+        brcV = (AppCompatImageView)s.findViewById(R.id.welcome_bottomRightCorner);
+        blcV = (AppCompatImageView)s.findViewById(R.id.welcome_bottomLeftCorner);
         // top and bottom
-        brmV = (ImageView)s.findViewById(R.id.welcome_bottomRightMiddle);
-        blmV = (ImageView)s.findViewById(R.id.welcome_bottomLeftMiddle);
-        trmV = (ImageView)s.findViewById(R.id.welcome_topRightMiddle);
-        tlmV = (ImageView)s.findViewById(R.id.welcome_topLeftMiddle);
+        brmV = (AppCompatImageView)s.findViewById(R.id.welcome_bottomRightMiddle);
+        blmV = (AppCompatImageView)s.findViewById(R.id.welcome_bottomLeftMiddle);
+        trmV = (AppCompatImageView)s.findViewById(R.id.welcome_topRightMiddle);
+        tlmV = (AppCompatImageView)s.findViewById(R.id.welcome_topLeftMiddle);
         //left side
-        slbV = (ImageView)s.findViewById(R.id.welcome_sideLeftBottom);
-        slmV = (ImageView)s.findViewById(R.id.welcome_sideLeftMiddle);
-        sltV = (ImageView)s.findViewById(R.id.welcome_sideLeftTop);
+        slbV = (AppCompatImageView)s.findViewById(R.id.welcome_sideLeftBottom);
+        slmV = (AppCompatImageView)s.findViewById(R.id.welcome_sideLeftMiddle);
+        sltV = (AppCompatImageView)s.findViewById(R.id.welcome_sideLeftTop);
         //right side
-        srbV = (ImageView)s.findViewById(R.id.welcome_sideRightBottom);
-        srmV = (ImageView)s.findViewById(R.id.welcome_sideRightMiddle);
-        srtV = (ImageView)s.findViewById(R.id.welcome_sideRightTop);
+        srbV = (AppCompatImageView)s.findViewById(R.id.welcome_sideRightBottom);
+        srmV = (AppCompatImageView)s.findViewById(R.id.welcome_sideRightMiddle);
+        srtV = (AppCompatImageView)s.findViewById(R.id.welcome_sideRightTop);
 
         //set initial screen size
         Display display = windowManager.getDefaultDisplay();

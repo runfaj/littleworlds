@@ -1,6 +1,8 @@
 package com.stuartrosk.borders;
 
 import android.app.Activity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +31,8 @@ public class FileListAdapter extends ArrayAdapter<String>{
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.file_row, null, true);
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.rowtext);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.rowimage);
+        AppCompatTextView txtTitle = (AppCompatTextView) rowView.findViewById(R.id.rowtext);
+        AppCompatImageView imageView = (AppCompatImageView) rowView.findViewById(R.id.rowimage);
 
         txtTitle.setText(file_name.get(position));
         imageView.setImageResource(image_id.get(position));

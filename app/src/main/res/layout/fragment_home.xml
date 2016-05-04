@@ -34,7 +34,7 @@
         android:layout_centerInParent="true"
         android:paddingBottom="80dp">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
                 android:layout_width="260dp"
                 android:layout_height="73dp"
                 android:id="@+id/imageView"
@@ -42,7 +42,7 @@
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/logo"/>
 
-        <Switch
+        <android.support.v7.widget.SwitchCompat
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:text="Enable Borders"
@@ -53,6 +53,7 @@
             android:checked="false"
             android:textColor="@android:color/black"
             android:enabled="true"
+            app:showText="false"
             />
 
         <!--<Button
@@ -65,7 +66,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_below="@+id/serviceSwitch"/>-->
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:text="Share!"
@@ -75,7 +76,7 @@
             android:layout_marginTop="16dp"
             android:layout_below="@+id/serviceSwitch"/>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
                 android:layout_width="105dp"
                 android:layout_height="wrap_content"
                 android:text="Settings"
@@ -92,7 +93,7 @@
             android:id="@+id/rating_container"
             android:layout_marginTop="18dp">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -100,7 +101,7 @@
                 android:id="@+id/rating_text"
                 />
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:id="@+id/rating_1_star"
@@ -110,7 +111,7 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_pressed"/>
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:id="@+id/rating_2_star"
@@ -120,7 +121,7 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_pressed"/>
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:id="@+id/rating_3_star"
@@ -130,7 +131,7 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_pressed"/>
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:id="@+id/rating_4_star"
@@ -140,7 +141,7 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/btn_pressed"/>
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:id="@+id/rating_5_star"
@@ -152,7 +153,7 @@
 
         </RelativeLayout>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:drawableLeft="@drawable/app_notif_icon"

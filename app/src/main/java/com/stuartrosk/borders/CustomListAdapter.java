@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatRadioButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,11 +43,11 @@ public class CustomListAdapter extends ArrayAdapter<CharSequence> implements Vie
         row.setId(themes[position].id);
 
         //set name
-        TextView tv = (TextView) row.findViewById(R.id.themeName);
+        AppCompatTextView tv = (AppCompatTextView) row.findViewById(R.id.themeName);
         tv.setText(themes[position].title);
 
         //set image
-        final ImageView ti = (ImageView) row.findViewById(R.id.themeImage);
+        final AppCompatImageView ti = (AppCompatImageView) row.findViewById(R.id.themeImage);
         try {
             ti.setImageDrawable(
                 Drawable.createFromStream(
@@ -74,8 +77,8 @@ public class CustomListAdapter extends ArrayAdapter<CharSequence> implements Vie
         //ti.setImageResource(resourceImages.getResourceId(position,-1));
 
         //set checkbox
-        RadioButton tb = (RadioButton) row.findViewById(R.id.ckbox);
-        ImageView iv = (ImageView) row.findViewById(R.id.lockedIcon);
+        AppCompatRadioButton tb = (AppCompatRadioButton) row.findViewById(R.id.ckbox);
+        AppCompatImageView iv = (AppCompatImageView) row.findViewById(R.id.lockedIcon);
             if (themes[position].id == selected) {
                 tb.setChecked(true);
             } else {

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,7 +28,7 @@ public class FileDialog extends Dialog {
     private Context context;
     private List<String> path = null;
     private String root = DEFAULT_ROOT;
-    private TextView myPath;
+    private AppCompatTextView myPath;
     RelativeLayout downloadLink, cameraLink, picturesLink, sdcardLink;
     private ListView list;
     private FileDialogListener fileDialogListener;
@@ -56,7 +57,7 @@ public class FileDialog extends Dialog {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.file_list_view);
-        myPath = (TextView) findViewById(R.id.path);
+        myPath = (AppCompatTextView) findViewById(R.id.path);
         list = (ListView) findViewById(R.id.file_list);
         downloadLink = (RelativeLayout) findViewById(R.id.downloadsRow);
         cameraLink = (RelativeLayout) findViewById(R.id.cameraRow);

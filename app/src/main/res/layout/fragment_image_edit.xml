@@ -8,7 +8,7 @@
                 android:id="@+id/fragmentImageEdit"
     >
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -81,7 +81,7 @@
             </RelativeLayout>
             -->
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -93,7 +93,7 @@
                 android:layout_height="fill_parent"
                 android:layout_marginTop="8dp">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -112,7 +112,7 @@
                     android:layout_below="@+id/textView15"
                     android:gravity="right">
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(Select)"
@@ -122,7 +122,7 @@
                         android:layout_toLeftOf="@+id/imageClear"
                         />
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:id="@+id/imageClear"
@@ -270,7 +270,7 @@
                 android:layout_height="fill_parent"
                 android:layout_marginTop="8dp">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -279,7 +279,7 @@
                     android:enabled="true"
                     android:layout_alignParentLeft="true"/>
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="40dp"
                     android:layout_height="300dp"
                     android:id="@+id/previewImage"
@@ -294,7 +294,7 @@
 
 </ScrollView>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
@@ -304,11 +304,11 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="42dp"/>
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Reset"
+    <android.support.v7.widget.AppCompatButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Reset"
             android:id="@+id/resetBtn"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="42dp" android:layout_centerHorizontal="true"/>
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"

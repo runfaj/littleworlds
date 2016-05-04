@@ -18,14 +18,14 @@
             android:layout_weight="1"
             android:paddingRight="6dp">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Width (px)"
                 android:id="@+id/textView"/>
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberSigned"
@@ -40,14 +40,14 @@
             android:layout_weight="1"
             android:paddingLeft="6dp">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Height (px)"
                 android:id="@+id/textView3"/>
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberSigned"
@@ -56,7 +56,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reset to Default"

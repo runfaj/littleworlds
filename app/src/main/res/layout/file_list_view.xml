@@ -11,7 +11,7 @@
             android:visibility="visible"
             android:background="@android:color/darker_gray"/>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/path"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -52,7 +52,7 @@
                 android:paddingBottom="4dp"
                 android:id="@+id/sdcardRow">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:id="@+id/sdcardRowIcon"
@@ -60,7 +60,7 @@
                     android:layout_alignParentLeft="true"
                     android:src="@drawable/ic_sd_card_black_48dp"/>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/sdcardText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                 android:paddingBottom="4dp"
                 android:id="@+id/downloadsRow">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:id="@+id/downloadsRowIcon"
@@ -92,7 +92,7 @@
                     android:layout_alignParentLeft="true"
                     android:src="@drawable/ic_get_app_black_48dp"/>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/downloadsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                 android:paddingBottom="4dp"
                 android:id="@+id/cameraRow">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:id="@+id/cameraRowIcon"
@@ -124,7 +124,7 @@
                     android:layout_alignParentLeft="true"
                     android:src="@drawable/ic_photo_camera_black_48dp"/>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/cameraText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 android:paddingBottom="4dp"
                 android:id="@+id/picturesRow">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:id="@+id/picturesRowIcon"
@@ -156,7 +156,7 @@
                     android:layout_alignParentLeft="true"
                     android:src="@drawable/ic_image_black_48dp"/>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/picturesText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -182,6 +182,6 @@
         android:id="@+id/file_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="40dp"/>
+        android:paddingBottom="20dp"/>
 
 </LinearLayout>

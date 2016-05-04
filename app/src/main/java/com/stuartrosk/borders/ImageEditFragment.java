@@ -11,6 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +29,9 @@ public class ImageEditFragment extends Fragment {
     private ImageJsonObject.Position position;
     private ThemeJsonObject.Theme currTheme;
     private ImageEditFragmentListener listener;
-    private Button imageBtn;
+    private AppCompatButton imageBtn;
     private String selectedFilePath;
-    private ImageView previewImage, imageClear;
+    private AppCompatImageView previewImage, imageClear;
 
     private boolean cancelCheck = false;
 
@@ -88,14 +91,14 @@ public class ImageEditFragment extends Fragment {
             }
         }
         */
-        Button cancelBtn = (Button) view.findViewById(R.id.cancelBtn);
-        Button saveBtn = (Button) view.findViewById(R.id.saveBtn);
-        Button resetBtn = (Button) view.findViewById(R.id.resetBtn);
+        AppCompatButton cancelBtn = (AppCompatButton) view.findViewById(R.id.cancelBtn);
+        AppCompatButton saveBtn = (AppCompatButton) view.findViewById(R.id.saveBtn);
+        AppCompatButton resetBtn = (AppCompatButton) view.findViewById(R.id.resetBtn);
         //sizeBtn = (Button)view.findViewById(R.id.sizeBtn);
-        imageBtn = (Button) view.findViewById(R.id.imageBtn);
-        TextView titleText = (TextView) view.findViewById(R.id.imageEditTitleTxt);
-        previewImage = (ImageView) view.findViewById(R.id.previewImage);
-        imageClear = (ImageView) view.findViewById(R.id.imageClear);
+        imageBtn = (AppCompatButton) view.findViewById(R.id.imageBtn);
+        AppCompatTextView titleText = (AppCompatTextView) view.findViewById(R.id.imageEditTitleTxt);
+        previewImage = (AppCompatImageView) view.findViewById(R.id.previewImage);
+        imageClear = (AppCompatImageView) view.findViewById(R.id.imageClear);
 
         //config = new ImageJsonObject(getActivity(), ImageJsonObject.Position.valueOf(editPos));
 

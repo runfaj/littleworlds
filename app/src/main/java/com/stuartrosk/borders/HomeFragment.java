@@ -2,11 +2,16 @@ package com.stuartrosk.borders;
 
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +25,10 @@ import android.widget.*;
  */
 public class HomeFragment extends Fragment {
 
-    private Switch toggleSwitch;
+    private SwitchCompat toggleSwitch;
     private SharedPreferences preferences;
     private HomeFragmentListener listener;
-    private Button pointsBtn;
+    private AppCompatButton pointsBtn;
     private RelativeLayout ratingCont;
     private CompoundButton.OnCheckedChangeListener checkedChangeListener = null;
 
@@ -223,19 +228,19 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View mainView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ImageButton mainEditButton = (ImageButton) mainView.findViewById(R.id.mainEditButton);
-        toggleSwitch = (Switch) mainView.findViewById(R.id.serviceSwitch);
+        FloatingActionButton mainEditButton = (FloatingActionButton) mainView.findViewById(R.id.mainEditButton);
+        toggleSwitch = (SwitchCompat) mainView.findViewById(R.id.serviceSwitch);
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
         ratingCont = (RelativeLayout) mainView.findViewById(R.id.rating_container);
-        ImageView rank1 = (ImageView) mainView.findViewById(R.id.rating_1_star);
-        ImageView rank2 = (ImageView) mainView.findViewById(R.id.rating_2_star);
-        ImageView rank3 = (ImageView) mainView.findViewById(R.id.rating_3_star);
-        ImageView rank4 = (ImageView) mainView.findViewById(R.id.rating_4_star);
-        ImageView rank5 = (ImageView) mainView.findViewById(R.id.rating_5_star);
+        AppCompatImageView rank1 = (AppCompatImageView) mainView.findViewById(R.id.rating_1_star);
+        AppCompatImageView rank2 = (AppCompatImageView) mainView.findViewById(R.id.rating_2_star);
+        AppCompatImageView rank3 = (AppCompatImageView) mainView.findViewById(R.id.rating_3_star);
+        AppCompatImageView rank4 = (AppCompatImageView) mainView.findViewById(R.id.rating_4_star);
+        AppCompatImageView rank5 = (AppCompatImageView) mainView.findViewById(R.id.rating_5_star);
         ///////////////////feedbackBtn = (Button)mainView.findViewById(R.id.feedbackBtn);
-        Button settingsBtn = (Button) mainView.findViewById(R.id.settingsBtn);
-        Button shareBtn = (Button) mainView.findViewById(R.id.shareBtn);
-        pointsBtn = (Button) mainView.findViewById(R.id.pointsBtn);
+        AppCompatButton settingsBtn = (AppCompatButton) mainView.findViewById(R.id.settingsBtn);
+        AppCompatButton shareBtn = (AppCompatButton) mainView.findViewById(R.id.shareBtn);
+        pointsBtn = (AppCompatButton) mainView.findViewById(R.id.pointsBtn);
 
         View.OnClickListener bad_rating = new View.OnClickListener() {
             @Override

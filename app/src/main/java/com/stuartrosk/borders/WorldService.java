@@ -10,7 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
-import android.widget.ImageView;
+import android.support.v7.widget.AppCompatImageView;
 import android.widget.RelativeLayout;
 
 
@@ -31,7 +31,7 @@ public class WorldService extends Service {
     private WindowManager windowManager;
     public RelativeLayout serviceView;
     private LayoutInflater inflater;
-    private ImageView trcV, tlcV, brcV, blcV,
+    private AppCompatImageView trcV, tlcV, brcV, blcV,
             tlmV, trmV, blmV, brmV,
             sltV, slmV, slbV,
             srtV, srmV, srbV;
@@ -53,23 +53,23 @@ public class WorldService extends Service {
         RelativeLayout s = serviceView;
 
         // corners
-        trcV = (ImageView)s.findViewById(R.id.topRightCorner);
-        tlcV = (ImageView)s.findViewById(R.id.topLeftCorner);
-        brcV = (ImageView)s.findViewById(R.id.bottomRightCorner);
-        blcV = (ImageView)s.findViewById(R.id.bottomLeftCorner);
+        trcV = (AppCompatImageView)s.findViewById(R.id.topRightCorner);
+        tlcV = (AppCompatImageView)s.findViewById(R.id.topLeftCorner);
+        brcV = (AppCompatImageView)s.findViewById(R.id.bottomRightCorner);
+        blcV = (AppCompatImageView)s.findViewById(R.id.bottomLeftCorner);
         // top and bottom
-        brmV = (ImageView)s.findViewById(R.id.bottomRightMiddle);
-        blmV = (ImageView)s.findViewById(R.id.bottomLeftMiddle);
-        trmV = (ImageView)s.findViewById(R.id.topRightMiddle);
-        tlmV = (ImageView)s.findViewById(R.id.topLeftMiddle);
+        brmV = (AppCompatImageView)s.findViewById(R.id.bottomRightMiddle);
+        blmV = (AppCompatImageView)s.findViewById(R.id.bottomLeftMiddle);
+        trmV = (AppCompatImageView)s.findViewById(R.id.topRightMiddle);
+        tlmV = (AppCompatImageView)s.findViewById(R.id.topLeftMiddle);
         //left side
-        slbV = (ImageView)s.findViewById(R.id.sideLeftBottom);
-        slmV = (ImageView)s.findViewById(R.id.sideLeftMiddle);
-        sltV = (ImageView)s.findViewById(R.id.sideLeftTop);
+        slbV = (AppCompatImageView)s.findViewById(R.id.sideLeftBottom);
+        slmV = (AppCompatImageView)s.findViewById(R.id.sideLeftMiddle);
+        sltV = (AppCompatImageView)s.findViewById(R.id.sideLeftTop);
         //right side
-        srbV = (ImageView)s.findViewById(R.id.sideRightBottom);
-        srmV = (ImageView)s.findViewById(R.id.sideRightMiddle);
-        srtV = (ImageView)s.findViewById(R.id.sideRightTop);
+        srbV = (AppCompatImageView)s.findViewById(R.id.sideRightBottom);
+        srmV = (AppCompatImageView)s.findViewById(R.id.sideRightMiddle);
+        srtV = (AppCompatImageView)s.findViewById(R.id.sideRightTop);
 
         trcO = new ImageJsonObject();
         tlcO = new ImageJsonObject();
@@ -126,7 +126,7 @@ public class WorldService extends Service {
         return BitmapFactory.decodeFile(path, options);
     }
 
-    private void setConfig(ImageView v, ImageJsonObject o) {
+    private void setConfig(AppCompatImageView v, ImageJsonObject o) {
         boolean thisAreaLocked = false;
 
         //set locked areas

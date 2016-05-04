@@ -15,7 +15,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
@@ -23,9 +23,9 @@
                 android:id="@+id/themeName"
                 android:textSize="22sp"
                 android:layout_marginBottom="8dp">
-        </TextView>
+        </android.support.v7.widget.AppCompatTextView>
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:id="@+id/themeImage"
@@ -33,7 +33,7 @@
             />
     </LinearLayout>
 
-    <RadioButton
+    <android.support.v7.widget.AppCompatRadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
@@ -41,9 +41,9 @@
             android:id="@+id/ckbox"
             android:button="@null"
             android:drawableRight="@android:drawable/btn_radio"
-            android:paddingLeft="20dp"></RadioButton>
+            android:paddingLeft="20dp"></android.support.v7.widget.AppCompatRadioButton>
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/lockedIcon"

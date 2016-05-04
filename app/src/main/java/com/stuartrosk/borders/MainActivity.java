@@ -14,10 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
+import android.os.*;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.*;
@@ -57,6 +54,7 @@ import java.util.List;
  * ads manual calling has errors if done too often...
  * need to hide borders on any ad, then re-show upon close
  * play/pause notif stopped working api 16 - had to force close. Sometimes it just randomly disappears
+ * add roboto font app-wide
  *
  * TODO:
  * analytics
@@ -279,11 +277,14 @@ public class MainActivity extends Activity
 
     @Override
     public void onContentShow(TJPlacement tjPlacement) {
+        stopWorldService();
     }
 
     @Override
     public void onContentDismiss(TJPlacement tjPlacement) {
-
+        boolean editMode = preferences.getBoolean(getString(R.string.service_editmode),false);
+        String editPos = preferences.getString(getString(R.string.service_editpos),"");
+        startWorldService(editMode,editPos);
     }
 
     @Override
@@ -1373,15 +1374,6 @@ public class MainActivity extends Activity
         doExtras();
     }
 
-    public void handleUncaughtException (Thread thread, Throwable e) {
-        e.printStackTrace();
-        stopWorldService();
-        if(preferences.getBoolean(getString(R.string.service_toggled_pref),false))
-            startWorldService(false,"");
-        longToast(getString(R.string.app_crash_message));
-        FeedbackUtils.askForFeedback(getApplicationContext());
-    }
-
     private void doExtras() {
         //handle import intent filters
         Intent intent = getIntent();
@@ -1427,6 +1419,29 @@ public class MainActivity extends Activity
         }
     }
 
+    public void handleUncaughtException (Thread thread, final Throwable e) {
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+
+                e.printStackTrace();
+                stopWorldService();
+                if(preferences.getBoolean(getString(R.string.service_toggled_pref),false))
+                    startWorldService(false,"");
+                longToast(getString(R.string.app_crash_message));
+                FeedbackUtils.askForFeedback(getApplicationContext());
+
+                Looper.loop();
+            }
+        }.start();
+        try
+        {
+            Thread.sleep(4000); // Let the Toast display before app will get shutdown
+        }
+        catch (InterruptedException e2) { e2.printStackTrace(); }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("blah","oncreate main");
@@ -1439,7 +1454,9 @@ public class MainActivity extends Activity
             @Override
             public void uncaughtException (Thread thread, Throwable e)
             {
-                handleUncaughtException (thread, e);
+                //handleUncaughtException (thread, e);
+                e.printStackTrace();
+                System.exit(2);
             }
         });
 

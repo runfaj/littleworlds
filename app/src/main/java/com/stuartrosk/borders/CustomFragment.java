@@ -13,6 +13,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +36,9 @@ public class CustomFragment extends Fragment {
     View v;
     private CustomFragmentListener listener;
     private SharedPreferences preferences;
-    TextView nameField;
+    AppCompatEditText nameField;
     ThemeJsonObject.Theme manifest;
-    ImageView previewImage;
+    AppCompatImageView previewImage;
 
     public CustomFragment() {
         // Required empty public constructor
@@ -73,11 +76,11 @@ public class CustomFragment extends Fragment {
         int curr_id = preferences.getInt(getString(R.string.custom_id), 1);
         manifest = ThemeJsonObject.getCustomTheme(getActivity().getApplicationContext(), curr_id);
 
-        ImageView saveButton = (ImageView) v.findViewById(R.id.custom_save_btn);
-        ImageView deleteButton = (ImageView) v.findViewById(R.id.custom_delete_btn);
-        ImageView exportButton = (ImageView) v.findViewById(R.id.custom_export_btn);
-        previewImage = (ImageView) v.findViewById(R.id.preview_image);
-        nameField = (TextView) v.findViewById(R.id.theme_name_tv);
+        AppCompatImageView saveButton = (AppCompatImageView) v.findViewById(R.id.custom_save_btn);
+        AppCompatImageView deleteButton = (AppCompatImageView) v.findViewById(R.id.custom_delete_btn);
+        AppCompatImageView exportButton = (AppCompatImageView) v.findViewById(R.id.custom_export_btn);
+        previewImage = (AppCompatImageView) v.findViewById(R.id.preview_image);
+        nameField = (AppCompatEditText) v.findViewById(R.id.theme_name_tv);
 
         Log.d("custom create",manifest.title);
         nameField.setText(manifest.title);
@@ -85,11 +88,11 @@ public class CustomFragment extends Fragment {
         //set edit button handlers
         ViewGroup vg = (ViewGroup)v.findViewById(R.id.fragmentCustom);
         for(int i=0;i<vg.getChildCount();i++) {
-            if(vg.getChildAt(i) instanceof ImageView) {
+            if(vg.getChildAt(i) instanceof AppCompatImageView) {
                 testUnlocked(vg.getChildAt(i));
             }
         }
-        ImageView previewButton = (ImageView) v.findViewById(R.id.preview_edit_btn);
+        AppCompatImageView previewButton = (AppCompatImageView) v.findViewById(R.id.preview_edit_btn);
         testUnlocked(previewButton);
 
         String fullPath = ThemeJsonObject.getCustomThemePath(manifest) + "/" + ThemeJsonObject.getPreviewFile(manifest);

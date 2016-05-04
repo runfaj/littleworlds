@@ -8,14 +8,14 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/rowimage"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"/>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/rowtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

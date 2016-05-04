@@ -10,7 +10,7 @@
             android:background="#ffffffff"
             android:id="@+id/screenshot_image"
             android:visibility="invisible">
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="260dp"
                     android:layout_height="73dp"
                     android:id="@+id/imageView"
@@ -19,7 +19,7 @@
                     />
         </RelativeLayout>
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/topLeftCorner"
             android:layout_width="@dimen/cornerThickness"
             android:layout_height="@dimen/cornerThickness"
@@ -29,7 +29,7 @@
             android:scaleType="fitXY"
             />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
             android:id="@+id/topRightCorner"
             android:layout_width="@dimen/cornerThickness"
             android:layout_height="@dimen/cornerThickness"
@@ -39,7 +39,7 @@
             android:scaleType="fitXY"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/topLeftMiddle"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/barThickness"
@@ -48,7 +48,7 @@
         android:layout_toRightOf="@+id/topLeftCorner"
         android:layout_toLeftOf="@+id/space"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/topRightMiddle"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/barThickness"
@@ -57,7 +57,7 @@
         android:scaleType="fitXY"
         android:layout_toRightOf="@+id/space"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
             android:id="@+id/bottomLeftCorner"
             android:layout_width="@dimen/cornerThickness"
             android:layout_height="@dimen/cornerThickness"
@@ -66,7 +66,7 @@
             android:scaleType="fitXY"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
             android:id="@+id/bottomRightCorner"
             android:layout_width="@dimen/cornerThickness"
             android:layout_height="@dimen/cornerThickness"
@@ -75,7 +75,7 @@
             android:scaleType="fitXY"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/bottomLeftMiddle"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/barThickness"
@@ -85,7 +85,7 @@
         android:layout_toLeftOf="@+id/space"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/bottomRightMiddle"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/barThickness"
@@ -94,7 +94,7 @@
         android:scaleType="fitXY"
         android:layout_toRightOf="@+id/space"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/sideLeftTop"
         android:layout_width="@dimen/barThickness"
         android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
         android:scaleType="fitXY"
         android:layout_above="@+id/sideLeftMiddle"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
             android:id="@+id/sideLeftMiddle"
             android:layout_width="@dimen/barThickness"
             android:layout_height="160dp"
@@ -114,7 +114,7 @@
             android:scaleType="fitXY"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/sideLeftBottom"
         android:layout_width="@dimen/barThickness"
         android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
         android:scaleType="fitXY"
         android:layout_below="@+id/sideLeftMiddle"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/sideRightTop"
         android:layout_width="@dimen/barThickness"
         android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
         android:scaleType="fitXY"
         android:layout_above="@+id/sideRightMiddle"/>
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
             android:id="@+id/sideRightMiddle"
             android:layout_width="@dimen/barThickness"
             android:layout_height="160dp"
@@ -144,7 +144,7 @@
             android:scaleType="fitXY"
         />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/sideRightBottom"
         android:layout_width="@dimen/barThickness"
         android:layout_height="wrap_content"

@@ -15,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.AccelerateInterpolator;
@@ -36,8 +38,8 @@ public class EditFragment extends Fragment {
 
     private SharedPreferences preferences;
     private TableLayout custom_cont;
-    private ImageView shareButton;
-    private ImageView editButton;
+    private AppCompatImageView shareButton;
+    private AppCompatImageView editButton;
     private EditFragmentListener listener;
     private ThemeListFragment themeListFragment;
     private View v;
@@ -123,11 +125,11 @@ public class EditFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_edit, container, false);
 
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
-        Button editDoneBtn = (Button) v.findViewById(R.id.editDoneBtn);
-        ImageView addButton = (ImageView) v.findViewById(R.id.custom_add_btn);
-        ImageView importButton = (ImageView) v.findViewById(R.id.custom_import_btn);
-        shareButton = (ImageView)v.findViewById(R.id.custom_share_btn);
-        editButton = (ImageView)v.findViewById(R.id.custom_edit_btn);
+        AppCompatButton editDoneBtn = (AppCompatButton) v.findViewById(R.id.editDoneBtn);
+        AppCompatImageView addButton = (AppCompatImageView) v.findViewById(R.id.custom_add_btn);
+        AppCompatImageView importButton = (AppCompatImageView) v.findViewById(R.id.custom_import_btn);
+        shareButton = (AppCompatImageView)v.findViewById(R.id.custom_share_btn);
+        editButton = (AppCompatImageView)v.findViewById(R.id.custom_edit_btn);
         themeListFragment = new ThemeListFragment();
         custom_cont = (TableLayout)v.findViewById(R.id.custom_cont);
 
