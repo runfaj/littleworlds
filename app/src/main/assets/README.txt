@@ -118,3 +118,5 @@ Custom Borders themes can be created very easily with just a few steps. Please m
 6)  __ Other Notes __
 
     If you are sharing your theme, please leave the README file with the Creator notes and rights left alone. If you like the app, please also share with others and consider buying the full version!
+
+    If you are using the provided ai file in illustrator, you can easily export your design with all the correct file names by going to File > Export. Then enter the file name you'd like and select the "Use Artboards" checkbox. Lastly, select "png" file type and finish by clicking the export button.

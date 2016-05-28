@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.annotation.TargetApi; //don't delete, this is actually used
 import android.app.*;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.*;
 import android.content.pm.ApplicationInfo;
@@ -27,9 +28,14 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.simplifynowsoftware.androidmarketmanager.AMMConstants;
 import com.simplifynowsoftware.androidmarketmanager.AMMLinks;
-import com.tapjoy.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,28 +44,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-/**
- * Things to change when switching between app type:
- * app name in strings
- * ---auto items if proper package rename---
- * rename package
- * top of manifest
- * build.gradle app id
- */
-
+import java.util.Random;
 
 /*****
- * BUGS
- * ads manual calling has errors if done too often...
- * need to hide borders on any ad, then re-show upon close
- * play/pause notif stopped working api 16 - had to force close. Sometimes it just randomly disappears
- * add roboto font app-wide
- *
- * TODO:
- * analytics
- * extensively test onpause/resume/destroy of all fragments for worldservice, ondestroy of imageedit def not working
+ * BUGS:
  * check hiding/showing things on notifications
+ * NEED to have some sort of implementation to set custom preferences through a file download
  *
  *
  * MAYBE TODO:
@@ -69,6 +59,10 @@ import java.util.List;
  * small notification play/pause: http://www.androidbegin.com/tutorial/android-custom-notification-tutorial/
  * figure out image sizing for tablets
  * need to make sure thickness is set proportionally
+ * find a way to hide native ad if it didn't load
+ *
+ * TODO:
+ * extensively test onpause/resume/destroy of all fragments for worldservice, ondestroy of imageedit def not working
  * add option to only show notification when borders on
  * fullscreen may be more accurate with another invisible overlay and detecting the topleft position: http://stackoverflow.com/questions/18049543/is-it-possible-to-detect-when-any-application-is-in-full-screen-in-android
  *
@@ -87,7 +81,7 @@ public class MainActivity extends Activity
         ThemeListFragment.EditPrefListFragmentListener,
         SettingsPrefFragment.SettingsPrefFragmentListener,
         CustomFragment.CustomFragmentListener,
-        TJConnectListener, TJPlacementListener
+        SuperFragment.SuperFragmentListener
 {
 
     private WelcomeFragment fragmentWelcome;
@@ -109,192 +103,151 @@ public class MainActivity extends Activity
 
     private String TAG = "";
 
-    /************************************* tapjoy (ads) ******************************************/
+    /*********** some ga stuff *************/
 
-    private String TAPJOY_KEY = "";
-    TJPlacementListener tjPlacementListener = this;
-    TJPlacement tjNews, tjInterstitial, tjVideo, tjOfferwall;
+    public static void sendEvent(Context context, String category, String action, String label, String value){
+        //ga part
+        BordersApplication application = (BordersApplication) context.getApplicationContext();
+        Tracker mTracker = application.getDefaultTracker();
 
-    private void initTapJoy(){
-        try {
-            TAPJOY_KEY = getString(R.string.tapjoy_key);
-            Tapjoy.connect(this.getApplicationContext(), TAPJOY_KEY, null, this);
-            Tapjoy.setDebugEnabled(true); /////////////////////////////////////////////////////////////// remove this before prod release
-            Tapjoy.setGcmSender("143564304788"); //project id from google developer console, also requires server api key added to tapjoy dash
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.pref_namespace),MODE_PRIVATE);
 
-            //all placements should init here
-            tjNews = new TJPlacement(this, getString(R.string.tapjoy_news_placement), tjPlacementListener);
-            tjInterstitial = new TJPlacement(this, getString(R.string.tapjoy_interstitial_placement), tjPlacementListener);
-            tjVideo = new TJPlacement(this, getString(R.string.tapjoy_video_placement), tjPlacementListener);
-            tjOfferwall = new TJPlacement(this, getString(R.string.tapjoy_offerwall_placement), tjPlacementListener);
-        } catch (Exception e) {
-            Log.e("error", "cannot load ads: " + e.getMessage());
+        int v = 0;
+        if(value != null && value.equals("true")) v=1;
+
+        if(mTracker == null) return;
+        if(preferences.getString(context.getString(R.string.last_ga_category),"").equals(category)
+                && preferences.getString(context.getString(R.string.last_ga_action),"").equals(action)
+                && preferences.getString(context.getString(R.string.last_ga_label),"").equals(label)
+                && preferences.getInt(context.getString(R.string.last_ga_value),0) == v)
+            return;
+        else {
+            SharedPreferences.Editor e = preferences.edit();
+            e.putString(context.getString(R.string.last_ga_category),category);
+            if(action != null) e.putString(context.getString(R.string.last_ga_action),action);
+            if(label != null) e.putString(context.getString(R.string.last_ga_label),label);
+            if(value != null) e.putInt(context.getString(R.string.last_ga_value),v);
+            e.commit();
         }
+        HitBuilders.EventBuilder eb = new HitBuilders.EventBuilder();
+        eb.setCategory(category);
+        if(action != null) eb.setAction(action);
+        if(label != null) eb.setLabel(label);
+        if(value != null) eb.setValue(v);
+        mTracker.send(eb.build());
+
+        //firebase part
+        Bundle bundle = new Bundle();
+        if (action != null) bundle.putString("action", action);
+        if (label != null) bundle.putString("label", label);
+        if (value != null) bundle.putString("value", value);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        mFirebaseAnalytics.logEvent(category, bundle);
+    }
+    public static void sendView(Context context, String optName) {
+        //if(optName == null)
+        //    optName = getClass().getSimpleName();
+
+        //ga part
+        BordersApplication application = (BordersApplication) context.getApplicationContext();
+        Tracker mTracker = application.getDefaultTracker();
+
+        mTracker.setScreenName(optName);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+
+        //firebase doesn't have anything, so just send event
+        sendEvent(context, "screenview", optName, null, null);
     }
 
-    public int getTJPoints(){
+    /************************************* tapjoy (ads) ******************************************/
+
+    private InterstitialAd mInvoluntaryInterstitialAd;
+    private InterstitialAd mVoluntaryInterstitialAd;
+
+    private void awardPoints(Boolean lesserEnd){
+        ///////////////////////////////////////// randomly give user points 3-10
+        ////// if lesserEnd == true, then only do 3-5 points
+        int min = 3;
+        int max = 8;
+        int curr = getAdPoints();
+        if(lesserEnd)
+            max = 5;
+        int award = new Random().nextInt((max - min) + 1) + min;
+        sendEvent(this,"B-Points", Build.SERIAL, Integer.toString(curr+award),null);
+        preferences.edit().putInt(getString(R.string.b_points),curr+award).commit();
+        //longToast(Integer.toString(award) + " B-Points awarded!");
+    }
+
+    public static void awardSetPoints(Context context, SharedPreferences preferences, int points){
+        int curr = preferences.getInt(context.getString(R.string.b_points),0);
+        sendEvent(context,"B-Points", Build.SERIAL, Integer.toString(curr+points),null);
+        preferences.edit().putInt(context.getString(R.string.b_points),curr+points).commit();
+    }
+
+    private void initAdmob(){
+        Log.d("admob","init");
+
+        mInvoluntaryInterstitialAd = new InterstitialAd(this);
+        mInvoluntaryInterstitialAd.setAdUnitId(getString(R.string.involuntary_interstitial));
+        mVoluntaryInterstitialAd = new InterstitialAd(this);
+        mVoluntaryInterstitialAd.setAdUnitId(getString(R.string.voluntary_interstitial));
+        requestInvoluntaryAd();
+        requestVoluntaryAd();
+
+        mInvoluntaryInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                awardPoints(false);
+                requestInvoluntaryAd();
+            }
+        });
+        mVoluntaryInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                awardPoints(true);
+                requestVoluntaryAd();
+            }
+        });
+    }
+
+    private void requestInvoluntaryAd(){
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.my_device_hash))
+                .build();
+
+        mInvoluntaryInterstitialAd.loadAd(adRequest);
+    }
+    private void requestVoluntaryAd(){
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(getString(R.string.my_device_hash))
+                .build();
+
+        mVoluntaryInterstitialAd.loadAd(adRequest);
+    }
+
+    public int getAdPoints(){
         return preferences.getInt(getString(R.string.b_points),0);
     }
 
-    public void requestTJCurrentPoints(){
-        if(Tapjoy.isConnected() && !preferences.getBoolean(getString(R.string.unlocked_pref),false)) {
-            Tapjoy.getCurrencyBalance(new TJGetCurrencyBalanceListener() {
-                @Override
-                public void onGetCurrencyBalanceResponse(String currencyName, int balance) {
-                    Log.d("points",balance+"");
-                    preferences.edit().putInt(getString(R.string.b_points),balance).commit();
-                }
-
-                @Override
-                public void onGetCurrencyBalanceResponseFailure(String error) {
-                    Log.i("Tapjoy", "getCurrencyBalance error: " + error);
-                }
-            });
-        }
-    }
-
     public void showInvoluntaryAd(){
-        requestTJCurrentPoints();
 
         int launchedCount = preferences.getInt(getString(R.string.edit_fragment_show_count),0);
         Log.d(TAG,launchedCount+"");
         launchedCount++;
         preferences.edit().putInt(getString(R.string.edit_fragment_show_count),launchedCount).commit();
         if(launchedCount % 4 == 0 && !preferences.getBoolean(getString(R.string.unlocked_pref),false)) {
-            //////////want to stop service here maybe, then start after ad ////////////////////////////////////////////////////
-
-            int adNum = preferences.getInt(getString(R.string.ad_rotation),1);
-            switch (adNum) {
-                case 1: showInterstitial(); break;
-                case 2: showInterstitial(); break;
-                case 3: showOfferwall(); break;
-                case 4: showInterstitial(); break;
-                case 5: showVideo(); break;
-            }
-            adNum++;
-            if(adNum == 6) adNum = 1;
-            preferences.edit().putInt(getString(R.string.ad_rotation),adNum).commit();
+            Log.d("admob","show");
+            if (mInvoluntaryInterstitialAd != null && mInvoluntaryInterstitialAd.isLoaded())
+                mInvoluntaryInterstitialAd.show();
         }
     }
 
     public void showVoluntaryAd(){
-        showVideo();
-    }
+        Log.d("admob","show");
+        if (mVoluntaryInterstitialAd != null && mVoluntaryInterstitialAd.isLoaded())
+            mVoluntaryInterstitialAd.show();
 
-    public void showInterstitial(){
-        if(tjInterstitial == null){
-            tjInterstitial = new TJPlacement(this, getString(R.string.tapjoy_interstitial_placement), tjPlacementListener);
-            tjInterstitial.requestContent();
-            tjInterstitial.showContent();
-        }
-        else
-        if(tjInterstitial.isContentReady() || tjInterstitial.isContentAvailable()) {
-            Log.d(TAG,"interstitial go");
-            tjInterstitial.showContent();
-        } else {
-            Log.d(TAG,"interstitial fail");
-        }
-    }
-
-    public void showVideo(){
-        if(tjVideo == null) {
-            tjVideo = new TJPlacement(this, getString(R.string.tapjoy_video_placement), tjPlacementListener);
-            tjVideo.requestContent();
-            tjVideo.showContent();
-        }
-        else
-        if(tjVideo.isContentReady() || tjVideo.isContentAvailable()) {
-            Log.d(TAG,"tjVideo go");
-            tjVideo.showContent();
-        } else {
-            Log.d(TAG,"tjVideo fail");
-        }
-    }
-
-    public void showOfferwall(){
-        if(tjOfferwall == null){
-            tjOfferwall = new TJPlacement(this, getString(R.string.tapjoy_offerwall_placement), tjPlacementListener);
-            tjOfferwall.requestContent();
-            tjOfferwall.showContent();
-        }
-        else {
-            //if(tjOfferwall.isContentReady() || tjOfferwall.isContentAvailable()) {
-            Log.d(TAG, "tjOfferwall go");
-            tjOfferwall.requestContent();
-            tjOfferwall.showContent();
-            //} else {
-            //    Log.d(TAG,"tjOfferwall fail");
-            //}
-        }
-    }
-
-    // called when Tapjoy connect call succeed
-    @Override
-    public void onConnectSuccess() {
-        Log.d(TAG, "Tapjoy connect Succeeded");
-        Log.d(TAG, "Tapjoy unlocked - " + preferences.getBoolean(getString(R.string.unlocked_pref),false));
-        if(!preferences.getBoolean(getString(R.string.unlocked_pref),false)) {
-            Log.d(TAG,"tapjoy actually connected - "+Tapjoy.isConnected());
-            if(Tapjoy.isConnected()) {
-                tjNews.requestContent();
-                tjInterstitial.requestContent();
-                tjVideo.requestContent();
-                tjOfferwall.requestContent();
-            } else {
-                Log.d("%s", "Tapjoy SDK must finish connecting before requesting content.");
-            }
-        }
-    }
-
-    // called when Tapjoy connect call failed
-    @Override
-    public void onConnectFailure() {
-        Log.d(TAG, "Tapjoy connect Failed");
-    }
-
-    @Override
-    public void onRequestSuccess(TJPlacement tjPlacement) {
-        requestTJCurrentPoints();
-        if(tjPlacement.equals(tjNews)) {
-            if(tjNews.isContentReady() || tjNews.isContentAvailable()) {
-                Log.d(TAG,"appstart go");
-                tjNews.showContent();
-            } else {
-                Log.d(TAG,"appstart fail");
-            }
-        }
-    }
-
-    @Override
-    public void onRequestFailure(TJPlacement tjPlacement, TJError tjError) {
-
-    }
-
-    @Override
-    public void onContentReady(TJPlacement tjPlacement) {
-
-    }
-
-    @Override
-    public void onContentShow(TJPlacement tjPlacement) {
-        stopWorldService();
-    }
-
-    @Override
-    public void onContentDismiss(TJPlacement tjPlacement) {
-        boolean editMode = preferences.getBoolean(getString(R.string.service_editmode),false);
-        String editPos = preferences.getString(getString(R.string.service_editpos),"");
-        startWorldService(editMode,editPos);
-    }
-
-    @Override
-    public void onPurchaseRequest(TJPlacement tjPlacement, TJActionRequest tjActionRequest, String s) {
-
-    }
-
-    @Override
-    public void onRewardRequest(TJPlacement tjPlacement, TJActionRequest tjActionRequest, String s, int i) {
-
+        ///showVideo();
     }
 
     /******************************* billing functions ***************************************/
@@ -345,6 +298,7 @@ public class MainActivity extends Activity
         }
 
         try {
+            awardSetPoints(this, preferences, 8);
             if(extension.equals(getString(R.string.image_type_jpg))) extension = getString(R.string.image_type_jpeg);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(getString(R.string.image_mimetype_start)+extension);
@@ -410,13 +364,19 @@ public class MainActivity extends Activity
         }
     }
 
+    private Fragment getTopFragment() {
+        Fragment f = getFragmentManager().findFragmentById(R.id.mainFrame);
+        return f;
+    }
+
     private FragmentManager.OnBackStackChangedListener backStackChangedListener() {
         return new FragmentManager.OnBackStackChangedListener()
         {
             public void onBackStackChanged()
             {
-                if (fragmentEdit != null && fragmentEdit.isVisible())
+                if (fragmentEdit != null && fragmentEdit.isVisible() && getTopFragment() instanceof EditFragment)
                 {
+                    Log.d("service","onbschange");
                     fragmentEdit.customOnResume();
                 }
             }
@@ -521,19 +481,29 @@ public class MainActivity extends Activity
     }
 
     private void showUnlockNotification() {
+        sendEvent(this,"Notification","Show Unlock",null,null);
         Log.d("notify","show rating");
 
         Intent unlock = new Intent(this, MainActivity.class);
         unlock.putExtra(getString(R.string.unlockAppExtra), true);
-        PendingIntent unlockApp = PendingIntent.getActivity(this, 0, unlock, PendingIntent.FLAG_UPDATE_CURRENT);
+        unlock.putExtra(getString(R.string.unlockAppProcessExtra),false);
+        unlock.putExtra(getString(R.string.unlockAppLaterExtra),false);
+        unlock.putExtra(getString(R.string.unlockAppNeverExtra),false);
+        PendingIntent unlockApp = PendingIntent.getActivity(this, getResources().getInteger(R.integer.notif_unlock_code), unlock, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent unlockLater = new Intent(this, MainActivity.class);
-        unlock.putExtra(getString(R.string.unlockAppLaterExtra), true);
-        PendingIntent unlockAppLater = PendingIntent.getActivity(this, 0, unlockLater, PendingIntent.FLAG_UPDATE_CURRENT);
+        unlockLater.putExtra(getString(R.string.unlockAppExtra), false);
+        unlockLater.putExtra(getString(R.string.unlockAppProcessExtra),false);
+        unlockLater.putExtra(getString(R.string.unlockAppLaterExtra),true);
+        unlockLater.putExtra(getString(R.string.unlockAppNeverExtra),false);
+        PendingIntent unlockAppLater = PendingIntent.getActivity(this, getResources().getInteger(R.integer.notif_unlock_later_code), unlockLater, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent unlockNever = new Intent(this, MainActivity.class);
-        unlock.putExtra(getString(R.string.unlockAppNeverExtra), true);
-        PendingIntent unlockAppNever = PendingIntent.getActivity(this, 0, unlockNever, PendingIntent.FLAG_UPDATE_CURRENT);
+        unlockNever.putExtra(getString(R.string.unlockAppExtra), false);
+        unlockNever.putExtra(getString(R.string.unlockAppProcessExtra),false);
+        unlockNever.putExtra(getString(R.string.unlockAppLaterExtra),false);
+        unlockNever.putExtra(getString(R.string.unlockAppNeverExtra),true);
+        PendingIntent unlockAppNever = PendingIntent.getActivity(this, getResources().getInteger(R.integer.notif_unlock_never_code), unlockNever, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -551,19 +521,21 @@ public class MainActivity extends Activity
     }
 
     private void showRatingNotification() {
+        sendEvent(this,"Notification","Show Rating",null,null);
+
         Log.d("notify","show rating");
 
         Intent showStore = new Intent(this, FeedbackUtils.class);
         showStore.setAction(getString(R.string.rating_action_show));
-        PendingIntent storeIntent = PendingIntent.getService(this, 0, showStore, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent storeIntent = PendingIntent.getService(this, getResources().getInteger(R.integer.notif_rate_code), showStore, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent later = new Intent(this, FeedbackUtils.class);
         later.setAction(getString(R.string.rating_action_later));
-        PendingIntent laterIntent = PendingIntent.getService(this, 0, later, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent laterIntent = PendingIntent.getService(this, getResources().getInteger(R.integer.notif_rate_later_code), later, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent never = new Intent(this, FeedbackUtils.class);
         never.setAction(getString(R.string.rating_action_never));
-        PendingIntent neverIntent = PendingIntent.getService(this, 0, never, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent neverIntent = PendingIntent.getService(this, getResources().getInteger(R.integer.notif_rate_never_code), never, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         NotificationCompat.Builder n = new NotificationCompat.Builder(this)
@@ -641,6 +613,13 @@ public class MainActivity extends Activity
             }
         }
         return false;
+    }
+
+    public void restartWorldService(){
+        boolean editMode = preferences.getBoolean(getString(R.string.service_editmode),false);
+        String editPos = preferences.getString(getString(R.string.service_editpos),"");
+        stopWorldService();
+        startWorldService(editMode,editPos);
     }
 
     public void startWorldService(boolean editMode, String editPos) {
@@ -750,7 +729,7 @@ public class MainActivity extends Activity
 
     @TargetApi(21)
     public void showEditScreen(float x, float y) {
-        requestTJCurrentPoints();
+        ////requestTJCurrentPoints();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fragmentEdit.setAnimationXY(x, y);
@@ -769,20 +748,23 @@ public class MainActivity extends Activity
         //set main activity background
         findViewById(R.id.mainFrame).setBackgroundColor(getResources().getColor(R.color.color_accent_light));
         if(fragmentEdit.isAdded()) {
+            Log.d("etod","already added");
             getFragmentManager().beginTransaction().show(fragmentEdit).commit();
             getFragmentManager().executePendingTransactions();
         }
-        else
+        else {
+            Log.d("etod","new");
             getFragmentManager().beginTransaction()
-                .replace(R.id.mainFrame, fragmentEdit, getString(R.string.fragment_tag_edit))
+                .add(R.id.mainFrame, fragmentEdit, getString(R.string.fragment_tag_edit))
                 .addToBackStack(null)
             .commit();
+        }
         getFragmentManager().executePendingTransactions();
     }
 
     @TargetApi(21)
     public void hideEditScreen() {
-        requestTJCurrentPoints();
+        ////requestTJCurrentPoints();
 
         Log.d("service","hideeditservice");
         stopWorldService();
@@ -869,8 +851,6 @@ public class MainActivity extends Activity
 
     @Override
     public void onFinishEdit() {
-        requestTJCurrentPoints();
-
         if(preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
             Log.d("service", "onfinishedit");
             stopWorldService();
@@ -883,7 +863,8 @@ public class MainActivity extends Activity
 
     @Override
     public void onStartEdit() {
-        requestTJCurrentPoints();
+        ThemeJsonObject.Theme[] cThemes = ThemeJsonObject.getCustomThemes(this);
+        sendEvent(this,"Custom Theme","Count",Integer.toString(cThemes.length),null);
 
         Log.d("service", "onstartedit");
         stopWorldService();
@@ -898,6 +879,7 @@ public class MainActivity extends Activity
     }
 
     public void showCustomScreen(){
+        Log.d("service","showcustom");
         if(preferences.getInt(getString(R.string.custom_id), 0) < 1) {
             longToast("No custom theme selected to edit.");
             return;
@@ -906,7 +888,7 @@ public class MainActivity extends Activity
         hideServiceNotification();
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.mainFrame, fragmentCustom, getString(R.string.fragment_tag_custom))
+                .add(R.id.mainFrame, fragmentCustom, getString(R.string.fragment_tag_custom))
                 .addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
@@ -914,6 +896,7 @@ public class MainActivity extends Activity
 
     @Override
     public void onThemeSelectionChange() {
+        Log.d("service","onthemeselectionchange");
         if(appPermissions(false)) {
             setThemeChange(false);
         } else {
@@ -932,11 +915,14 @@ public class MainActivity extends Activity
         EditFragment editFragment = (EditFragment)getFragmentManager().findFragmentByTag(getString(R.string.fragment_tag_edit));
         CustomFragment customFragment = (CustomFragment)getFragmentManager().findFragmentByTag(getString(R.string.fragment_tag_custom));
 
+        Log.d("service",Boolean.toString(currImageEditFragment == null) +" "+ Boolean.toString(editFragment != null) +" "+ Boolean.toString(editFragment.isVisible()) +" "+ Boolean.toString(customFragment == null || !customFragment.isVisible()));
         if(currImageEditFragment == null && editFragment != null && editFragment.isVisible() && (customFragment == null || !customFragment.isVisible())) {
+            sendEvent(this,"Select Theme",preferences.getString(getString(R.string.theme_key),"(None)"),"",null);
             if(preferences.getInt(getString(R.string.theme_id),getResources().getInteger(R.integer.default_theme_id)) == 1)
                 editFragment.showCustomCont();
-            else
+            else {
                 editFragment.hideCustomCont();
+            }
             Log.d("service","setthemechange");
             stopWorldService();
             startWorldService(false, "");
@@ -949,7 +935,7 @@ public class MainActivity extends Activity
     public void showImageEditScreen(String editPos) {
         currImageEditFragment = ImageEditFragment.newInstance(editPos);
         getFragmentManager().beginTransaction()
-                .replace(R.id.mainFrame, currImageEditFragment, getString(R.string.fragment_tag_image_edit))
+                .add(R.id.mainFrame, currImageEditFragment, getString(R.string.fragment_tag_image_edit))
                 .addToBackStack(null)
                 .commit();
         getFragmentManager().executePendingTransactions();
@@ -977,14 +963,17 @@ public class MainActivity extends Activity
         Log.d("service","hidecustomscreen");
 
         stopWorldService();
+        fragmentEditTransition.skipCreateAnimation = true;
         getFragmentManager().popBackStack();
         getFragmentManager().executePendingTransactions();
+        fragmentEditTransition.skipCreateAnimation = false;
         startWorldService(false,"");
 
         showInvoluntaryAd();
     }
 
     public void onStartCustomScreen(){
+        Log.d("service","onstartcustom");
         hideServiceNotification();
         stopWorldService();
         startWorldService(true,"");
@@ -1191,6 +1180,7 @@ public class MainActivity extends Activity
 
     public void showRationalDialog(){
         if(!appPermissions(false)) {
+            sendEvent(this,"Popup","Permissions",null,null);
             hideServiceNotification();
 
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -1230,26 +1220,26 @@ public class MainActivity extends Activity
         //if(!preferences.getBoolean(getString(R.string.temp_perm_dialog),false)) {
           //  preferences.edit().putBoolean(getString(R.string.temp_perm_dialog),true).commit();
 
-            String locationCPermission = Manifest.permission.ACCESS_FINE_LOCATION;
+            //String locationCPermission = Manifest.permission.ACCESS_FINE_LOCATION;
             String readPhoneStatePermission = Manifest.permission.READ_PHONE_STATE;
-            String getAccountsPermission = Manifest.permission.GET_ACCOUNTS;
+            //String getAccountsPermission = Manifest.permission.GET_ACCOUNTS;
             String filePermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
             int hasFilePermission = ContextCompat.checkSelfPermission(this, filePermission);
-            int hasLocCPermission = ContextCompat.checkSelfPermission(this, locationCPermission);
+            //int hasLocCPermission = ContextCompat.checkSelfPermission(this, locationCPermission);
             int hasRPSPermission = ContextCompat.checkSelfPermission(this, readPhoneStatePermission);
-            int hasAccountsPermission = ContextCompat.checkSelfPermission(this, getAccountsPermission);
+            //int hasAccountsPermission = ContextCompat.checkSelfPermission(this, getAccountsPermission);
 
             List<String> permissions = new ArrayList<>();
-            if (hasLocCPermission != PackageManager.PERMISSION_GRANTED) {
+            /*if (hasLocCPermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(locationCPermission);
-            }
+            }*/
             if (hasRPSPermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(readPhoneStatePermission);
             }
-            if (hasAccountsPermission != PackageManager.PERMISSION_GRANTED) {
+            /*if (hasAccountsPermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(getAccountsPermission);
-            }
+            }*/
             if (hasFilePermission != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(filePermission);
             }
@@ -1346,10 +1336,13 @@ public class MainActivity extends Activity
     }
 
     private void appInitFunctions() {
-        if(!Tapjoy.isConnected())
-            initTapJoy();
+        /*if(!Tapjoy.isConnected())
+            initTapJoy();*/
 
         showServiceNotification(true);
+
+        /*init admob stuff*/
+        initAdmob();
 
         //track how many times the app has started and store it
         int appStartCount = preferences.getInt(getString(R.string.app_start_pref),0);
@@ -1403,17 +1396,23 @@ public class MainActivity extends Activity
         Boolean unlockLater = intent.getBooleanExtra(getString(R.string.unlockAppLaterExtra),false);
         Boolean unlockNever = intent.getBooleanExtra(getString(R.string.unlockAppNeverExtra),false);
 
+        Log.d("doExtras",Boolean.toString(unlockExtra)+" "+Boolean.toString(goUnlockExtra)+" "+Boolean.toString(unlockLater)+" "+Boolean.toString(unlockNever));
+
         if(unlockExtra) {
+            sendEvent(this,"Notification","Unlock",null,null);
             UnlockDialog unlockDialog = new UnlockDialog(this,null);
             unlockDialog.showDialog();
         } else
         if(unlockLater) {
+            sendEvent(this,"Notification","Unlock Later",null,null);
             //do nothing since we autocancel
         } else
         if(unlockNever) {
+            sendEvent(this,"Notification","Unlock Never",null,null);
             preferences.edit().putBoolean(getString(R.string.unlocked_no_notify),true).commit();
         } else
         if(goUnlockExtra) {
+            sendEvent(this,"Notification","Unlock",null,null);
             storeJump(this, getString(R.string.paid_app_name));
             ///////////////////////////////////////////////////////////////////////////////////////processUnlock();
         }
@@ -1482,8 +1481,6 @@ public class MainActivity extends Activity
 
         getFragmentManager().addOnBackStackChangedListener(backStackChangedListener());
 
-        //preferences.edit().clear().commit(); ///////////////////////////////////////////////////////////////////remove before release
-
         //start app with main home fragment
         Log.d("prefs","mainact ft: "+Boolean.toString(preferences.getBoolean(getString(R.string.first_time_pref),true)));
         if(preferences.getBoolean(getString(R.string.first_time_pref),true)) {
@@ -1507,7 +1504,7 @@ public class MainActivity extends Activity
 
     @Override
     protected void onResume() {
-        requestTJCurrentPoints();
+        ////requestTJCurrentPoints();
 
         //receiver to handle our special screenshot view
         LocalBroadcastManager.getInstance(this).registerReceiver(screenshotReceiver,
@@ -1557,12 +1554,10 @@ public class MainActivity extends Activity
     @Override
     protected void onStart() {
         super.onStart();
-        Tapjoy.onActivityStart(this);
     }
 
     @Override
     protected void onStop() {
-        Tapjoy.onActivityStop(this);
         super.onStop();
     }
 

@@ -9,5 +9,8 @@
         <item name="colorPrimaryDark">@color/color_accent</item>
         <item name="colorAccent">@color/color_accent</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+
+        <!--<item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="buttonStyle">@style/RobotoButtonStyle</item>-->
     </style>
 </resources>

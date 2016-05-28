@@ -126,6 +126,22 @@ public class WorldService extends Service {
         return BitmapFactory.decodeFile(path, options);
     }
 
+    public Bitmap ConvertToNegative(Bitmap sampleBitmap){
+        ColorMatrix colorMatrix_Inverted =
+                new ColorMatrix(new float[] {
+                        -1,  0,  0,  0, 255,
+                        0, -1,  0,  0, 255,
+                        0,  0, -1,  0, 255,
+                        0,  0,  0,  1,   0});
+        final ColorMatrixColorFilter colorFilter= new ColorMatrixColorFilter(colorMatrix_Inverted);
+        Bitmap rBitmap = sampleBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Paint paint=new Paint();
+        paint.setColorFilter(colorFilter);
+        Canvas myCanvas =new Canvas(rBitmap);
+        myCanvas.drawBitmap(rBitmap, 0, 0, paint);
+        return rBitmap;
+    }
+
     private void setConfig(AppCompatImageView v, ImageJsonObject o) {
         boolean thisAreaLocked = false;
 
@@ -170,6 +186,14 @@ public class WorldService extends Service {
             v.setBackgroundColor(color);
         }
 
+        ColorMatrix colorMatrix_Inverted =
+                new ColorMatrix(new float[] {
+                        -1,  0,  0,  0, 255,
+                         0, -1,  0,  0, 255,
+                         0,  0, -1,  0, 255,
+                         0,  0,  0,  1,   0});
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix_Inverted);
+
         //built in themes
         if(preferences.getInt(getString(R.string.theme_id),1) > 1) {
             try {
@@ -177,14 +201,17 @@ public class WorldService extends Service {
                 if(asset.toLowerCase().equals("error")) throw new Exception("Image cannot be loaded, bad position");
                 BitmapDrawable b = ((BitmapDrawable)v.getDrawable());
                 if(b!=null) b.getBitmap().recycle();
-                v.setImageDrawable(
-                    Drawable.createFromStream(
-                        getAssets().open(
-                            asset
-                        ),
-                        null
-                    )
+
+                Drawable img = Drawable.createFromStream(
+                    getAssets().open(
+                        asset
+                    ),
+                    null
                 );
+                if(preferences.getString(getString(R.string.dark_or_light),"dark").equals("light")) {
+                    img.setColorFilter(filter);
+                }
+                v.setImageDrawable(img);
             } catch (Exception e) {
                 Log.e("error", e.getMessage());
             }
@@ -195,10 +222,14 @@ public class WorldService extends Service {
                     String asset = ThemeJsonObject.getFileFromPosition(currTheme, o.position);
                     if (asset.toLowerCase().equals("error"))
                         throw new Exception("Image cannot be loaded, bad position");
-
                     BitmapDrawable b = ((BitmapDrawable) v.getDrawable());
                     if (b != null) b.getBitmap().recycle();
-                    v.setImageBitmap(decodeSampledBitmapFromFile(ThemeJsonObject.getCustomThemePath(currTheme) + "/" + asset, o.width, o.height));
+
+                    Bitmap img = decodeSampledBitmapFromFile(ThemeJsonObject.getCustomThemePath(currTheme) + "/" + asset, o.width, o.height);
+                    if(preferences.getString(getString(R.string.dark_or_light),"dark").equals("light")) {
+                        img = ConvertToNegative(img);
+                    }
+                    v.setImageBitmap(img);
                 } catch (Exception e) {
                     if(e.getMessage() != null)
                         Log.e("error", e.getMessage());
@@ -513,6 +544,11 @@ public class WorldService extends Service {
             }
         }
 
+        if(preferences.getBoolean(getString(R.string.bottom_separator),true))
+            serviceView.findViewById(R.id.bottom_separator).setVisibility(View.VISIBLE);
+        else
+            serviceView.findViewById(R.id.bottom_separator).setVisibility(View.INVISIBLE);
+
         setSizes();
 
         if(editPos != null && !editPos.equals(""))
@@ -527,6 +563,6 @@ public class WorldService extends Service {
             serviceView.findViewById(R.id.screenshot_image).setVisibility(View.INVISIBLE);
         }
 
-        return START_STICKY;
+        return START_REDELIVER_INTENT;
     }
 }

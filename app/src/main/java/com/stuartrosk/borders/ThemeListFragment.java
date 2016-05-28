@@ -20,6 +20,7 @@ public class ThemeListFragment extends PreferenceFragment implements Preference.
     }
 
     public void updateEntries() {
+        Log.d("service","updateEntries");
         if(lp!=null)
             lp.setSummary("Current: " +
                 preferences.
@@ -120,26 +121,31 @@ public class ThemeListFragment extends PreferenceFragment implements Preference.
         // Load the preferences from XML resource
         this.addPreferencesFromResource(R.xml.edit_pref_list_fragment);
 
+        if(cp == null)
+            cp = (CustomListPreference) findPreference("custom_list");
+        hideCustom();
+
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
     }
 
 
     @Override
     public void onResume() {
+        Log.d("service","tlf resume");
         super.onResume();
 
         //setup themes list
         if(lp == null) {
             lp = (ThemeListPreference) findPreference("theme_list");
-            lp.setOnPreferenceChangeListener(this);
             refreshThemes();
         }
+        lp.setOnPreferenceChangeListener(this);
 
         if(cp == null) {
             //setup custom list
             cp = (CustomListPreference) findPreference("custom_list");
-            cp.setOnPreferenceChangeListener(this);
         }
+        cp.setOnPreferenceChangeListener(this);
 
         // Set up a listener whenever a key changes
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -160,6 +166,7 @@ public class ThemeListFragment extends PreferenceFragment implements Preference.
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Log.d("service","onprefchange");
         updateEntries();
 
         return true;
@@ -167,6 +174,7 @@ public class ThemeListFragment extends PreferenceFragment implements Preference.
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        Log.d("service","onsharedprefchange");
         updateEntries();
     }
 }

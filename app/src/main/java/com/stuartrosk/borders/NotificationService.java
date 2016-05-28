@@ -98,11 +98,13 @@ public class NotificationService extends Service {
 
         Log.d("service","notification onstartcommand");
         if(startBordersExtra) {
+            MainActivity.sendEvent(getApplicationContext(),"Notification","Start Borders",null,null);
             startWorldService(false, "");
             preferences.edit().putBoolean(getString(R.string.service_enabled_pref),true).commit();
             setToggleSwitch(true);
         }
         if(stopBordersExtra) {
+            MainActivity.sendEvent(getApplicationContext(),"Notification","Stop Borders",null,null);
             stopWorldService();
             preferences.edit().putBoolean(getString(R.string.service_enabled_pref),false).commit();
             setToggleSwitch(false);
@@ -129,19 +131,23 @@ public class NotificationService extends Service {
         if (!forceStop && preferences.getBoolean(getString(R.string.notification_pref), true)) {
             //main intent for just clicking on notification
             Intent intent = new Intent(this, MainActivity.class);
-            PendingIntent mainIntent = PendingIntent.getActivity(this, 0, intent, 0);
+            intent.putExtra(getString(R.string.unlockAppExtra), false);
+            intent.putExtra(getString(R.string.unlockAppProcessExtra),false);
+            intent.putExtra(getString(R.string.unlockAppLaterExtra),false);
+            intent.putExtra(getString(R.string.unlockAppNeverExtra),false);
+            PendingIntent mainIntent = PendingIntent.getActivity(this, getResources().getInteger(R.integer.notif_no_action_code), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             //notification "play" button
             Intent newWorldService = new Intent(this, NotificationService.class);
             newWorldService.putExtra(getString(R.string.startBordersExtra), true);
             newWorldService.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent startWorldService = PendingIntent.getService(this, 555, newWorldService, 0);
+            PendingIntent startWorldService = PendingIntent.getService(this, getResources().getInteger(R.integer.notif_start_borders_code), newWorldService, 0);
 
             //notification "stop" button
             Intent oldWorldService = new Intent(this, NotificationService.class);
             oldWorldService.putExtra(getString(R.string.stopBordersExtra), true);
             oldWorldService.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent stopWorldService = PendingIntent.getService(this, 556, oldWorldService, 0);
+            PendingIntent stopWorldService = PendingIntent.getService(this, getResources().getInteger(R.integer.notif_stop_borders_code), oldWorldService, 0);
 
             int iconId = R.drawable.app_notif_icon;
             int toggleId = R.drawable.ic_stop_white_48dp;
@@ -160,7 +166,7 @@ public class NotificationService extends Service {
 
             NotificationCompat.Builder n = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(currStateTitle + ", touch to " + currStateTitle2 + " " + getString(R.string.app_name))
+                .setContentText(currStateTitle + ", touch below to " + currStateTitle2 + " " + getString(R.string.app_name))
                 .setSmallIcon(iconId)
                 .setContentIntent(mainIntent)
                 .setAutoCancel(false)
@@ -180,7 +186,10 @@ public class NotificationService extends Service {
             if (!preferences.getBoolean(getString(R.string.unlocked_pref),false)) {
                 Intent unlock = new Intent(this, MainActivity.class);
                 unlock.putExtra(getString(R.string.unlockAppExtra), true);
-                PendingIntent unlockApp = PendingIntent.getActivity(this, 0, unlock, PendingIntent.FLAG_UPDATE_CURRENT);
+                unlock.putExtra(getString(R.string.unlockAppProcessExtra),false);
+                unlock.putExtra(getString(R.string.unlockAppLaterExtra),false);
+                unlock.putExtra(getString(R.string.unlockAppNeverExtra),false);
+                PendingIntent unlockApp = PendingIntent.getActivity(this, getResources().getInteger(R.integer.notif_unlock_code),unlock,0);
                 n.addAction(R.drawable.ic_lock_open_white_48dp, "Unlock", unlockApp);
             }
 

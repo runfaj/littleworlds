@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 
@@ -18,19 +18,20 @@ repositories {
 android {
     signingConfigs {
         config {
-            keyAlias 'android'
-            keyPassword 'android'
             storeFile file('C:/Users/Stuart/Documents/GitHub/littleworlds/stuartrosk-android.keystore')
-            storePassword 'joebob551'
+            storePassword 'android'
+            keyAlias 'android'
+            keyPassword 'joebob551'
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
     defaultConfig {
+        multiDexEnabled false
         minSdkVersion 14
-        targetSdkVersion 14
-        versionCode 701
-        versionName "0.701"
+        targetSdkVersion 23
+        versionCode 1020
+        versionName "1.02"
         signingConfig signingConfigs.config
         applicationId "com.stuartrosk.borders.app"
         //manifestPlaceholders = [ applicationId:"com.stuartrosk.borders.app" ]
@@ -39,7 +40,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -50,7 +57,6 @@ android {
         }
         full {
             applicationId 'com.stuartrosk.borders.full'
-            //manifestPlaceholders = [ applicationId:"com.stuartrosk.borders.full" ]
         }
     }
 }
@@ -59,8 +65,18 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.+'
     compile 'com.android.support:design:23.+'
-    compile 'com.google.android.gms:play-services:8.1.0'
+    compile 'com.google.android.gms:play-services-base:9.0.0'
+    compile 'com.google.android.gms:play-services-analytics:9.0.0'
+    /*compile 'com.google.android.gms:play-services-ads:8.4.0'*/
+    compile 'com.google.firebase:firebase-core:9.0.0'
+    compile 'com.google.firebase:firebase-crash:9.0.0'
+    compile 'com.google.firebase:firebase-ads:9.0.0'
+    compile 'com.google.firebase:firebase-messaging:9.0.0'
+
+    //compile 'com.android.support:multidex:1.0.0'
     compile('com.github.TimMackenzie:AndroidMarketManager:bc272e410c') {
         exclude module: 'AndroidMarketManagerTest'
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

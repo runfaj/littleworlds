@@ -11,7 +11,7 @@ import android.view.*;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class WelcomeFragment extends Fragment {
+public class WelcomeFragment extends SuperFragment {
 
     private WelcomeFragmentListener listener;
     private View mainView;
@@ -50,6 +50,8 @@ public class WelcomeFragment extends Fragment {
         });
 
         setSizes();
+
+        sendView(getClass().getSimpleName());
 
         return mainView;
     }

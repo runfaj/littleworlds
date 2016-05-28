@@ -22,6 +22,8 @@ import android.view.*;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.*;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 
 import java.io.*;
@@ -34,8 +36,10 @@ import java.util.zip.ZipInputStream;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditFragment extends Fragment {
+public class EditFragment extends SuperFragment {
 
+
+    NativeExpressAdView adView;
     private SharedPreferences preferences;
     private TableLayout custom_cont;
     private AppCompatImageView shareButton;
@@ -59,6 +63,7 @@ public class EditFragment extends Fragment {
         void showCustomScreen();
         void startScreenshotWorldService();
         void shareApp();
+        void restartWorldService();
     }
 
 
@@ -124,6 +129,8 @@ public class EditFragment extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_edit, container, false);
 
+        Log.d("service","ef create");
+
         preferences = getActivity().getSharedPreferences(getString(R.string.pref_namespace), getActivity().MODE_PRIVATE);
         AppCompatButton editDoneBtn = (AppCompatButton) v.findViewById(R.id.editDoneBtn);
         AppCompatImageView addButton = (AppCompatImageView) v.findViewById(R.id.custom_add_btn);
@@ -133,8 +140,53 @@ public class EditFragment extends Fragment {
         themeListFragment = new ThemeListFragment();
         custom_cont = (TableLayout)v.findViewById(R.id.custom_cont);
 
+
+        adView = (NativeExpressAdView)v.findViewById(R.id.adView);
+        if(MainActivity.isPaidVersion(getActivity())) {
+            adView.setVisibility(View.GONE);
+        } else {
+            AdRequest request = new AdRequest.Builder()
+                    .addTestDevice(getString(R.string.my_device_hash))
+                    .build();
+            adView.loadAd(request);
+        }
+        adView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.awardSetPoints(getActivity(), preferences, 6);
+            }
+        });
+
+        if(preferences.getString(getString(R.string.dark_or_light),"dark").equals("light")) {
+            v.setBackgroundColor(getResources().getColor(R.color.dark_back));
+            RadioGroup radioGroup = (RadioGroup)v.findViewById(R.id.toggle);
+            radioGroup.check(R.id.light);
+        }
+
+        RadioButton dark = (RadioButton)v.findViewById(R.id.dark);
+        RadioButton light = (RadioButton)v.findViewById(R.id.light);
+        View.OnClickListener radioClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View rv) {
+                int id = rv.getId();
+                String val = "light";
+                if(id == R.id.dark) {
+                    val = "dark";
+                    v.setBackgroundColor(getResources().getColor(R.color.primary));
+                } else {
+                    v.setBackgroundColor(getResources().getColor(R.color.dark_back));
+                }
+                sendEvent("DarkVLight",val);
+                preferences.edit().putString(getString(R.string.dark_or_light),val).commit();
+                listener.restartWorldService();
+            }
+        };
+        dark.setOnClickListener(radioClick);
+        light.setOnClickListener(radioClick);
+
+
         //animation for fragment opening
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && !preferences.getBoolean(getString(R.string.edit_mode_pref),false)) {
             v.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(final View v, int left, int top, int right, int bottom, int oldLeft, int oldTop,
@@ -181,6 +233,7 @@ public class EditFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendEvent("Custom Theme","Edit");
                 listener.showCustomScreen();
             }
         });
@@ -203,22 +256,27 @@ public class EditFragment extends Fragment {
             }
         });
 
+        sendView(getClass().getSimpleName());
+
         return v;
     }
 
     private void shareTheme() {
+        sendEvent("Popup","Share Theme","From Edit");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle("Are you sure?");
+        alertDialogBuilder.setTitle("Share Theme");
         alertDialogBuilder
                 .setMessage("Which theme option would you like to share?")
                 .setNeutralButton("App Link", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        sendEvent("Share","App","From Edit");
                         listener.shareApp();
                     }
                 })
                 .setPositiveButton("Theme File", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        sendEvent("Share","Theme","From Edit");
                         ThemeJsonObject.Theme manifest = ThemeJsonObject.getCustomTheme(getActivity().getApplicationContext(), preferences.getInt(getString(R.string.custom_id),1));
                         String result = ThemeJsonObject.zipCustomTheme(getActivity(), manifest);
                         if(result.equals(""))
@@ -238,6 +296,8 @@ public class EditFragment extends Fragment {
                                     message = getString(R.string.share_theme_azn_paid);
                             }
 
+                            MainActivity.awardSetPoints(getActivity(), preferences, 8);
+
                             Intent intent = new Intent(Intent.ACTION_SEND);
                             intent.setType("text/plain");
                             Uri uri = Uri.fromFile(new File(result));
@@ -249,6 +309,8 @@ public class EditFragment extends Fragment {
                 })
                 .setNegativeButton("Screenshot", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        sendEvent("Share","Screenshot","From Edit");
+                        MainActivity.awardSetPoints(getActivity(), preferences, 7);
                         listener.startScreenshotWorldService();
                     }
                 });
@@ -261,6 +323,7 @@ public class EditFragment extends Fragment {
     }
 
     private void addNewTheme() {
+        sendEvent("Custom Theme","New");
         boolean error = false;
 
         File bordersDir = getThemesDir();
@@ -453,6 +516,7 @@ public class EditFragment extends Fragment {
     }
 
     private void importCustomTheme(){
+        sendEvent("Custom Theme","Import");
         Toast.makeText(getActivity().getApplicationContext(),"Select a btheme file to import.",Toast.LENGTH_LONG).show();
 
         String[] extensions = {"btheme"};
@@ -499,11 +563,16 @@ public class EditFragment extends Fragment {
     }
     @Override
     public void onResume() {
+        Log.d("service","ef onresume");
         customOnResume();
+        if(MainActivity.isPaidVersion(getActivity())) {
+            adView.setVisibility(View.GONE);
+        }
         super.onResume();
     }
 
     public void customOnResume() {
+        Log.d("service","ef cor");
         if(listener.appPermissions(false)) {
             listener.onStartEdit();
             if(preferences.getInt(getString(R.string.theme_id),2) == 1)

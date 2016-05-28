@@ -1,5 +1,6 @@
 package com.stuartrosk.borders;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -9,11 +10,32 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.widget.Toast;
 
 
 public class FeedbackUtils extends Service {
     private static final String FEEDBACK_CHOOSER_TITLE = "Select feedback.";
     private static final String EMAIL_ADDRESS = "me@stuartrosk.com";
+
+    public static void openGooglePlusPage(Activity context){
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/communities/117472363584237491157")));
+        /*Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setClassName("com.google.android.apps.plus", "com.google.android.apps.plus.phone.UrlGatewayActivity");
+        i.putExtra("customAppUri", "117472363584237491157");
+        context.startActivity(i);
+
+        checkIfAppExists(context, i, "Google Plus");*/
+    }
+
+    // method to check whether an app exists or not
+    public static void checkIfAppExists(Context context, Intent appIntent, String appName){
+        if (appIntent.resolveActivity(context.getPackageManager()) != null) {
+            // start the activity if the app exists in the system
+            context.startActivity(appIntent);
+        } else {
+            Toast.makeText(context, appName + " app does not exist!", Toast.LENGTH_LONG).show();
+        }
+    }
 
     public static void jumpToStore(Context context, SharedPreferences preferences) {
         preferences.edit().putBoolean(context.getString(R.string.rate_us_pref),true).commit();
@@ -115,18 +137,25 @@ public class FeedbackUtils extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
+        /** ga part **/
+        MainActivity.sendView(getApplicationContext(),getClass().getSimpleName());
+        /****/
+
         if(intent != null) {
             boolean showStore = intent.getAction().equals("show_rating");
             boolean laterStore = intent.getAction().equals("later_rating");
             boolean neverStore = intent.getAction().equals("never_rating");
             SharedPreferences preferences = getSharedPreferences(getString(R.string.pref_namespace), MODE_PRIVATE);
 
-            if(neverStore)
-                preferences.edit().putBoolean(getString(R.string.never_rate_pref),true).commit();
-            else if(showStore && !preferences.getBoolean(getString(R.string.never_rate_pref),false)) {
+            if(neverStore) {
+                MainActivity.sendEvent(getApplicationContext(),"Notification", "Rate Never",null,null);
+                preferences.edit().putBoolean(getString(R.string.never_rate_pref), true).commit();
+            } else if(showStore && !preferences.getBoolean(getString(R.string.never_rate_pref),false)) {
+                MainActivity.sendEvent(getApplicationContext(),"Notification","Rate",null,null);
                 jumpToStore(getApplicationContext(), preferences);
                 preferences.edit().putBoolean(getString(R.string.never_rate_pref),true).commit();
             } else if (laterStore) {
+                MainActivity.sendEvent(getApplicationContext(),"Notification","Rate Later",null,null);
                 //do nothing since the dialog auto cancels
             }
 

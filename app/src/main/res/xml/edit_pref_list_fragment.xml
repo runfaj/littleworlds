@@ -4,12 +4,12 @@
                 android:layout_height="match_parent">
     <com.stuartrosk.borders.ThemeListPreference
             android:key="theme_list"
-            android:title="Select Theme"
+            android:title="Touch to Change"
             android:summary="Current: Custom"
             android:dialogTitle="Select Theme"/>
     <com.stuartrosk.borders.CustomListPreference
         android:key="custom_list"
-        android:title="Select Custom Theme"
+        android:title="Change Custom Theme"
         android:summary="Current: (None)"
         android:dialogTitle="Select Custom Theme"/>
 </PreferenceScreen>

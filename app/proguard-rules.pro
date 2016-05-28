@@ -16,6 +16,15 @@
 #   public *;
 #}
 
--dontwarn android.support.v4.**
--keep public class com.google.android.gms.* { public *; }
+
+#-keep class com.tapjoy.** { *; }
+-dontwarn com.tapjoy.**
+
 -dontwarn com.google.android.gms.**
+-keep class com.google.android.gms.* { public *; }
+-dontwarn android.support.v4.**
+-keep class android.support.v4.** { *; }
+-dontwarn android.support.v7.**
+-keep class android.support.v7.** { *; }
+-dontwarn android.support.design.**
+-keep class android.support.design.** { *; }

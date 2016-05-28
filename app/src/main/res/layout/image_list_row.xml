@@ -8,12 +8,13 @@
         android:clickable="true">
 
     <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="wrap_content"
-            android:orientation="vertical"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical">
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical" android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false" android:layout_centerVertical="true">
 
         <android.support.v7.widget.AppCompatTextView
                 android:layout_height="wrap_content"
@@ -34,22 +35,20 @@
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatRadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/ckbox"
-            android:button="@null"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:paddingLeft="20dp"></android.support.v7.widget.AppCompatRadioButton>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/ckbox"
+        android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:id="@+id/lockedIcon"
             android:layout_gravity="center_vertical"
             android:layout_weight="0"
             android:src="@drawable/ic_lock_outline_black_48dp"
-            android:visibility="gone"/>
+            android:visibility="gone" android:layout_centerVertical="true" android:layout_alignParentRight="true"/>
 
 </LinearLayout>

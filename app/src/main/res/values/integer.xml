@@ -6,5 +6,17 @@
     <integer name="rating_notification_id">2</integer>
     <integer name="unlock_notification_id">3</integer>
     <integer name="popup_interval">7</integer>
-    <integer name="unlock_points">50</integer>
+    <integer name="unlock_points">750</integer>
+
+    <integer name="notif_no_action_code">0</integer>
+    <integer name="notif_unlock_code">1</integer>
+    <integer name="notif_unlock_later_code">2</integer>
+    <integer name="notif_unlock_never_code">3</integer>
+
+    <integer name="notif_start_borders_code">4</integer>
+    <integer name="notif_stop_borders_code">5</integer>
+
+    <integer name="notif_rate_code">6</integer>
+    <integer name="notif_rate_later_code">7</integer>
+    <integer name="notif_rate_never_code">8</integer>
 </resources>

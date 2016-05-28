@@ -23,12 +23,12 @@ import android.widget.*;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends SuperFragment {
 
     private SwitchCompat toggleSwitch;
     private SharedPreferences preferences;
     private HomeFragmentListener listener;
-    private AppCompatButton pointsBtn;
+    private AppCompatImageView pointsBtn;
     private RelativeLayout ratingCont;
     private CompoundButton.OnCheckedChangeListener checkedChangeListener = null;
 
@@ -49,25 +49,27 @@ public class HomeFragment extends Fragment {
         //boolean requestOverlayPermission();
         boolean appPermissions(boolean requestPerms);
         void showRationalDialog();
-        int getTJPoints();
+        int getAdPoints();
         void showVoluntaryAd();
-        void showOfferwall();
         void shareApp();
         void adUnlock();
     }
 
     private void showLowRatingPopup() {
+        sendEvent("Popup","Rate","From Home");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(getString(R.string.bad_rating_title));
         alertDialogBuilder
             .setMessage(getString(R.string.bad_rating_message))
             .setPositiveButton(getString(R.string.bad_rating_email), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    sendEvent("Rate","Lower Score","Email");
                     FeedbackUtils.askForFeedback(getActivity());
                 }
             })
             .setNegativeButton(getString(R.string.bad_rating_rate), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    sendEvent("Rate","Lower Score","Continue Rating");
                     FeedbackUtils.jumpToStore(getActivity(), preferences);
                 }
             });
@@ -79,61 +81,26 @@ public class HomeFragment extends Fragment {
         alertDialog.show();
     }
 
-    /*******************private void showFeedbackPopup() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(getString(R.string.feedback_title));
-        alertDialogBuilder
-                .setMessage(getString(R.string.feedback))
-                .setPositiveButton(getString(R.string.feedback_email), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        FeedbackUtils.askForFeedback(getActivity());
-                    }
-                })
-                .setNegativeButton(getString(R.string.feedback_rate), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        jumpToStore();
-                    }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-    }********************/
-
-    /*
-    private void shareImageDialog() {
-        String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
-        FileDialog fd = new FileDialog(getActivity(), "/", extensions, new FileDialog.FileDialogListener() {
-            @Override
-            public void fileDialogOutput(String path, String name, String ext) {
-                File file = new File(path+"/"+name);
-                Uri uri = Uri.fromFile(file);
-                shareImage("Here's an awesome image I used for my Borders app!",uri,ext);
-            }
-        });
-        fd.show();
-    }
-    */
-
     private void shareScreenshot() {
         listener.startScreenshotWorldService();
     }
 
     public void showSharePopup() {
+        sendEvent("Popup","Share","From Home");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(getString(R.string.share_title));
         alertDialogBuilder
             .setMessage(getString(R.string.share_message))
             .setNegativeButton(getString(R.string.share_app), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    sendEvent("Share","App","From Home");
                     listener.shareApp();
                 }
             })
             .setPositiveButton(getString(R.string.share_screenshot), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
+                    sendEvent("Share","Screenshot","From Home");
                     shareScreenshot();
                 }
             });
@@ -146,27 +113,35 @@ public class HomeFragment extends Fragment {
     }
 
     public void showVoluntaryAdPopup(){
+        sendEvent("Popup","B-Points","From Home");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(getString(R.string.voluntary_title));
+
+        int actualPoints = preferences.getInt(getString(R.string.points_override),
+                getResources().getInteger(R.integer.unlock_points));
+
         alertDialogBuilder
-                .setMessage(getString(R.string.voluntary_message)+"\n\n------------------------------------------------------------\nYour B-Points:  "+listener.getTJPoints()+"/"+getResources().getInteger(R.integer.unlock_points)+"\n------------------------------------------------------------")
-                .setNegativeButton(getString(R.string.voluntary_offer), new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.voluntary_message)+"\n\n------------------------------------------------------------\nYour B-Points:  "+listener.getAdPoints()+"/"+actualPoints+"\n------------------------------------------------------------")
+                /*.setNegativeButton(getString(R.string.voluntary_offer), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
+                        sendEvent("Voluntary Ad","Offerwall");
                         listener.showOfferwall();
                     }
-                })
-                .setPositiveButton(getString(R.string.voluntary_video), new DialogInterface.OnClickListener() {
+                })*/
+                .setPositiveButton(/*getString(R.string.voluntary_video)*/"Sounds Good", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        listener.showVoluntaryAd();
+                        //sendEvent("Voluntary Ad","Show Ad");
+                        //listener.showVoluntaryAd();
                     }
                 });
 
-        if(listener.getTJPoints() >= getResources().getInteger(R.integer.unlock_points)) {
+        if(listener.getAdPoints() >= actualPoints) {
             alertDialogBuilder.setNeutralButton(getString(R.string.voluntary_unlock), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
+                    sendEvent("Voluntary Ad","Unlock");
                     listener.adUnlock();
                 }
             });
@@ -238,9 +213,10 @@ public class HomeFragment extends Fragment {
         AppCompatImageView rank4 = (AppCompatImageView) mainView.findViewById(R.id.rating_4_star);
         AppCompatImageView rank5 = (AppCompatImageView) mainView.findViewById(R.id.rating_5_star);
         ///////////////////feedbackBtn = (Button)mainView.findViewById(R.id.feedbackBtn);
-        AppCompatButton settingsBtn = (AppCompatButton) mainView.findViewById(R.id.settingsBtn);
-        AppCompatButton shareBtn = (AppCompatButton) mainView.findViewById(R.id.shareBtn);
-        pointsBtn = (AppCompatButton) mainView.findViewById(R.id.pointsBtn);
+        AppCompatImageView settingsBtn = (AppCompatImageView) mainView.findViewById(R.id.settingsBtn);
+        AppCompatImageView shareBtn = (AppCompatImageView) mainView.findViewById(R.id.shareBtn);
+        AppCompatButton themesBtn = (AppCompatButton) mainView.findViewById(R.id.themesBtn);
+        pointsBtn = (AppCompatImageView) mainView.findViewById(R.id.pointsBtn);
 
         View.OnClickListener bad_rating = new View.OnClickListener() {
             @Override
@@ -251,9 +227,18 @@ public class HomeFragment extends Fragment {
         View.OnClickListener good_rating = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendEvent("Rate","Higher Score","");
                 FeedbackUtils.jumpToStore(getActivity(), preferences);
             }
         };
+
+        themesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEvent("Community","Themes Page","From Home");
+                FeedbackUtils.openGooglePlusPage(getActivity());
+            }
+        });
 
         mainEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,6 +255,7 @@ public class HomeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,
                                          boolean isChecked) {
                 Log.d("service","check changed");
+                sendEvent("Toggle","Service","From Home");
                 if(listener.appPermissions(false)) {
                     setServiceToggle(isChecked);
                 } else {
@@ -300,7 +286,7 @@ public class HomeFragment extends Fragment {
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("stupid","settings click");
+                sendEvent("Popup","Settings");
                 if(listener.appPermissions(false))
                     listener.showSettings();
                 else
@@ -321,6 +307,8 @@ public class HomeFragment extends Fragment {
                 showFeedbackPopup();
             }
         });************/
+
+        sendView(getClass().getSimpleName());
 
         return mainView;
     }

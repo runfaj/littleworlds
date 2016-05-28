@@ -29,6 +29,11 @@
         android:title="Border Visibility Settings">
 
         <CheckBoxPreference
+            android:key="@string/bottom_separator"
+            android:title="Show Bottom Separator"
+            android:summary="Show a small separator on the bottom of the borders for devices that allow a clear navigation bar."
+            android:defaultValue="true"/>
+        <CheckBoxPreference
             android:key="@string/startup_pref"
             android:title="Run at Startup"
             android:summary="Show the borders when the phone boots."

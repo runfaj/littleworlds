@@ -1,5 +1,6 @@
 package com.stuartrosk.borders;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,12 +15,13 @@ public class FeedbackDialog extends DialogPreference {
 
     public FeedbackDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
     protected void onPrepareDialogBuilder(AlertDialog.Builder builder)
     {
+        MainActivity.sendEvent(getContext(),"Popup","Feedback","From Settings",null);
+
         super.onPrepareDialogBuilder(builder);
 
         preferences = getContext().getSharedPreferences(getContext().getString(R.string.pref_namespace), getContext().MODE_PRIVATE);
@@ -29,11 +31,13 @@ public class FeedbackDialog extends DialogPreference {
             .setMessage(getContext().getString(R.string.feedback_message))
             .setPositiveButton(getContext().getString(R.string.feedback_email), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    MainActivity.sendEvent(getContext(),"Popup","Email Us","From Settings",null);
                     FeedbackUtils.askForFeedback(getContext());
                 }
             })
             .setNegativeButton(getContext().getString(R.string.feedback_rate), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    MainActivity.sendEvent(getContext(),"Popup","Rate","From Settings",null);
                     FeedbackUtils.jumpToStore(getContext(), preferences);
                 }
             });

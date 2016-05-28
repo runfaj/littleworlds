@@ -31,7 +31,7 @@ import java.io.File;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CustomFragment extends Fragment {
+public class CustomFragment extends SuperFragment {
 
     View v;
     private CustomFragmentListener listener;
@@ -140,10 +140,13 @@ public class CustomFragment extends Fragment {
 
         listener.onStartCustomScreen();
 
+        sendView(getClass().getSimpleName());
+
         return v;
     }
 
     public void saveTheme(){
+        sendEvent("Custom Theme","Save");
         //hide keyboard
         View view = getActivity().getCurrentFocus();
         if (view != null) {
@@ -158,12 +161,14 @@ public class CustomFragment extends Fragment {
     }
 
     public void deleteTheme(){
+        sendEvent("Popup","Delete Theme","From Custom");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle("Are you sure?");
         alertDialogBuilder
                 .setMessage("Are you sure you want to delete this theme? All files associated to this theme in the Borders/Themes directory will also be removed.")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        sendEvent("Custom Theme","Delete");
                         if(ThemeJsonObject.deleteCustomTheme(getActivity().getApplicationContext(), manifest)) {
                             Toast.makeText(getActivity().getApplicationContext(),"\""+manifest.title+"\" deleted successfully.",Toast.LENGTH_LONG).show();
                             preferences.edit()
@@ -189,6 +194,7 @@ public class CustomFragment extends Fragment {
     }
 
     public void exportCustomTheme(){
+        sendEvent("Custom Theme","Export");
         String result = ThemeJsonObject.zipCustomTheme(getActivity(), manifest);
         if(result.equals(""))
             Toast.makeText(getActivity().getApplicationContext(),"Error exporting theme. Please make sure there are no extra folders in the theme directory.",Toast.LENGTH_SHORT).show();
@@ -203,7 +209,7 @@ public class CustomFragment extends Fragment {
     //iterable
     private void testUnlocked(View v){
         //return true if still showing the button
-        String pos = v.getTag().toString();
+        final String pos = v.getTag().toString();
         if(pos == null) return;
 
         //only giving the user 6 options if its locked
@@ -229,6 +235,7 @@ public class CustomFragment extends Fragment {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    sendEvent("Custom Theme","Edit Position",pos.toString(),"false");
                     UnlockDialog unlockDialog = new UnlockDialog(view.getContext(),null);
                     unlockDialog.showDialog();
                 }
@@ -237,6 +244,7 @@ public class CustomFragment extends Fragment {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    sendEvent("Custom Theme","Edit Position",pos.toString(),"true");
                     String btnName = v.getTag().toString();
                     listener.showImageEditScreen(btnName);
                 }

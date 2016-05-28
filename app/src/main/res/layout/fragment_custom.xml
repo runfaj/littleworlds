@@ -7,8 +7,8 @@
                 android:background="#ffffff">
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/topLeftCornerEditBtn"
         android:tag="top_left_corner"
         android:layout_alignParentTop="true"
@@ -19,11 +19,11 @@
         android:rotation="90"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/topRightCornerEditBtn"
         android:tag="top_right_corner"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -33,11 +33,11 @@
         android:layout_marginRight="40dp"
         android:rotation="180"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/bottomRightCornerEditBtn"
         android:tag="bottom_right_corner"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -47,11 +47,11 @@
         android:layout_marginBottom="40dp"
         android:rotation="270"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/bottomLeftCornerEditBtn"
         android:tag="bottom_left_corner"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -59,14 +59,14 @@
         android:layout_alignLeft="@+id/topLeftCornerEditBtn"
         android:layout_alignStart="@+id/topLeftCornerEditBtn"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/topLeftMiddleEditBtn"
         android:tag="top_left_middle"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:layout_alignTop="@+id/topLeftCornerEditBtn"
         android:layout_toRightOf="@+id/topLeftCornerEditBtn"
@@ -74,26 +74,26 @@
         android:layout_marginTop="-20dp"
         android:rotation="112.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/topRightMiddleEditBtn"
         android:tag="top_right_middle"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:layout_alignTop="@+id/topRightCornerEditBtn"
         android:layout_toLeftOf="@+id/topRightCornerEditBtn"
         android:layout_toStartOf="@+id/topRightCornerEditBtn"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="-20dp"
         android:rotation="157.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/bottomLeftMiddleEditBtn"
         android:tag="bottom_left_middle"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -103,11 +103,11 @@
         android:layout_marginBottom="-20dp"
         android:rotation="-22.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/bottomRightMiddleEditBtn"
         android:tag="bottom_right_middle"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -117,11 +117,11 @@
         android:layout_marginBottom="-20dp"
         android:rotation="-67.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/sideLeftMiddleEditBtn"
         android:tag="side_left_middle"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -131,11 +131,11 @@
         android:layout_marginLeft="-20dp"
         android:rotation="45"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/sideRightMiddleEditBtn"
         android:tag="side_right_middle"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -145,14 +145,14 @@
         android:layout_marginRight="-20dp"
         android:rotation="225"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/sideLeftTopEditBtn"
         android:tag="side_left_top"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:layout_below="@+id/topLeftCornerEditBtn"
         android:layout_alignLeft="@+id/topLeftCornerEditBtn"
@@ -160,11 +160,11 @@
         android:layout_marginLeft="-20dp"
         android:rotation="67.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/sideRightTopEditBtn"
         android:tag="side_right_top"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -174,26 +174,26 @@
         android:layout_marginRight="-20dp"
         android:rotation="202.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/sideLeftBottomEditBtn"
         android:tag="side_left_bottom"
         android:src="@drawable/ic_mode_edit_black_48dp"
         android:layout_above="@+id/bottomLeftCornerEditBtn"
         android:layout_alignLeft="@+id/bottomLeftCornerEditBtn"
         android:layout_alignStart="@+id/bottomLeftCornerEditBtn"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="-20dp"
         android:rotation="22.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
         android:id="@+id/sideRightBottomEditBtn"
         android:tag="side_right_bottom"
         android:src="@drawable/ic_mode_edit_black_48dp"
@@ -203,10 +203,10 @@
         android:layout_marginRight="-20dp"
         android:rotation="-112.5"
         android:scaleType="fitXY"
-        android:background="@drawable/btn_pressed"/>
+        android:background="@drawable/btn_pressed_gray" android:padding="7dp"/>
 
     <RelativeLayout
-        android:layout_width="200dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         >
@@ -238,52 +238,54 @@
             android:layout_below="@+id/theme_name_tv"
             android:layout_marginTop="12dp"/>
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="match_parent"
+            android:layout_width="170dp"
             android:layout_height="32dp"
             android:id="@+id/preview_image"
             android:layout_below="@+id/preview_image_label_tv"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="6dp"
             android:background="#efefef"
             android:scaleType="fitCenter"/>
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:id="@+id/preview_edit_btn"
             android:tag="preview"
             android:src="@drawable/ic_mode_edit_black_48dp"
             android:scaleType="fitXY"
             android:background="@drawable/btn_pressed_white"
             android:layout_alignRight="@+id/preview_image"
-            android:layout_alignTop="@+id/preview_image"/>
+            android:layout_alignTop="@+id/preview_image"
+            android:padding="5dp"
+            android:layout_marginTop="-5dp"
+            android:layout_marginRight="-8dp"/>
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/custom_save_btn"
             android:background="@drawable/btn_pressed"
             android:src="@drawable/ic_check_black_48dp"
             android:layout_alignTop="@+id/custom_export_btn"
             android:layout_toLeftOf="@+id/custom_export_btn"
-            android:layout_marginRight="25dp"/>
+            android:layout_marginRight="14dp" android:padding="7dp"/>
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/custom_delete_btn"
             android:background="@drawable/btn_pressed"
             android:src="@drawable/ic_delete_black_48dp"
             android:layout_alignTop="@+id/custom_export_btn"
             android:layout_toRightOf="@+id/custom_export_btn"
-            android:layout_marginLeft="25dp"/>
+            android:layout_marginLeft="14dp" android:padding="7dp"/>
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:id="@+id/custom_export_btn"
             android:background="@drawable/btn_pressed"
             android:src="@drawable/ic_unarchive_black_48dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/preview_image" android:layout_marginTop="20dp"/>
+            android:layout_below="@+id/preview_image" android:layout_marginTop="14dp" android:padding="7dp"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -292,7 +294,7 @@
             android:text="You can also edit themes directly in the Borders/Themes folder as well as find additional resources."
             android:id="@+id/textView4"
             android:layout_below="@+id/custom_save_btn"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="14dp"/>
 
     </RelativeLayout>
 

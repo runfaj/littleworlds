@@ -28,6 +28,8 @@ public class SettingsPrefFragment extends PreferenceFragment implements SharedPr
         void onStartupPrefChecked();
         boolean isAccessibilityEnabled();
         void onAccessibilitySettingChecked();
+        void stopWorldService();
+        void startWorldService(boolean editMode, String editPos);
         //void onNotificationSettingChecked();
         //boolean isNotificationSettingEnabled();
     }
@@ -145,6 +147,12 @@ public class SettingsPrefFragment extends PreferenceFragment implements SharedPr
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        MainActivity.sendEvent(getActivity().getApplicationContext(),"Settings Change",key,null,null);
+
+        if(key.equals(getString(R.string.bottom_separator))) {
+            listener.stopWorldService();
+            listener.startWorldService(false,"");
+        }
         if(key.equals(getString(R.string.notification_pref))
                 || key.equals(getString(R.string.notification_icon_pref))) {
             listener.showServiceNotification();

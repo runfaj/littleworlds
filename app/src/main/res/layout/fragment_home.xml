@@ -66,7 +66,37 @@
                 android:layout_marginTop="16dp"
                 android:layout_below="@+id/serviceSwitch"/>-->
 
-        <android.support.v7.widget.AppCompatButton
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/serviceSwitch"
+            android:layout_marginTop="6dp"
+            android:id="@+id/btnCont">
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/shareBtn"
+                    android:src="@drawable/ic_share_black_48dp" android:background="@drawable/btn_pressed"
+                    android:layout_marginRight="22dp" android:padding="7dp"/>
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/pointsBtn"
+                    android:src="@drawable/app_notif_icon_unlock_black"
+                    android:background="@drawable/btn_pressed" android:padding="7dp"/>
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/settingsBtn"
+                    android:src="@drawable/ic_settings_black_48dp" android:background="@drawable/btn_pressed"
+                    android:layout_marginLeft="22dp" android:padding="7dp"/>
+            </TableRow>
+        </TableLayout>
+        <!--<android.support.v7.widget.AppCompatButton
             android:layout_width="105dp"
             android:layout_height="wrap_content"
             android:text="Share!"
@@ -83,15 +113,15 @@
                 android:id="@+id/settingsBtn"
                 android:layout_alignTop="@+id/shareBtn"
                 android:layout_alignRight="@+id/imageView"
-                android:layout_alignEnd="@+id/imageView"/>
+                android:layout_alignEnd="@+id/imageView"/>-->
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/shareBtn"
+            android:layout_below="@+id/btnCont"
             android:layout_centerHorizontal="true"
             android:id="@+id/rating_container"
-            android:layout_marginTop="18dp">
+            android:layout_marginTop="8dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -99,7 +129,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Rate:"
                 android:id="@+id/rating_text"
-                />
+                android:textSize="16dp" android:layout_marginTop="2dp"/>
 
             <android.support.v7.widget.AppCompatImageView
                 android:layout_width="24dp"
@@ -153,7 +183,7 @@
 
         </RelativeLayout>
 
-        <android.support.v7.widget.AppCompatButton
+        <!--<android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:drawableLeft="@drawable/app_notif_icon"
@@ -162,7 +192,18 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/rating_container"
             android:layout_marginTop="14dp"
-            />
+            />-->
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:drawableLeft="@drawable/ic_google_plus_white_48dp"
+            android:text="  Community Themes"
+            android:id="@+id/themesBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/rating_container"
+            android:layout_marginTop="14dp"
+        />
 
     </RelativeLayout>
 

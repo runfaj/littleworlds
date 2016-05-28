@@ -1,88 +1,139 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="match_parent" xmlns:ads="http://schemas.android.com/apk/res-auto"
                 tools:context="com.stuartrosk.borders.EditFragment"
                 android:id="@+id/fragmentEdit"
-                android:background="#ffffff">
+                android:background="@color/primary">
 
-    <RelativeLayout
-        android:layout_width="200dp"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        >
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="wrap_content" android:layout_centerInParent="true" android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/themeFragmentCont"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_width="200dp"
+            android:layout_height="340dp"
+            android:layout_gravity="center_horizontal">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/custom_cont"
-            android:visibility="invisible"
-            android:layout_above="@+id/editDoneBtn"
-            android:layout_marginBottom="30dp">
+            <RadioGroup
+                android:id="@+id/toggle"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/toggle_outline"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:checkedButton="@+id/dark"
+                android:layout_alignParentTop="true">
 
-            <TableRow
+                <RadioButton
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:id="@+id/dark"
+                    android:background="@drawable/toggle_background"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="Dark"
+                    android:textColor="@drawable/toggle_background" />
+
+                <RadioButton
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="1dp"
+                    android:id="@+id/light"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/toggle_background"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="Light"
+                    android:textColor="@drawable/toggle_background" />
+
+            </RadioGroup>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                >
+                android:id="@+id/themeFragmentCont"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/toggle">
+            </RelativeLayout>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/custom_add_btn"
-                    android:background="@drawable/btn_pressed"
-                    android:src="@drawable/ic_library_add_black_48dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"/>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/custom_cont"
+                android:visibility="visible"
+                android:layout_above="@+id/editDoneBtn"
+                android:layout_marginBottom="15dp">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/custom_edit_btn"
-                    android:background="@drawable/btn_pressed"
-                    android:src="@drawable/ic_border_color_black_48dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    >
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/custom_import_btn"
-                    android:background="@drawable/btn_pressed"
-                    android:src="@drawable/ic_archive_black_48dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/custom_add_btn"
+                        android:background="@drawable/btn_pressed"
+                        android:src="@drawable/ic_library_add_black_48dp"
+                        android:padding="7dp"/>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:id="@+id/custom_share_btn"
-                    android:background="@drawable/btn_pressed"
-                    android:src="@drawable/ic_share_black_48dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/custom_edit_btn"
+                        android:background="@drawable/btn_pressed"
+                        android:src="@drawable/ic_border_color_black_48dp"
+                        android:padding="7dp"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/custom_import_btn"
+                        android:background="@drawable/btn_pressed"
+                        android:src="@drawable/ic_archive_black_48dp"
+                        android:padding="7dp"/>
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/custom_share_btn"
+                        android:background="@drawable/btn_pressed"
+                        android:src="@drawable/ic_share_black_48dp"
+                        android:padding="7dp"/>
 
 
-            </TableRow>
-        </TableLayout>
+                </TableRow>
+            </TableLayout>
 
-        <android.support.v7.widget.AppCompatButton
+            <android.support.v7.widget.AppCompatButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Done"
+                android:id="@+id/editDoneBtn"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+        <com.google.android.gms.ads.NativeExpressAdView
+            android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Done"
-            android:id="@+id/editDoneBtn"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"/>
+            ads:adUnitId="@string/edit_banner"
+            ads:adSize="280x85" android:layout_centerHorizontal="true" android:layout_marginTop="20dp">
+        </com.google.android.gms.ads.NativeExpressAdView>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

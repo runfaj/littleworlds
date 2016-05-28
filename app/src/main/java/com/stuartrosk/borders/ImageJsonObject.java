@@ -2,7 +2,12 @@ package com.stuartrosk.borders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.renderscript.ScriptGroup;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class ImageJsonObject {
     public enum SizeType {
@@ -109,6 +114,15 @@ public class ImageJsonObject {
             File file = new File(file_path + "/" + file_name);
             if (file.exists())
                 return file.toString();
+        }
+        return null;
+    }
+
+    public static InputStream getFileStream(Context context, Uri uri) {
+        if(uri != null) {
+            try {
+                return context.getContentResolver().openInputStream(uri);
+            } catch (FileNotFoundException e) {}
         }
         return null;
     }

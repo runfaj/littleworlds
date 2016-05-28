@@ -18,5 +18,8 @@ public class autostart extends BroadcastReceiver
             Intent intent = new Intent(context, WorldService.class);
             context.startService(intent);
         }
+
+        Intent service = new Intent(context, NotificationService.class);
+        context.startService(service);
     }
 }

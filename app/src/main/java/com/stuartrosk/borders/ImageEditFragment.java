@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
@@ -23,15 +26,18 @@ import android.widget.*;
 
 import java.io.*;
 
-public class ImageEditFragment extends Fragment {
+public class ImageEditFragment extends SuperFragment {
 
     private SharedPreferences preferences;
     private ImageJsonObject.Position position;
     private ThemeJsonObject.Theme currTheme;
     private ImageEditFragmentListener listener;
     private AppCompatButton imageBtn;
-    private String selectedFilePath;
+    private InputStream selectedFileIS;
+    private Uri selectedFileUri;
     private AppCompatImageView previewImage, imageClear;
+
+    private int PICK_IMAGE_REQUEST = 1;
 
     private boolean cancelCheck = false;
 
@@ -160,9 +166,12 @@ public class ImageEditFragment extends Fragment {
             }
         });
 
-        setPreviewImage(ThemeJsonObject.getCustomThemePath(currTheme) + "/" + ThemeJsonObject.getFileFromPosition(currTheme, position));
+        Uri path = Uri.parse(ThemeJsonObject.getCustomThemePath(currTheme) + "/" + ThemeJsonObject.getFileFromPosition(currTheme, position));
+        setPreviewImage(ImageJsonObject.getFileStream(getActivity().getApplicationContext(), path));
 
         preferences.edit().putString("last_edit_pos", editPos).commit();
+
+        sendView(getClass().getSimpleName());
 
         return view;
     }
@@ -229,22 +238,40 @@ public class ImageEditFragment extends Fragment {
         alertDialog.show();
     }
 
+    public static Bitmap decodeSampledBitmapFromInputStream(InputStream in,
+                                                            InputStream copyOfin, int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(in, null, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeStream(copyOfin, null, options);
+    }
+
     private boolean commitChanges(){
         boolean success = false;
 
         //if no new file, just return success
-        if(selectedFilePath == null)
+        if(selectedFileUri == null)
             return true;
 
         String newFile = ThemeJsonObject.getCustomThemePath(currTheme) + "/" + ThemeJsonObject.getFileFromPosition(currTheme, position);
-        File existingFile = new File(selectedFilePath);
-
         try {
-            Log.d("blah",existingFile.toString()+" "+existingFile.exists());
-            if(existingFile.exists()){
+            if(selectedFileUri != null){
                 OutputStream out = new FileOutputStream(newFile);
 
-                Bitmap in = decodeSampledBitmapFromFile(selectedFilePath,
+                /*Bitmap in = decodeSampledBitmapFromFile(selectedFilePath,
+                        preferences.getInt(position.toString()+"width",10),
+                        preferences.getInt(position.toString()+"height",10));*/
+                Bitmap in = decodeSampledBitmapFromInputStream(
+                        ImageJsonObject.getFileStream(getActivity().getApplicationContext(), selectedFileUri),
+                        ImageJsonObject.getFileStream(getActivity().getApplicationContext(), selectedFileUri),
                         preferences.getInt(position.toString()+"width",10),
                         preferences.getInt(position.toString()+"height",10));
                 in.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -364,13 +391,14 @@ public class ImageEditFragment extends Fragment {
 
     private void resetImageSource() {
         imageBtn.setText(getString(R.string.default_image_btn_text));
-        setPreviewImage(ThemeJsonObject.getCustomThemePath(currTheme) + "/" + ThemeJsonObject.getFileFromPosition(currTheme, position));
+        Uri path = Uri.parse(ThemeJsonObject.getCustomThemePath(currTheme) + "/" + ThemeJsonObject.getFileFromPosition(currTheme, position));
+        setPreviewImage(ImageJsonObject.getFileStream(getActivity().getApplicationContext(),path));
         imageClear.setVisibility(View.GONE);
     }
 
     private void showFileDialog() {
         String[] extensions = { ".png", "jpg", ".bmp", ".webp", ".gif"};
-        FileDialog fd = new FileDialog(getActivity(), Environment.getExternalStorageDirectory().getAbsolutePath(), extensions, new FileDialog.FileDialogListener() {
+        /*FileDialog fd = new FileDialog(getActivity(), Environment.getExternalStorageDirectory().getAbsolutePath(), extensions, new FileDialog.FileDialogListener() {
             @Override
             public void fileDialogOutput(String path, String name, String ext) {
                 selectedFilePath = ImageJsonObject.getFullPath(getActivity().getApplicationContext(), path, name);
@@ -383,11 +411,47 @@ public class ImageEditFragment extends Fragment {
                 }
             }
         });
-        fd.show();
+        fd.show();*/
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    private void setPreviewImage(String selectedFilePath) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+
+            selectedFileUri = data.getData();
+
+            try {
+                Log.d("ief ijo",selectedFileUri.toString());
+                selectedFileIS = ImageJsonObject.getFileStream(getActivity().getApplicationContext(), selectedFileUri);
+                if(selectedFileIS == null)
+                    Toast.makeText(getActivity().getApplicationContext(), "The file chosen for " + ImageJsonObject.getPositionName(position) + " is not valid.", Toast.LENGTH_LONG).show();
+                else {
+                    imageBtn.setText(MediaStore.Images.Media.TITLE);
+                    setPreviewImage(selectedFileIS);
+                    imageClear.setVisibility(View.VISIBLE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void setPreviewImage(InputStream selectedFilePath) {
+        previewImage.setImageBitmap(BitmapFactory.decodeStream(selectedFilePath));
+        prevImageCommon();
+    }
+    /*private void setPreviewImage(String selectedFilePath) {
         previewImage.setImageURI(Uri.parse(selectedFilePath));
+        prevImageCommon();
+    }*/
+    private void prevImageCommon(){
         previewImage.getLayoutParams().width = preferences.getInt(position.toString()+"width",10) * 2; //config.width * 2;
         previewImage.getLayoutParams().height = preferences.getInt(position.toString()+"height",10) * 2; //config.height * 2;
         if(position == ImageJsonObject.Position.preview) {

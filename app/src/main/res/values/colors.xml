@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#ffffff</color>
+    <color name="almost_white">#f5f5f5</color>
     <color name="light_gray_background">#eaeaea</color>
     <color name="edit_box_super_light">#f4f4f4</color>
     <color name="edit_box_very_light">#ffeaeaea</color>
@@ -11,4 +12,7 @@
     <color name="text_color">#000000</color>
     <color name="color_accent_light">#ffff00</color>
     <color name="color_accent">#ff9a00</color>
+    <color name="color_accent_dark">#eb8d00</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="dark_back">#ffafafaf</color>
 </resources>

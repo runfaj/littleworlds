@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:state_pressed="false"
+        android:state_selected="false"
+        android:state_activated="false">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <solid android:color="@color/almost_white"/>
+            <corners
+                android:bottomLeftRadius="25dp"
+                android:bottomRightRadius="25dp"
+                android:topLeftRadius="25dp"
+                android:topRightRadius="25dp" />
+            <stroke
+                android:width="0dp"
+                android:color="#000000"
+            />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <solid android:color="@color/star_pressed_background"/>
+            <corners
+                android:bottomLeftRadius="25dp"
+                android:bottomRightRadius="25dp"
+                android:topLeftRadius="25dp"
+                android:topRightRadius="25dp" />
+            <stroke
+                android:width="0dp"
+                android:color="#000000"
+            />
+        </shape>
+    </item>
+    <!--<item android:drawable="@color/star_pressed_background" android:state_pressed="true"/>-->
+    <item android:state_selected="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <solid android:color="@color/star_pressed_background"/>
+            <corners
+                android:bottomLeftRadius="25dp"
+                android:bottomRightRadius="25dp"
+                android:topLeftRadius="25dp"
+                android:topRightRadius="25dp" />
+            <stroke
+                android:width="0dp"
+                android:color="#000000"
+            />
+        </shape>
+    </item>
+    <item android:state_activated="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <solid android:color="@color/star_pressed_background"/>
+            <corners
+                android:bottomLeftRadius="25dp"
+                android:bottomRightRadius="25dp"
+                android:topLeftRadius="25dp"
+                android:topRightRadius="25dp" />
+            <stroke
+                android:width="0dp"
+                android:color="#000000"
+            />
+        </shape>
+    </item>
+</selector>

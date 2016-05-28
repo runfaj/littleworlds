@@ -167,5 +167,10 @@
         android:layout_centerInParent="true"
         android:visibility="invisible"
         android:id="@+id/space"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" android:background="#000000"
+        android:id="@+id/bottom_separator" android:visibility="visible"/>
 
 </RelativeLayout>
